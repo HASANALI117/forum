@@ -1,0 +1,181 @@
+{{define "navbar"}}
+
+<!-- Navbar -->
+<nav class="p-2 mt-0 w-full">
+  <div class="container mx-auto flex flex-wrap items-center justify-between">
+    <div
+      class="flex w-full justify-between md:w-1/2 md:justify-start text-white font-extrabold"
+    >
+      <a
+        class="text-white no-underline hover:text-white hover:no-underline flex items-center"
+        href="/"
+      >
+        <span class="text-2xl pl-2">Groupie Tracker</span>
+      </a>
+      <div class="block md:hidden">
+        <button
+          id="hamburger-button"
+          class="w-8 h-10 mr-2 text-white focus:outline-none"
+        >
+          <i class="fas fa-bars" style="font-size: 1.5em"></i>
+        </button>
+      </div>
+    </div>
+    <div class="hidden w-full md:flex md:w-1/2 md:justify-end" id="navbar-menu">
+      <form
+        class="flex w-full md:w-auto relative"
+        action="/search"
+        method="GET"
+      >
+        <div class="relative inline-block text-left w-full md:w-auto">
+          <div class="flex justify-center md:justify-start">
+            <i class="fas fa-search search-icon" style="color: #2d3748"></i>
+            <input
+              class="rounded-full p-2 pl-9 mr-5 text-gray-800 bg-white focus:outline-none w-full md:w-auto"
+              id="search-input"
+              name="query"
+              type="text"
+              placeholder="Search"
+            />
+          </div>
+          <!-- Suggestions dropdown -->
+          <div
+            class="absolute left-0 z-10 mt-2 w-64 origin-top-right rounded-md text-white focus:outline-none max-h-96 overflow-y-auto dropdown"
+          >
+            <div class="py-1 hidden" id="suggestions-dropdown"></div>
+          </div>
+        </div>
+        <!-- Hide search button on small screens -->
+        <input
+          type="submit"
+          class="hidden md:block text-white p-2 search-button font-bold"
+          value="Search"
+        />
+      </form>
+      <div class="relative">
+        <button
+          class="hidden md:block ml-4 px-4 rounded-2xl text-white font-bold p-2 filter-button"
+          id="filter-button"
+        >
+          Filter
+        </button>
+        <!-- Filter component section -->
+        {{template "filter" .}}
+      </div>
+    </div>
+  </div>
+
+  <!-- Search bar and filter button in the same div, toggled by hamburger button -->
+  <div class="hidden md:hidden mt-4 w-full text-center" id="mobile-menu">
+    <form
+      class="flex flex-col items-center w-full"
+      action="/search"
+      method="GET"
+    >
+      <div class="relative inline-block text-left w-full">
+        <div class="flex justify-center">
+          <i class="fas fa-search search-icon" style="color: #2d3748"></i>
+          <input
+            class="rounded-full p-2 pl-9 text-gray-800 bg-white focus:outline-none w-full"
+            id="search-input-mobile"
+            name="query"
+            type="text"
+            placeholder="Search"
+          />
+        </div>
+        <!-- Suggestions dropdown for mobile -->
+        <div
+          class="absolute left-0 z-10 mt-2 w-full origin-top-right rounded-md text-white focus:outline-none max-h-96 overflow-y-auto dropdown"
+        >
+          <div class="py-1 hidden" id="suggestions-dropdown-mobile"></div>
+        </div>
+      </div>
+    </form>
+    <button
+      class="block w-full mt-2 px-4 rounded-2xl text-white font-bold p-2 filter-button"
+      id="filter-button-mobile"
+    >
+      Filter
+    </button>
+  </div>
+</nav>
+
+<!-- JavaScript to toggle visibility of filter div and hamburger menu -->
+<script>
+  document
+    .getElementById("filter-button")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      var filterForm = document.getElementById("filter-form");
+      filterForm.classList.toggle("hidden");
+    });
+
+  document
+    .getElementById("hamburger-button")
+    .addEventListener("click", function () {
+      var mobileMenu = document.getElementById("mobile-menu");
+      mobileMenu.classList.toggle("hidden");
+    });
+
+  document
+    .getElementById("filter-button-mobile")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      var filterForm = document.getElementById("filter-form");
+      filterForm.classList.toggle("hidden");
+    });
+
+  // Function to set up the suggestions feature for a given input and dropdown
+  function setupSearchSuggestions(inputId, dropdownId) {
+    var searchInput = document.getElementById(inputId);
+    var dropdown = document.getElementById(dropdownId);
+
+    // Add an event listener for input changes
+    searchInput.addEventListener("input", function () {
+      // Get the current input value
+      var query = searchInput.value;
+
+      if (query.length < 1) {
+        // If the query is less than 1 character, clear the dropdown and return
+        dropdown.innerHTML = "";
+        dropdown.style.display = "none";
+        return;
+      }
+
+      // Call the /suggest endpoint with the current query
+      fetch("/suggest?query=" + encodeURIComponent(query))
+        .then((response) => response.json())
+        .then((suggestions) => {
+          // Clear the current suggestions
+          dropdown.innerHTML = "";
+
+          // If there are suggestions, show the dropdown
+          if (suggestions.length > 0) {
+            dropdown.style.display = "block";
+          }
+
+          // Add each suggestion to the dropdown
+          suggestions.forEach((suggestion) => {
+            var item = document.createElement("a");
+            item.textContent =
+              suggestion.Name +
+              " - " +
+              suggestion.Type +
+              " - " +
+              suggestion.Artist.name;
+            item.setAttribute(
+              "class",
+              "text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
+            );
+            item.href = "/artist/" + encodeURIComponent(suggestion.Artist.id);
+            dropdown.appendChild(item);
+          });
+        });
+    });
+  }
+
+  // Setup suggestions for both desktop and mobile search inputs
+  setupSearchSuggestions("search-input", "suggestions-dropdown");
+  setupSearchSuggestions("search-input-mobile", "suggestions-dropdown-mobile");
+</script>
+{{end}}

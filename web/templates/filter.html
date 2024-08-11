@@ -1,0 +1,143 @@
+{{define "filter"}}
+<div id="filter-form" class="hidden">
+  <div
+    class="absolute left-0 z-10 mt-2 w-64 origin-top-right rounded-md text-white focus:outline-none max-h-96 overflow-y-auto dropdown"
+  >
+    <form action="/filter" method="GET" class="p-4 rounded-lg shadow-lg">
+      <div>
+        <p>Creation Date</p>
+        <div class="flex flex-wrap text-gray-800">
+          <input
+            type="number"
+            name="minCreationYear"
+            placeholder="1958"
+            min="1958"
+            max="2015"
+            value="1958"
+            id="min-creation-year"
+            class="rounded-md p-1 my-2 mr-4 w-12"
+          />
+          <input
+            type="number"
+            name="maxCreationYear"
+            placeholder="2015"
+            min="1958"
+            max="2015"
+            value="2015"
+            id="max-creation-year"
+            class="rounded-md p-1 my-2 w-12"
+          />
+        </div>
+
+        <div>
+          <input
+            type="range"
+            min="1958"
+            max="2015"
+            value="1958"
+            id="slider-1"
+            oninput="updateSlider('slider-1', 'min-creation-year')"
+          />
+          <input
+            type="range"
+            min="1958"
+            max="2015"
+            value="2015"
+            id="slider-2"
+            oninput="updateSlider('slider-2', 'max-creation-year')"
+          />
+        </div>
+      </div>
+      <div class="mt-4">
+        <p>First Album Date</p>
+        <div class="flex flex-wrap text-gray-800">
+          <input
+            type="number"
+            name="minAlbumYear"
+            placeholder="1958"
+            min="1963"
+            max="2018"
+            value="1963"
+            id="min-album-year"
+            class="rounded-md p-1 my-2 mr-4 w-12"
+          />
+          <input
+            type="number"
+            name="maxAlbumYear"
+            placeholder="2015"
+            min="1963"
+            max="2018"
+            value="2018"
+            id="max-album-year"
+            class="rounded-md p-1 my-2 w-12"
+          />
+        </div>
+
+        <div>
+          <input
+            type="range"
+            min="1963"
+            max="2018"
+            value="1963"
+            id="slider-3"
+            oninput="updateSlider('slider-3', 'min-album-year')"
+          />
+          <input
+            type="range"
+            min="1963"
+            max="2018"
+            value="2018"
+            id="slider-4"
+            oninput="updateSlider('slider-4', 'max-album-year')"
+          />
+        </div>
+      </div>
+
+      <div class="mt-4">
+        <p>Members</p>
+        <div class="flex flex-wrap justify-between">
+          {{range .BandSize}}
+          <input type="checkbox" id="{{.}}" name="Members" value="{{.}}" />
+          <label for="{{.}}"> <span>{{.}}</span> </label>{{end}}
+        </div>
+      </div>
+
+      <div class="my-4">
+        <p class="font-bold mb-2">Countries</p>
+        <div class="flex flex-col space-y-2">
+          {{range .Countries}}
+          <div class="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              id="{{.}}"
+              name="Countries"
+              value="{{.}}"
+              class="form-checkbox h-4 w-4"
+            />
+            <label for="{{.}}"> <p>{{.}}</p> </label>
+          </div>
+          {{end}}
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="px-4 rounded-2xl text-white font-bold p-2 filter-button"
+      >
+        Apply Filters
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  function updateSlider(sliderId, inputId) {
+    var slider = document.getElementById(sliderId);
+    var input = document.getElementById(inputId);
+
+    // Update the value and placeholder of the input
+    input.value = slider.value;
+    input.placeholder = slider.value;
+  }
+</script>
+{{end}}

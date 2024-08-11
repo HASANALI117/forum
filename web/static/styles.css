@@ -1,0 +1,82 @@
+body {
+  background-color: #2d3250;
+}
+
+h1 {
+  font-family: "Source Serif 4", Georgia, serif;
+  font-weight: 400;
+  line-height: 3.5rem;
+}
+
+h3 {
+  font-family: "Montserrat", sans-serif;
+}
+
+.search-icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* .index-image {
+  height: 20rem;
+  width: 26rem;
+}
+
+.text-box-cover {
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.6));
+}
+
+.artist-relations {
+  max-height: 25rem;
+  width: 35rem;
+}
+.artist-relations::-webkit-scrollbar {
+  width: 12px;
+}
+
+.artist-relations::-webkit-scrollbar-track {
+  background: #662549;
+  border-radius: 100%;
+}
+
+.artist-relations::-webkit-scrollbar-thumb {
+  background-color: #bb8493;
+  border-radius: 10px;
+  border: 3px solid #662549;
+}
+
+.members {
+  max-width: 35rem;
+}
+.textBox {
+  background-color: #662549;
+} */
+
+span {
+  font-family: "Lobster", sans-serif;
+}
+
+nav {
+  background-color: #49243e;
+}
+
+.dropdown {
+  background: #662549;
+}
+
+.search-button {
+  background-color: #49243e;
+}
+
+.filter-button {
+  background-color: #bb8493;
+}
+.filter-button:hover {
+  background-color: #dbafa0;
+}
+
+#filter-form {
+  background-color: #704264;
+}
