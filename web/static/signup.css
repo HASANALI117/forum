@@ -1,0 +1,139 @@
+/* styles.css */
+
+/* Colors */
+.bg-primary-50 {
+  background-color: #eff6ff;
+}
+.bg-primary-100 {
+  background-color: #dbeafe;
+}
+.bg-primary-200 {
+  background-color: #bfdbfe;
+}
+.bg-primary-300 {
+  background-color: #93c5fd;
+}
+.bg-primary-400 {
+  background-color: #60a5fa;
+}
+.bg-primary-500 {
+  background-color: #3b82f6;
+}
+.bg-primary-600 {
+  background-color: #2563eb;
+}
+.bg-primary-700 {
+  background-color: #1d4ed8;
+}
+.bg-primary-800 {
+  background-color: #1e40af;
+}
+.bg-primary-900 {
+  background-color: #1e3a8a;
+}
+.bg-primary-950 {
+  background-color: #172554;
+}
+
+.text-primary-50 {
+  color: #eff6ff;
+}
+.text-primary-100 {
+  color: #dbeafe;
+}
+.text-primary-200 {
+  color: #bfdbfe;
+}
+.text-primary-300 {
+  color: #93c5fd;
+}
+.text-primary-400 {
+  color: #60a5fa;
+}
+.text-primary-500 {
+  color: #3b82f6;
+}
+.text-primary-600 {
+  color: #2563eb;
+}
+.text-primary-700 {
+  color: #1d4ed8;
+}
+.text-primary-800 {
+  color: #1e40af;
+}
+.text-primary-900 {
+  color: #1e3a8a;
+}
+.text-primary-950 {
+  color: #172554;
+}
+
+/* Font Families */
+.font-body {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.font-sans {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Dark Mode */
+.dark .dark\:bg-gray-900 {
+  background-color: #1a202c;
+}
+.dark .dark\:bg-gray-800 {
+  background-color: #2d3748;
+}
+.dark .dark\:bg-gray-700 {
+  background-color: #4a5568;
+}
+.dark .dark\:bg-gray-600 {
+  background-color: #718096;
+}
+.dark .dark\:bg-gray-400 {
+  background-color: #cbd5e0;
+}
+.dark .dark\:bg-gray-300 {
+  background-color: #e2e8f0;
+}
+.dark .dark\:text-white {
+  color: #ffffff;
+}
+.dark .dark\:text-gray-900 {
+  color: #1a202c;
+}
+.dark .dark\:text-gray-800 {
+  color: #2d3748;
+}
+.dark .dark\:text-gray-700 {
+  color: #4a5568;
+}
+.dark .dark\:text-gray-600 {
+  color: #718096;
+}
+.dark .dark\:text-gray-400 {
+  color: #cbd5e0;
+}
+.dark .dark\:text-gray-300 {
+  color: #e2e8f0;
+}
+.dark .dark\:focus\:ring-primary-600 {
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
+}
+.dark .dark\:focus\:border-primary-600 {
+  border-color: #2563eb;
+}
+.dark .dark\:hover\:bg-primary-700 {
+  background-color: #1d4ed8;
+}
+.dark .dark\:focus\:ring-primary-800 {
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5);
+}
+.dark .dark\:ring-offset-gray-800 {
+  box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.5);
+}

@@ -38,29 +38,27 @@
               placeholder="Search"
             />
           </div>
-          <!-- Suggestions dropdown -->
-          <div
-            class="absolute left-0 z-10 mt-2 w-64 origin-top-right rounded-md text-white focus:outline-none max-h-96 overflow-y-auto dropdown"
-          >
-            <div class="py-1 hidden" id="suggestions-dropdown"></div>
-          </div>
         </div>
-        <!-- Hide search button on small screens -->
-        <input
-          type="submit"
-          class="hidden md:block text-white p-2 search-button font-bold"
-          value="Search"
-        />
+        <div class="relative">
+          <input
+            type="submit"
+            class="hidden md:block text-white p-2 search-button font-bold"
+            value="Filter"
+            id="filter-button"
+          />
+          <!-- filter component section -->
+          {{template "filter" .}}
+        </div>
       </form>
       <div class="relative">
         <button
           class="hidden md:block ml-4 px-4 rounded-2xl text-white font-bold p-2 filter-button"
-          id="filter-button"
+          id="signin-button"
         >
-          Filter
+          Signin
         </button>
-        <!-- Filter component section -->
-        {{template "filter" .}}
+        <!-- Signin component section -->
+        {{template "signin" .}}
       </div>
     </div>
   </div>
@@ -109,73 +107,12 @@
       var filterForm = document.getElementById("filter-form");
       filterForm.classList.toggle("hidden");
     });
-
   document
-    .getElementById("hamburger-button")
-    .addEventListener("click", function () {
-      var mobileMenu = document.getElementById("mobile-menu");
-      mobileMenu.classList.toggle("hidden");
-    });
-
-  document
-    .getElementById("filter-button-mobile")
+    .getElementById("signin-button")
     .addEventListener("click", function (event) {
       event.preventDefault();
-      var filterForm = document.getElementById("filter-form");
+      var filterForm = document.getElementById("signin-form");
       filterForm.classList.toggle("hidden");
     });
-
-  // Function to set up the suggestions feature for a given input and dropdown
-  function setupSearchSuggestions(inputId, dropdownId) {
-    var searchInput = document.getElementById(inputId);
-    var dropdown = document.getElementById(dropdownId);
-
-    // Add an event listener for input changes
-    searchInput.addEventListener("input", function () {
-      // Get the current input value
-      var query = searchInput.value;
-
-      if (query.length < 1) {
-        // If the query is less than 1 character, clear the dropdown and return
-        dropdown.innerHTML = "";
-        dropdown.style.display = "none";
-        return;
-      }
-
-      // Call the /suggest endpoint with the current query
-      fetch("/suggest?query=" + encodeURIComponent(query))
-        .then((response) => response.json())
-        .then((suggestions) => {
-          // Clear the current suggestions
-          dropdown.innerHTML = "";
-
-          // If there are suggestions, show the dropdown
-          if (suggestions.length > 0) {
-            dropdown.style.display = "block";
-          }
-
-          // Add each suggestion to the dropdown
-          suggestions.forEach((suggestion) => {
-            var item = document.createElement("a");
-            item.textContent =
-              suggestion.Name +
-              " - " +
-              suggestion.Type +
-              " - " +
-              suggestion.Artist.name;
-            item.setAttribute(
-              "class",
-              "text-gray-700 block px-4 py-2 text-sm cursor-pointer hover:bg-gray-100"
-            );
-            item.href = "/artist/" + encodeURIComponent(suggestion.Artist.id);
-            dropdown.appendChild(item);
-          });
-        });
-    });
-  }
-
-  // Setup suggestions for both desktop and mobile search inputs
-  setupSearchSuggestions("search-input", "suggestions-dropdown");
-  setupSearchSuggestions("search-input-mobile", "suggestions-dropdown-mobile");
 </script>
 {{end}}

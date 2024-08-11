@@ -19,7 +19,7 @@ h3 {
   transform: translateY(-50%);
 }
 
-/* .index-image {
+.index-image {
   height: 20rem;
   width: 26rem;
 }
@@ -52,7 +52,7 @@ h3 {
 }
 .textBox {
   background-color: #662549;
-} */
+}
 
 span {
   font-family: "Lobster", sans-serif;
@@ -79,4 +79,29 @@ nav {
 
 #filter-form {
   background-color: #704264;
+}
+
+/* Hide the default browser spinner (up/down arrows) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield; /* Standard syntax */
+}
+
+@media (max-width: 640px) {
+  #map {
+    height: 300px; /* Adjust the height as needed */
+    width: 90%;
+    margin: 1rem;
+  }
+
+  .artist-relations {
+    width: 90%;
+    margin: 1rem;
+  }
 }
