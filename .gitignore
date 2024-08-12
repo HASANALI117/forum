@@ -18,3 +18,4 @@
 go.work
 .air.toml
 tmp/
+.vscode
