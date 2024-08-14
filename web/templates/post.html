@@ -8,10 +8,15 @@
         alt="Random Image"
       />
       <div class="flex flex-col ml-4 text-sm text-gray-400">
+        {{if .IsLoggedIn}}
         <div>
-          <span class="font-semibold">u/{{.Username}}</span> • <span>4h</span>
+          <span class="font-semibold">u/{{.Username}}</span> •
+          <span>{{.CreatedAt}}</span>
         </div>
-        <span class="font-semibold">r/Full-Stack</span>
+        {{else}}
+        <div><span class="font-semibold">u/Guest</span> • <span>4h</span></div>
+        {{end}}
+        <span class="font-semibold">c/Full-Stack</span>
       </div>
     </div>
     <hr class="my-4 border-gray-600" />

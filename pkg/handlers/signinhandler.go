@@ -3,8 +3,7 @@ package handlers
 import (
 	"fmt"
 	"forum/pkg/db"
-	"forum/pkg/models"
-	"log"
+	"forum/pkg/helpers"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -13,27 +12,34 @@ import (
 func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	var hashedPassword, email, imgUrl string
+	var hashedPassword, email, imgUrl, createdAtStr string
+	var userID int
 
-	err := db.DataBase.QueryRow("SELECT password, email, img_url FROM users WHERE username = ?", username).Scan(&hashedPassword)
+	err := db.DataBase.QueryRow("SELECT id, email, password, img_url, created_at FROM users WHERE username = ?", username).Scan(&userID, &email, &hashedPassword, &imgUrl, &createdAtStr)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		return
 	}
 
 	if err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
-		log.Fatal(err)
+		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
+		return
 	}
 
 	fmt.Println("login succesful")
 
-	user := models.User{
-		Username: username,
-		Email:    email,
-		ImgURL:   imgUrl,
+	sessionToken, expiresAt, err := helpers.CreateSession(userID)
+	if err != nil {
+		http.Error(w, "Failed to create session", http.StatusInternalServerError)
+		return
 	}
-	fmt.Println(user)
 
-	if err := Templates.ExecuteTemplate(w, "index.html", user); err != nil {
-		log.Fatal(err)
-	}
+	http.SetCookie(w, &http.Cookie{
+		Name:     "session_token",
+		Value:    sessionToken,
+		Expires:  expiresAt,
+		HttpOnly: true,
+	})
+
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }

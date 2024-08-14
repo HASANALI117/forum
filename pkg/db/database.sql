@@ -3,11 +3,11 @@ CREATE TABLE IF NOT EXISTS users (
     username TEXT NOT NULL UNIQUE,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
-    img_url TEXT NOT NULL DEFAULT 'https://picsum.photos/100',
+    img_url TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- DROP TABLE users
+-- DROP TABLE users;
 
 CREATE TABLE IF NOT EXISTS sessions (
     session_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -17,3 +17,5 @@ CREATE TABLE IF NOT EXISTS sessions (
     expires_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
+
+-- DROP TABLE sessions;
