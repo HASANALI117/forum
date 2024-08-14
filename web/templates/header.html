@@ -23,13 +23,18 @@
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
     />
+    <!-- Tailwind JS -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.js"
+      defer
+    ></script>
     <!-- CSS Sheets -->
     <link rel="stylesheet" href="/web/static/styles.css" />
     <link rel="stylesheet" href="/web/static/signup.css" />
-    <title>Groupie Tracker</title>
+    <title>Forum</title>
   </head>
   <body class="min-h-screen flex flex-col">
     <!-- Navbar -->
-    {{template "navbar"}} {{end}}
+    {{template "navbar2" .}} {{end}}
   </body>
 </html>

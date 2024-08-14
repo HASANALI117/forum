@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"fmt"
+	"forum/pkg/db"
+	"forum/pkg/models"
 	"log"
 	"net/http"
 
@@ -11,17 +13,27 @@ import (
 func SignInHandler(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	var hashedPassword, email, imgUrl string
+
+	err := db.DataBase.QueryRow("SELECT password, email, img_url FROM users WHERE username = ?", username).Scan(&hashedPassword)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Printf("username: %s, password: %s, hashed-password: %s\n", username, password, hashedPassword)
 
-	if err = bcrypt.CompareHashAndPassword(hashedPassword, []byte(password)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password)); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := templates.ExecuteTemplate(w, "index.html", ""); err != nil {
+	fmt.Println("login succesful")
+
+	user := models.User{
+		Username: username,
+		Email:    email,
+		ImgURL:   imgUrl,
+	}
+	fmt.Println(user)
+
+	if err := Templates.ExecuteTemplate(w, "index.html", user); err != nil {
 		log.Fatal(err)
 	}
 }

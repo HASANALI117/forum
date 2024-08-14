@@ -2,64 +2,18 @@ body {
   background-color: #2d3250;
 }
 
-h1 {
-  font-family: "Source Serif 4", Georgia, serif;
-  font-weight: 400;
-  line-height: 3.5rem;
-}
-
-h3 {
-  font-family: "Montserrat", sans-serif;
-}
-
 .search-icon {
   position: absolute;
   left: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
-
-.index-image {
-  height: 20rem;
-  width: 26rem;
-}
-
-.text-box-cover {
-  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.6));
-}
-
-.artist-relations {
-  max-height: 25rem;
-  width: 35rem;
-}
-.artist-relations::-webkit-scrollbar {
-  width: 12px;
-}
-
-.artist-relations::-webkit-scrollbar-track {
-  background: #662549;
-  border-radius: 100%;
-}
-
-.artist-relations::-webkit-scrollbar-thumb {
-  background-color: #bb8493;
-  border-radius: 10px;
-  border: 3px solid #662549;
-}
-
-.members {
-  max-width: 35rem;
-}
-.textBox {
-  background-color: #662549;
-}
-
-span {
-  font-family: "Lobster", sans-serif;
-}
-
-nav {
-  background-color: #49243e;
+.line-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .dropdown {
@@ -79,29 +33,4 @@ nav {
 
 #filter-form {
   background-color: #704264;
-}
-
-/* Hide the default browser spinner (up/down arrows) */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-  appearance: textfield; /* Standard syntax */
-}
-
-@media (max-width: 640px) {
-  #map {
-    height: 300px; /* Adjust the height as needed */
-    width: 90%;
-    margin: 1rem;
-  }
-
-  .artist-relations {
-    width: 90%;
-    margin: 1rem;
-  }
 }

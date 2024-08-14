@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"fmt"
 	"forum/pkg/db"
+	"forum/pkg/models"
 	"log"
 	"net/http"
 
@@ -20,20 +20,28 @@ func SignUpHandler(w http.ResponseWriter, r *http.Request) {
 			log.Fatal(err)
 		}
 
-		if db.DataBase == nil {
-			log.Fatal("Database connection is nil")
-		}
+		imgUrl := "https://picsum.photos/100"
 
 		_, err = db.DataBase.Exec("INSERT INTO users (username, email, password) VALUES (?, ?, ?)", username, email, string(hashedPassword))
 		if err != nil {
-			http.Error(w, "User already exists", http.StatusConflict)
+			log.Fatal(err)
 			return
+		}
+
+		user := models.User{
+			Username: username,
+			Email:    email,
+			ImgURL:   imgUrl,
+		}
+
+		// Pass the user to the template
+		if err := Templates.ExecuteTemplate(w, "index.html", user); err != nil {
+			log.Fatal(err)
 		}
 
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 
-		fmt.Printf("email: %s, username: %s, password: %s, hashed-password: %s\n", email, username, password, hashedPassword)
 	} else {
-		templates.ExecuteTemplate(w, "signup.html", nil)
+		Templates.ExecuteTemplate(w, "signup.html", nil)
 	}
 }
