@@ -18,6 +18,7 @@ func main() {
 	http.HandleFunc("/signin", handlers.SignInHandler)
 	http.HandleFunc("/signout", handlers.SignOutHandler)
 	http.HandleFunc("/create-post", handlers.PostHandler)
+	http.HandleFunc("/post-form", handlers.RenderPostFormHandler)
 	http.HandleFunc("/filter", handlers.FilterHandler)
 
 	log.Println("Server running on http://localhost:8082")

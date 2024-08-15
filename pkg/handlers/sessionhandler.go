@@ -44,6 +44,7 @@ func SessionHandler(sessionToken string) (*models.User, error) {
 	}
 
 	user := &models.User{
+		UserID:     userID,
 		Username:   username,
 		Email:      email,
 		ImgURL:     imgUrl,

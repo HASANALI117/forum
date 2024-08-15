@@ -1,33 +1,25 @@
-{{define "post"}}
+{{define "post"}} {{range .Post}}
 <a class="m-4" href="/">
   <div class="bg-gray-900 w-72 rounded-2xl p-6 shadow-lg hover:shadow-2xl">
     <div class="flex items-center justify-between mb-4">
       <img
         class="w-10 h-10 rounded-full"
-        src="https://picsum.photos/100"
+        src="{{.User.ImgURL}}"
         alt="Random Image"
       />
       <div class="flex flex-col ml-4 text-sm text-gray-400">
-        {{if .IsLoggedIn}}
         <div>
-          <span class="font-semibold">u/{{.Username}}</span> •
+          <span class="font-semibold">u/{{.User.Username}}</span> •
           <span>{{.CreatedAt}}</span>
         </div>
-        {{else}}
-        <div><span class="font-semibold">u/Guest</span> • <span>4h</span></div>
-        {{end}}
+        <!-- <div><span class="font-semibold">u/Guest</span> • <span>4h</span></div> -->
         <span class="font-semibold">c/Full-Stack</span>
       </div>
     </div>
     <hr class="my-4 border-gray-600" />
 
-    <h1 class="text-lg font-semibold text-white mb-2">Post Title</h1>
-    <p class="text-md text-gray-300 line-clamp">
-      But I must explain to you how all this mistaken idea of denouncing
-      pleasure and praising pain was born and I will give you a complete account
-      of the system, and expound the actual teachings of the great explorer of
-      the truth, the master-builder of human happiness.
-    </p>
+    <h1 class="text-lg font-semibold text-white mb-2">{{.Title}}</h1>
+    <p class="text-md text-gray-300 line-clamp">{{.Content}}</p>
 
     <!-- Icons -->
     <div class="flex justify-between mt-6">
@@ -52,4 +44,4 @@
     </div>
   </div>
 </a>
-{{end}}
+{{end}} {{end}}

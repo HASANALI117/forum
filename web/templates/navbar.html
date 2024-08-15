@@ -101,10 +101,10 @@
               aria-haspopup="true"
             >
               <span class="sr-only">Open user menu</span>
-              {{if .IsLoggedIn}}
+              {{if .User.IsLoggedIn}}
               <img
                 class="w-10 h-10 rounded-full"
-                src="{{.ImgURL}}"
+                src="{{.User.ImgURL}}"
                 alt="User Image"
               />
               {{else}}
@@ -115,13 +115,15 @@
               />
               {{end}}
             </button>
-            {{if .IsLoggedIn}}
-            <p class="ml-4 text-xl font-medium text-white">{{.Username}}</p>
+            {{if .User.IsLoggedIn}}
+            <p class="ml-4 text-xl font-medium text-white">
+              {{.User.Username}}
+            </p>
             {{else}}
             <p class="ml-4 text-xl font-medium text-white">Guest</p>
             {{end}}
           </div>
-          {{if .IsLoggedIn}}
+          {{if .User.IsLoggedIn}}
           <!-- Signout component section -->
           {{template "signout" .}} {{else}}
           <!-- Signin component section -->
@@ -147,7 +149,7 @@
         >Categories</a
       >
       <a
-        href="/create-post"
+        href="/post-form"
         class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
         >Create Post</a
       >

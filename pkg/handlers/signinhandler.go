@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"forum/pkg/db"
 	"forum/pkg/helpers"
 	"net/http"
@@ -25,8 +24,6 @@ func SignInHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid username or password", http.StatusUnauthorized)
 		return
 	}
-
-	fmt.Println("login succesful")
 
 	sessionToken, expiresAt, err := helpers.CreateSession(userID)
 	if err != nil {

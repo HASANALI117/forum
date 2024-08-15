@@ -1,6 +1,7 @@
 package models
 
 type User struct {
+	UserID     int
 	Email      string
 	Username   string
 	ImgURL     string
@@ -8,5 +9,15 @@ type User struct {
 	IsLoggedIn bool
 }
 
-type Session struct {
+type Post struct {
+	PostID    int
+	User      User
+	Title     string
+	Content   string
+	CreatedAt string
+}
+
+type PostPageData struct {
+	User User
+	Post []Post
 }
