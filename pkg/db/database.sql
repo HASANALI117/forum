@@ -1,33 +1,52 @@
 CREATE TABLE IF NOT EXISTS users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT NOT NULL UNIQUE,
-    email TEXT NOT NULL UNIQUE,
-    password TEXT NOT NULL,
-    img_url TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    id TEXT PRIMARY KEY,
+    nickname TEXT UNIQUE,
+    email TEXT UNIQUE,
+    password TEXT,
+    age INTEGER,
+    gender TEXT,
+    first_name TEXT,
+    last_name TEXT
 );
 
 -- DROP TABLE users;
 
 CREATE TABLE IF NOT EXISTS sessions (
-    session_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    session_token TEXT NOT NULL UNIQUE,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    expires_at TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    session_token TEXT PRIMARY KEY,
+    user_id TEXT,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 -- DROP TABLE sessions;
 
 CREATE TABLE IF NOT EXISTS posts (
-    post_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    user_id INTEGER,
-    title TEXT NOT NULL,
-    content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
+    id TEXT PRIMARY KEY,
+    user_id TEXT,
+    category TEXT,
+    title TEXT,
+    content TEXT,
+    created_at DATETIME,
+    FOREIGN KEY(user_id) REFERENCES users(id)
 );
 
 -- DROP TABLE posts;
+
+CREATE TABLE IF NOT EXISTS comments (
+    id TEXT PRIMARY KEY,
+    post_id TEXT,
+    user_id TEXT,
+    content TEXT,
+    created_at DATETIME,
+    FOREIGN KEY(post_id) REFERENCES posts(id),
+    FOREIGN KEY(user_id) REFERENCES users(id)
+);
+
+CREATE TABLE IF NOT EXISTS messages (
+    id TEXT PRIMARY KEY,
+    sender_id TEXT,
+    receiver_id TEXT,
+    content TEXT,
+    created_at DATETIME,
+    FOREIGN KEY(sender_id) REFERENCES users(id),
+    FOREIGN KEY(receiver_id) REFERENCES users(id)
+);

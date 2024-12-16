@@ -1,28 +1,46 @@
 package main
 
 import (
-	"forum/pkg/db"
-	handlers "forum/pkg/handlers"
 	"log"
 	"net/http"
+
+	handlers "forum/pkg/handlers"
+	db "forum/pkg/db"
+	ws "forum/pkg/websockets"
 )
 
 func main() {
-	db.InitDB()
-	defer db.DataBase.Close()
+	dbConn, err := db.InitDB()
+	if err != nil {
+		log.Fatal("Could not initialize DB:", err)
+	}
+	dbWrapper := &db.DBWrapper{DB: &db.DBResource{DBConn: dbConn}}
 
-	http.Handle("/web/static/", http.StripPrefix("/web/static/", http.FileServer(http.Dir("web/static"))))
+	hub := ws.NewHub(dbWrapper)
+	go hub.Run()
 
-	http.HandleFunc("/", handlers.MainHandler)
-	http.HandleFunc("/signup", handlers.SignUpHandler)
-	http.HandleFunc("/signin", handlers.SignInHandler)
-	http.HandleFunc("/signout", handlers.SignOutHandler)
-	http.HandleFunc("/create-post", handlers.PostHandler)
-	http.HandleFunc("/post-form", handlers.RenderPostFormHandler)
-	http.HandleFunc("/filter", handlers.FilterHandler)
+	// Routes for API
+	http.HandleFunc("/api/register", handlers.RegisterHandler(dbWrapper))
+	http.HandleFunc("/api/login", handlers.LoginHandler(dbWrapper))
+	http.HandleFunc("/api/logout", handlers.LogoutHandler(dbWrapper))
 
-	log.Println("Server running on http://localhost:8082")
-	if err := http.ListenAndServe(":8082", nil); err != nil {
+	http.HandleFunc("/api/posts", handlers.GetPostsHandler(dbWrapper))
+	http.HandleFunc("/api/create_post", handlers.CreatePostHandler(dbWrapper))
+	http.HandleFunc("/api/comments", handlers.GetCommentsHandler(dbWrapper))
+	http.HandleFunc("/api/create_comment", handlers.CreateCommentHandler(dbWrapper))
+
+	http.HandleFunc("/api/get_messages", handlers.GetMessagesHandler(dbWrapper))
+	http.HandleFunc("/api/users_list", handlers.GetUsersListHandler(dbWrapper))
+
+	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
+		ws.ServeWs(hub, dbWrapper, w, r)
+	})
+
+	// Serve static files (SPA)
+	http.Handle("/", http.FileServer(http.Dir("static")))
+
+	log.Println("Server running on :8080")
+	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
 }

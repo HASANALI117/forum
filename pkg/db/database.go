@@ -10,22 +10,34 @@ import (
 
 var DataBase *sql.DB
 
-func InitDB() {
+// We will store db globally in this example for simplicity
+var DBHandler *DBWrapper
+
+type DBWrapper struct {
+	DB *DBResource
+}
+
+type DBResource struct {
+	DBConn *sql.DB
+}
+
+func InitDB() (*sql.DB, error) {
 	var err error
 	DataBase, err = sql.Open("sqlite3", "pkg/db/forum.db")
 	if err != nil {
-		log.Fatalf("Failed to connect to the database: %v", err)
+		return nil, err
 	}
 	err = createTables(DataBase)
 	if err != nil {
-		log.Fatalf("Failed to create tables: %v", err)
+		return nil, err
 	}
 
 	if err = DataBase.Ping(); err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
 	log.Println("Database initialized successfully")
+	return DataBase, nil
 }
 
 func createTables(db *sql.DB) error {
