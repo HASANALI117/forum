@@ -1,9 +1,38 @@
 import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
-import Post from "./components/Post.js";
+import Home from "./components/Home.js";
 import Signin from "./components/Signin.js";
 import Signup from "./components/Signup.js";
 import PostPage from "./components/PostPage.js";
+import CreatePost from "./components/CreatePost.js";
+
+// Navigation links
+const NavLinks = [
+  {
+    name: "Home",
+    href: "",
+    icon: "bxs-home",
+    current: true,
+  },
+  {
+    name: "My Posts",
+    href: "#my-posts",
+    icon: "bxs-notepad",
+    current: false,
+  },
+  {
+    name: "Categories",
+    href: "#categories",
+    icon: "bxs-category",
+    current: false,
+  },
+  {
+    name: "Create Post",
+    href: "#create-post",
+    icon: "bx-plus",
+    current: false,
+  },
+];
 
 // Sample user data
 const USER = {
@@ -94,23 +123,16 @@ const POSTS = [
 
 // DOM elements
 const root = document.getElementById("root");
-const posts = document.createElement("div");
-posts.id = "posts";
-posts.className = "flex";
 
 // Render Navbar and Footer
-const renderLayout = () => {
-  root.insertAdjacentHTML("beforebegin", Navbar(USER));
+const renderLayout = (currentHash) => {
+  root.insertAdjacentHTML("beforebegin", Navbar(USER, currentHash, NavLinks));
   root.insertAdjacentHTML("afterend", Footer());
 };
 
 // Render posts
 const renderPosts = () => {
-  posts.innerHTML = "";
-  POSTS.forEach((post) => {
-    posts.innerHTML += Post(post);
-  });
-  root.appendChild(posts);
+  root.innerHTML = Home(POSTS);
 };
 
 // Render signup form
@@ -122,6 +144,11 @@ const renderSignup = () => {
 const renderPostPage = (post) => {
   // Clear the root, then render the Comment component
   root.innerHTML = PostPage(post);
+};
+
+// Render create post component
+const renderCreatePost = () => {
+  root.innerHTML = CreatePost();
 };
 
 // Render page based on hash
@@ -152,6 +179,7 @@ const handlePostRoute = (hash) => {
 const handleGeneralRoute = (hash) => {
   const routeMap = {
     "#signup": renderSignup,
+    "#create-post": renderCreatePost,
     "": renderPosts,
   };
 
@@ -184,7 +212,7 @@ const initEventListeners = () => {
 
 // Initialize the app
 const initApp = () => {
-  renderLayout();
+  renderLayout(window.location.hash);
   renderPage();
   initEventListeners();
 };

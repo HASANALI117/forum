@@ -1,0 +1,127 @@
+const CreatePost = () => {
+  return /* HTML */ `
+    <div class="flex flex-col items-center justify-center py-8">
+      <form
+        class="bg-gray-900 w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+        action="/create-post"
+        method="POST"
+      >
+        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+          <div class="border-b pb-12">
+            <div class="sm:mx-auto sm:w-full sm:max-w-md">
+              <h2
+                class="text-center text-2xl font-bold leading-9 tracking-tight text-white"
+              >
+                Create a Post
+              </h2>
+            </div>
+
+            <div class="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+              <div class="sm:col-span-3 w-full">
+                <label
+                  for="title"
+                  class="block text-sm font-medium leading-6 text-white"
+                  >Title</label
+                >
+                <input
+                  type="text"
+                  name="title"
+                  id="title"
+                  class="block w-full rounded-md mt-2 border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  required
+                />
+              </div>
+
+              <div class="col-span-full w-full">
+                <label
+                  for="content"
+                  class="block text-sm font-medium leading-6 text-white"
+                  >Content</label
+                >
+                <textarea
+                  id="content"
+                  name="content"
+                  rows="3"
+                  class="block w-full rounded-md mt-2 border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  required
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="mt-10 space-y-10">
+              <fieldset>
+                <legend class="text-sm font-semibold leading-6 text-white">
+                  Categories
+                </legend>
+                <div class="mt-6 space-y-6">
+                  <div class="relative flex gap-x-3">
+                    <div class="flex h-6 items-center">
+                      <input
+                        id="category-1"
+                        name="category-1"
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      />
+                    </div>
+                    <div class="text-sm leading-6">
+                      <label for="category-1" class="font-medium text-white"
+                        >Full-stack</label
+                      >
+                    </div>
+                  </div>
+                  <div class="relative flex gap-x-3">
+                    <div class="flex h-6 items-center">
+                      <input
+                        id="category-2"
+                        name="category-2"
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      />
+                    </div>
+                    <div class="text-sm leading-6">
+                      <label for="category-2" class="font-medium text-white"
+                        >Front-end</label
+                      >
+                    </div>
+                  </div>
+                  <div class="relative flex gap-x-3">
+                    <div class="flex h-6 items-center">
+                      <input
+                        id="category-3"
+                        name="category-3"
+                        type="checkbox"
+                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+                      />
+                    </div>
+                    <div class="text-sm leading-6">
+                      <label for="category-3" class="font-medium text-white"
+                        >Back-end</label
+                      >
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-0 m-6 flex items-center justify-end gap-x-6">
+          <button
+            type="button"
+            class="text-sm font-semibold leading-6 text-white"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+          >
+            Save
+          </button>
+        </div>
+      </form>
+    </div>
+  `;
+};
+
+export default CreatePost;

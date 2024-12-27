@@ -8,7 +8,7 @@ const PostPage = (post) => {
   return /* HTML */ `
     <div class="flex items-center justify-center my-8">
       <div class="text-white w-1/2 rounded-xl p-6 bg-gray-900">
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center mb-4">
           <img
             class="w-10 h-10 rounded-full"
             src="${post.image}"

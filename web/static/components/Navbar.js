@@ -1,4 +1,22 @@
-const Navbar = (user) => {
+const Navbar = (user, currentHash, navLinks) => {
+  const isActive = (target) =>
+    currentHash === target
+      ? "inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+      : "inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white";
+
+  const navItems = navLinks
+    .map(
+      (link) => /* HTML */ ` <a
+        href="${link.href}"
+        class="${isActive(link.href)}"
+      >
+        ${link.icon
+          ? `<i class="bx ${link.icon} mr-1 text-xl"></i>`
+          : ""}${link.name}
+      </a>`
+    )
+    .join("");
+
   return /* HTML */ `
     <header class="bg-gray-800">
       <div
@@ -84,27 +102,7 @@ const Navbar = (user) => {
         </div>
 
         <nav class="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
-          <a
-            href=""
-            class="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
-            aria-current="page"
-            >Home</a
-          >
-          <a
-            href=""
-            class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >My Posts</a
-          >
-          <a
-            href=""
-            class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >Categories</a
-          >
-          <a
-            href=""
-            class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
-            >Create Post</a
-          >
+          ${navItems}
         </nav>
       </div>
     </header>
