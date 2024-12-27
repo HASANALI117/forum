@@ -1,6 +1,7 @@
 import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
 import Post from "./components/Post.js";
+import Signin from "./components/Signin.js";
 
 const user = {
   username: "hasan",
@@ -39,6 +40,7 @@ const posts = [
 
 const root = document.getElementById("root");
 const postsDiv = document.createElement("div");
+
 postsDiv.id = "posts";
 postsDiv.className = "flex";
 
@@ -50,3 +52,15 @@ posts.forEach((post) => {
 });
 
 root.appendChild(postsDiv);
+
+const userMenuButton = document.getElementById("user-menu-button");
+const signinContainer = document.getElementById("signin-container");
+
+// Toggle user menu
+userMenuButton.addEventListener("click", () => {
+  if (!signinContainer.innerHTML) {
+    signinContainer.innerHTML = Signin();
+  }
+  const signinForm = document.getElementById("signin-form");
+  signinForm.classList.toggle("hidden");
+});

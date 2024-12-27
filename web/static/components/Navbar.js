@@ -10,13 +10,14 @@ const Navbar = (user) => {
               <a href="/">
                 <img
                   class="h-12 w-12 rounded-full"
-                  src=${user.image}
+                  src="/static/assets/logo.PNG"
                   alt="Your Company"
                 />
               </a>
-              <h1 class="text-white text-xl pl-4">${user.username}</h1>
+              <h1 class="text-white text-xl pl-1">FORUM</h1>
             </div>
           </div>
+
           <div
             class="relative z-0 flex flex-1 items-center justify-center px-2 sm:absolute sm:inset-0"
           >
@@ -49,7 +50,39 @@ const Navbar = (user) => {
               </div>
             </div>
           </div>
+
+          <div
+            class="hidden lg:relative lg:z-10 lg:ml-4 lg:flex lg:items-center"
+          >
+            <!-- Profile dropdown -->
+            <div class="relative ml-4 flex-shrink-0">
+              <div class="flex items-center justify-between">
+                <button
+                  id="user-menu-button"
+                  type="button"
+                  class="relative flex rounded-full bg-gray-800 text-sm text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                  aria-expanded="false"
+                  aria-haspopup="true"
+                >
+                  <span class="sr-only">Open user menu</span>
+
+                  <img
+                    class="w-10 h-10 rounded-full"
+                    src=${user.image}
+                    alt="User Image"
+                  />
+                </button>
+
+                <p class="ml-4 text-xl font-medium text-white">
+                  ${user.username}
+                </p>
+              </div>
+
+              <div id="signin-container"></div>
+            </div>
+          </div>
         </div>
+
         <nav class="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
           <a
             href="#"
