@@ -4,12 +4,13 @@ import (
 	"log"
 	"net/http"
 
-	handlers "forum/pkg/handlers"
 	db "forum/pkg/db"
+	handlers "forum/pkg/handlers"
 	ws "forum/pkg/websockets"
 )
 
 func main() {
+
 	dbConn, err := db.InitDB()
 	if err != nil {
 		log.Fatal("Could not initialize DB:", err)
@@ -19,7 +20,11 @@ func main() {
 	hub := ws.NewHub(dbWrapper)
 	go hub.Run()
 
+	// Serve static files (SPA)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("web/static"))))
+
 	// Routes for API
+	http.HandleFunc("/", handlers.MainHandler)
 	http.HandleFunc("/api/register", handlers.RegisterHandler(dbWrapper))
 	http.HandleFunc("/api/login", handlers.LoginHandler(dbWrapper))
 	http.HandleFunc("/api/logout", handlers.LogoutHandler(dbWrapper))
@@ -36,10 +41,7 @@ func main() {
 		ws.ServeWs(hub, dbWrapper, w, r)
 	})
 
-	// Serve static files (SPA)
-	http.Handle("/", http.FileServer(http.Dir("static")))
-
-	log.Println("Server running on :8080")
+	log.Println("Server running on http://localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
 		log.Fatal(err)
 	}
