@@ -1,7 +1,9 @@
 const Post = (username, image, title, category, content, created_at) => {
   return /* HTML */ `
     <a class="m-4" href="/">
-      <div class="bg-gray-900 w-72 rounded-2xl p-6 shadow-lg hover:shadow-2xl">
+      <div
+        class="bg-gray-900 w-72 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all"
+      >
         <div class="flex items-center justify-between mb-4">
           <img
             class="w-10 h-10 rounded-full"

@@ -1,6 +1,6 @@
-import Navbar from "../components/Navbar.js";
-import Footer from "../components/Footer.js";
-import Post from "../components/Post.js";
+import Navbar from "./components/Navbar.js";
+import Footer from "./components/Footer.js";
+import Post from "./components/Post.js";
 
 const posts = [
   {
