@@ -14,7 +14,7 @@ const Navbar = (user) => {
                   alt="Your Company"
                 />
               </a>
-              <h1 class="text-white text-xl pl-1">FORUM</h1>
+              <h1 class="text-white text-xl pl-1 font-bold">FORUM</h1>
             </div>
           </div>
 

@@ -4,12 +4,14 @@ import Post from "./components/Post.js";
 import Signin from "./components/Signin.js";
 import Signup from "./components/Signup.js";
 
-const user = {
+// Sample user data
+const USER = {
   username: "hasan",
   image: "https://picsum.photos/200",
 };
 
-const posts = [
+// Sample posts data
+const POSTS = [
   {
     username: "hasan",
     image: "https://picsum.photos/200?random=1",
@@ -39,56 +41,78 @@ const posts = [
   },
 ];
 
+// DOM elements
 const root = document.getElementById("root");
-const postsDiv = document.createElement("div");
+const posts = document.createElement("div");
+posts.id = "posts";
+posts.className = "flex";
 
-postsDiv.id = "posts";
-postsDiv.className = "flex";
-
-root.insertAdjacentHTML("beforebegin", Navbar(user));
-root.insertAdjacentHTML("afterend", Footer());
-
-const renderPosts = () => {
-  postsDiv.innerHTML = "";
-  posts.forEach((post) => {
-    postsDiv.innerHTML += Post(post);
-  });
-  root.appendChild(postsDiv);
+// Render Navbar and Footer
+const renderLayout = () => {
+  root.insertAdjacentHTML("beforebegin", Navbar(USER));
+  root.insertAdjacentHTML("afterend", Footer());
 };
 
+// Render posts
+const renderPosts = () => {
+  posts.innerHTML = "";
+  POSTS.forEach((post) => {
+    posts.innerHTML += Post(post);
+  });
+  root.appendChild(posts);
+};
+
+// Render signup form
 const renderSignup = () => {
   root.innerHTML = Signup();
 };
 
+// Render page based on hash
 const renderPage = () => {
   const hash = window.location.hash;
-  if (hash === "#signup") {
-    renderSignup();
-  } else {
-    renderPosts();
+
+  switch (hash) {
+    case "#signup":
+      renderSignup();
+      break;
+
+    case "":
+    default:
+      renderPosts();
+      break;
   }
 };
 
-window.addEventListener("hashchange", renderPage);
-window.addEventListener("load", renderPage);
+// Initialize event listeners
+const initEventListeners = () => {
+  window.addEventListener("hashchange", renderPage);
+  window.addEventListener("load", renderPage);
 
-// Initial render
-renderPage();
+  const userMenuButton = document.getElementById("user-menu-button");
+  const signinContainer = document.getElementById("signin-container");
 
-const userMenuButton = document.getElementById("user-menu-button");
-const signinContainer = document.getElementById("signin-container");
-
-// Toggle user menu
-userMenuButton.addEventListener("click", () => {
-  if (!signinContainer.innerHTML) {
-    signinContainer.innerHTML = Signin();
-  }
-  const signinForm = document.getElementById("signin-form");
-  signinForm.classList.toggle("hidden");
-
-  // Add event listener to the signup link
-  const signupLink = document.getElementById("signup-link");
-  signupLink.addEventListener("click", (event) => {
+  // Toggle user menu
+  userMenuButton.addEventListener("click", () => {
+    if (!signinContainer.innerHTML) {
+      signinContainer.innerHTML = Signin();
+    }
+    const signinForm = document.getElementById("signin-form");
     signinForm.classList.toggle("hidden");
+
+    // Add event listener to the signup link
+    const signupLink = document.getElementById("signup-link");
+    signupLink.addEventListener("click", (event) => {
+      signinForm.classList.toggle("hidden");
+    });
   });
-});
+};
+
+// Initialize the app
+const initApp = () => {
+  renderLayout();
+  renderPage();
+  initEventListeners();
+};
+
+// Start the app
+initApp();

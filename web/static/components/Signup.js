@@ -61,7 +61,7 @@ const Signup = () => {
 
             <button
               type="submit"
-              class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
+              class="flex w-full justify-center rounded-md bg-indigo-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 transition-all"
             >
               Create an account
             </button>
@@ -87,7 +87,7 @@ const Signup = () => {
             <div class="mt-6 grid grid-cols-2 gap-4">
               <a
                 href="#"
-                class="flex w-full items-center justify-center gap-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-500 focus-visible:ring-transparent"
+                class="flex w-full items-center justify-center gap-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-500 focus-visible:ring-transparent transition-all"
               >
                 <svg class="h-5 w-5" viewBox="0 0 24 24" aria-hidden="true">
                   <path
@@ -112,7 +112,7 @@ const Signup = () => {
 
               <a
                 href="#"
-                class="flex w-full items-center justify-center gap-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-500 focus-visible:ring-transparent"
+                class="flex w-full items-center justify-center gap-3 rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-500 focus-visible:ring-transparent transition-all"
               >
                 <svg
                   class="h-5 w-5 fill-[#24292F]"
@@ -135,7 +135,7 @@ const Signup = () => {
             Already have an account?
             <a
               href="/"
-              class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
+              class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300 transition-all"
               >Login here</a
             >
           </p>
