@@ -85,23 +85,23 @@ const Navbar = (user) => {
 
         <nav class="hidden lg:flex lg:space-x-8 lg:py-2" aria-label="Global">
           <a
-            href="#"
+            href=""
             class="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
             aria-current="page"
             >Home</a
           >
           <a
-            href="#"
+            href=""
             class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >My Posts</a
           >
           <a
-            href="#"
+            href=""
             class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >Categories</a
           >
           <a
-            href="#"
+            href=""
             class="inline-flex items-center rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
             >Create Post</a
           >
