@@ -26,19 +26,19 @@ const Post = (username, image, title, category, content, created_at) => {
           <div
             class="flex items-center text-gray-400 hover:text-white cursor-pointer"
           >
-            <i class="fas fa-thumbs-up"></i>
+            <i class="bx bxs-like text-xl"></i>
             <span class="ml-2">10</span>
           </div>
           <div
             class="flex items-center text-gray-400 hover:text-white cursor-pointer"
           >
-            <i class="fas fa-thumbs-down"></i>
+            <i class="bx bxs-dislike text-xl"></i>
             <span class="ml-2">10</span>
           </div>
           <div
             class="flex items-center text-gray-400 hover:text-white cursor-pointer"
           >
-            <i class="fas fa-comment"></i>
+            <i class="bx bxs-message-rounded-dots text-xl"></i>
             <span class="ml-2">10</span>
           </div>
         </div>
