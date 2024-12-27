@@ -64,7 +64,8 @@ const Signin = () => {
           <p class="mt-6 text-center text-sm text-gray-400">
             No account?
             <a
-              href="/signup"
+              id="signup-link"
+              href="#signup"
               class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
               >Sign up</a
             >

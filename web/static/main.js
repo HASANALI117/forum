@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
 import Post from "./components/Post.js";
 import Signin from "./components/Signin.js";
+import Signup from "./components/Signup.js";
 
 const user = {
   username: "hasan",
@@ -47,11 +48,32 @@ postsDiv.className = "flex";
 root.insertAdjacentHTML("beforebegin", Navbar(user));
 root.insertAdjacentHTML("afterend", Footer());
 
-posts.forEach((post) => {
-  postsDiv.innerHTML += Post(post);
-});
+const renderPosts = () => {
+  postsDiv.innerHTML = "";
+  posts.forEach((post) => {
+    postsDiv.innerHTML += Post(post);
+  });
+  root.appendChild(postsDiv);
+};
 
-root.appendChild(postsDiv);
+const renderSignup = () => {
+  root.innerHTML = Signup();
+};
+
+const renderPage = () => {
+  const hash = window.location.hash;
+  if (hash === "#signup") {
+    renderSignup();
+  } else {
+    renderPosts();
+  }
+};
+
+window.addEventListener("hashchange", renderPage);
+window.addEventListener("load", renderPage);
+
+// Initial render
+renderPage();
 
 const userMenuButton = document.getElementById("user-menu-button");
 const signinContainer = document.getElementById("signin-container");
@@ -63,4 +85,10 @@ userMenuButton.addEventListener("click", () => {
   }
   const signinForm = document.getElementById("signin-form");
   signinForm.classList.toggle("hidden");
+
+  // Add event listener to the signup link
+  const signupLink = document.getElementById("signup-link");
+  signupLink.addEventListener("click", (event) => {
+    signinForm.classList.toggle("hidden");
+  });
 });
