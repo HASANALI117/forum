@@ -2,6 +2,11 @@ import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
 import Post from "./components/Post.js";
 
+const user = {
+  username: "hasan",
+  image: "https://picsum.photos/200",
+};
+
 const posts = [
   {
     username: "hasan",
@@ -37,18 +42,11 @@ const postsDiv = document.createElement("div");
 postsDiv.id = "posts";
 postsDiv.className = "flex";
 
-root.insertAdjacentHTML("beforebegin", Navbar());
+root.insertAdjacentHTML("beforebegin", Navbar(user));
 root.insertAdjacentHTML("afterend", Footer());
 
 posts.forEach((post) => {
-  postsDiv.innerHTML += Post(
-    post.username,
-    post.image,
-    post.title,
-    post.category,
-    post.content,
-    post.created_at
-  );
+  postsDiv.innerHTML += Post(post);
 });
 
 root.appendChild(postsDiv);

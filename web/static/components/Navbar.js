@@ -1,4 +1,4 @@
-const Navbar = () => {
+const Navbar = (user) => {
   return /* HTML */ `
     <header class="bg-gray-800">
       <div
@@ -10,11 +10,11 @@ const Navbar = () => {
               <a href="/">
                 <img
                   class="h-12 w-12 rounded-full"
-                  src="https://picsum.photos/200"
+                  src=${user.image}
                   alt="Your Company"
                 />
               </a>
-              <h1 class="text-white text-xl pl-4">User</h1>
+              <h1 class="text-white text-xl pl-4">${user.username}</h1>
             </div>
           </div>
           <div
