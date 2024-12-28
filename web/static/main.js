@@ -35,10 +35,23 @@ const NavLinks = [
 ];
 
 // Sample user data
-const USER = {
-  username: "hasan",
-  image: "https://picsum.photos/200",
-};
+const USERS = [
+  {
+    username: "hasan",
+    image: "https://picsum.photos/200",
+    date: "11/12/2024",
+  },
+  {
+    username: "hasan",
+    image: "https://picsum.photos/200",
+    date: "11/12/2024",
+  },
+  {
+    username: "hasan",
+    image: "https://picsum.photos/200",
+    date: "11/12/2024",
+  },
+];
 
 // Sample posts data
 const POSTS = [
@@ -126,13 +139,16 @@ const root = document.getElementById("root");
 
 // Render Navbar and Footer
 const renderLayout = (currentHash) => {
-  root.insertAdjacentHTML("beforebegin", Navbar(USER, currentHash, NavLinks));
+  root.insertAdjacentHTML(
+    "beforebegin",
+    Navbar(USERS[0], currentHash, NavLinks)
+  );
   root.insertAdjacentHTML("afterend", Footer());
 };
 
 // Render posts
 const renderPosts = () => {
-  root.innerHTML = Home(POSTS);
+  root.innerHTML = Home(POSTS, USERS);
 };
 
 // Render signup form

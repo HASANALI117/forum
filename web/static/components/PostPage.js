@@ -7,7 +7,7 @@ const PostPage = (post) => {
 
   return /* HTML */ `
     <div class="flex items-center justify-center my-8">
-      <div class="text-white w-1/2 rounded-xl p-6 bg-gray-900">
+      <div class="text-white w-1/2 rounded-xl p-12 bg-gray-900">
         <div class="flex items-center mb-4">
           <img
             class="w-10 h-10 rounded-full"
@@ -22,7 +22,9 @@ const PostPage = (post) => {
             <span class="font-semibold">c/${post.category}</span>
           </div>
         </div>
+
         <hr class="my-4 border-gray-600" />
+
         <h1 class="text-lg font-semibold text-white mb-2">${post.title}</h1>
         <p class="text-md text-gray-300 line-clamp">${post.content}</p>
         <!-- Icons -->
@@ -46,8 +48,13 @@ const PostPage = (post) => {
             <span class="ml-2">10</span>
           </div>
         </div>
+
+        <!-- Comments -->
+        ${commentsHTML}
+
         <!-- Comment Form -->
-        <div class="mt-6">
+
+        <div class="mt-16">
           <form id="comment-form">
             <label for="comment" class="block text-sm font-medium text-gray-400"
               >Add a comment:</label
@@ -61,15 +68,12 @@ const PostPage = (post) => {
             ></textarea>
             <button
               type="submit"
-              class="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              class="w-full mt-8 px-4 py-2 bg-indigo-500 text-white rounded-md hover:bg-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
             >
               Submit
             </button>
           </form>
         </div>
-
-        <!-- Comments -->
-        ${commentsHTML}
       </div>
     </div>
   `;
