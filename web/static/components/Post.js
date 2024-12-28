@@ -1,10 +1,10 @@
 const Post = (post) => {
   return /* HTML */ `
-    <a class="m-4 w-full" href="#post/${post.id}/comments">
+    <a class="m-4 w-4/5" href="#post/${post.id}/comments">
       <div
-        class="bg-gray-900 rounded-2xl p-6 shadow-lg hover:shadow-2xl transition-all"
+        class="bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all"
       >
-        <div class="flex items-center justify-between mb-4">
+        <div class="flex items-center mb-4">
           <img
             class="w-10 h-10 rounded-full"
             src="${post.image}"
