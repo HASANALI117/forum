@@ -33,19 +33,19 @@ const PostPage = (post) => {
             class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
           >
             <i class="bx bxs-like text-xl"></i>
-            <span class="ml-2">10</span>
+            <span class="ml-2">${post.likes}</span>
           </div>
           <div
             class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
           >
             <i class="bx bxs-dislike text-xl"></i>
-            <span class="ml-2">10</span>
+            <span class="ml-2">${post.dislikes}</span>
           </div>
           <div
             class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
           >
             <i class="bx bxs-message-rounded-dots text-xl"></i>
-            <span class="ml-2">10</span>
+            <span class="ml-2">${post.comments.length}</span>
           </div>
         </div>
 
