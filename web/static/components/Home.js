@@ -1,7 +1,7 @@
 import Post from "./Post.js";
 import Chat from "./Chat.js";
 
-const Home = (posts, users) => {
+const Home = (posts, users, messages) => {
   const postsHTML = posts.map((post) => Post(post)).join("");
 
   return /* HTML */ `
@@ -14,7 +14,9 @@ const Home = (posts, users) => {
         ${postsHTML}
       </div>
       <!-- Chat Section -->
-      <div class="flex flex-col w-1/2 bg-gray-900 ml-16">${Chat(users)}</div>
+      <div class="flex flex-col w-1/2 bg-gray-900 ml-16">
+        ${Chat(users, messages)}
+      </div>
     </div>
   `;
 };
