@@ -1,8 +1,8 @@
 const Signup = () => {
   return /* HTML */ `
-    <div class="flex flex-l items-center justify-center mt-8">
+    <div class="flex flex-l items-center justify-center bg-gray-900 w-full">
       <div
-        class="bg-gray-900 w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
       >
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <div class="sm:mx-auto sm:w-full sm:max-w-md">
@@ -13,6 +13,74 @@ const Signup = () => {
             </h2>
           </div>
           <form class="space-y-4 md:space-y-6" action="/signup" method="POST">
+            <div class="flex space-x-4">
+              <div class="w-1/2">
+                <label
+                  for="first-name"
+                  class="block mb-2 text-sm font-medium text-white dark:text-white"
+                  >First Name</label
+                >
+                <input
+                  type="text"
+                  name="first-name"
+                  id="first-name"
+                  class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  placeholder="John"
+                  required=""
+                />
+              </div>
+              <div class="w-1/2">
+                <label
+                  for="last-name"
+                  class="block mb-2 text-sm font-medium text-white dark:text-white"
+                  >Last Name</label
+                >
+                <input
+                  type="text"
+                  name="last-name"
+                  id="last-name"
+                  class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  placeholder="Cena"
+                  required=""
+                />
+              </div>
+            </div>
+
+            <div class="flex space-x-4">
+              <div class="w-1/2">
+                <label
+                  for="age"
+                  class="block mb-2 text-sm font-medium text-white dark:text-white"
+                  >Age</label
+                >
+                <input
+                  type="number"
+                  name="age"
+                  id="age"
+                  class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  placeholder="25"
+                  required=""
+                />
+              </div>
+              <div class="w-1/2">
+                <label
+                  for="gender"
+                  class="block mb-2 text-sm font-medium text-white dark:text-white"
+                  >Gender</label
+                >
+                <select
+                  name="gender"
+                  id="gender"
+                  class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+                  required=""
+                >
+                  <option value="" disabled selected>Select your gender</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+
             <div>
               <label
                 for="email"

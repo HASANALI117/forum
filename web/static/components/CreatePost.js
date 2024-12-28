@@ -1,8 +1,37 @@
+const categories = [
+  { id: "category-1", name: "Full-stack" },
+  { id: "category-2", name: "Front-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
+];
+
+const categoriesHTML = categories
+  .map(
+    (category) => /* HTML */ ` <div class="relative flex mr-4">
+      <div class="flex h-6 items-center">
+        <input
+          id="${category.id}"
+          name="${category.id}"
+          type="radio"
+          class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
+        />
+        <label for="${category.id}" class="ml-2 text-sm font-medium text-white">
+          ${category.name}
+        </label>
+      </div>
+    </div>`
+  )
+  .join("");
+
 const CreatePost = () => {
   return /* HTML */ `
-    <div class="flex flex-col items-center justify-center py-8">
+    <div
+      class="flex flex-col items-center justify-center py-8 bg-gray-900 w-full min-h-screen"
+    >
       <form
-        class="bg-gray-900 w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
+        class="rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
         action="/create-post"
         method="POST"
       >
@@ -21,8 +50,9 @@ const CreatePost = () => {
                 <label
                   for="title"
                   class="block text-sm font-medium leading-6 text-white"
-                  >Title</label
                 >
+                  Title
+                </label>
                 <input
                   type="text"
                   name="title"
@@ -36,8 +66,9 @@ const CreatePost = () => {
                 <label
                   for="content"
                   class="block text-sm font-medium leading-6 text-white"
-                  >Content</label
                 >
+                  Content
+                </label>
                 <textarea
                   id="content"
                   name="content"
@@ -49,76 +80,23 @@ const CreatePost = () => {
             </div>
 
             <div class="mt-10 space-y-10">
-              <fieldset>
-                <legend class="text-sm font-semibold leading-6 text-white">
-                  Categories
-                </legend>
-                <div class="mt-6 space-y-6">
-                  <div class="relative flex gap-x-3">
-                    <div class="flex h-6 items-center">
-                      <input
-                        id="category-1"
-                        name="category-1"
-                        type="checkbox"
-                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
-                      />
-                    </div>
-                    <div class="text-sm leading-6">
-                      <label for="category-1" class="font-medium text-white"
-                        >Full-stack</label
-                      >
-                    </div>
-                  </div>
-                  <div class="relative flex gap-x-3">
-                    <div class="flex h-6 items-center">
-                      <input
-                        id="category-2"
-                        name="category-2"
-                        type="checkbox"
-                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
-                      />
-                    </div>
-                    <div class="text-sm leading-6">
-                      <label for="category-2" class="font-medium text-white"
-                        >Front-end</label
-                      >
-                    </div>
-                  </div>
-                  <div class="relative flex gap-x-3">
-                    <div class="flex h-6 items-center">
-                      <input
-                        id="category-3"
-                        name="category-3"
-                        type="checkbox"
-                        class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
-                      />
-                    </div>
-                    <div class="text-sm leading-6">
-                      <label for="category-3" class="font-medium text-white"
-                        >Back-end</label
-                      >
-                    </div>
-                  </div>
-                </div>
-              </fieldset>
+              <h2 class="text-sm font-semibold leading-6 text-white">
+                Categories
+              </h2>
+
+              <div class="mt-6 flex items-center flex-wrap">
+                ${categoriesHTML}
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="mt-0 m-6 flex items-center justify-end gap-x-6">
-          <button
-            type="button"
-            class="text-sm font-semibold leading-6 text-white"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-          >
-            Save
-          </button>
-        </div>
+        <button
+          type="submit"
+          class="rounded-md bg-indigo-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 w-full transition-all"
+        >
+          Save
+        </button>
       </form>
     </div>
   `;
