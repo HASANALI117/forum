@@ -76,6 +76,17 @@ const handleGeneralRoute = (hash) => {
   (routeMap[hash] || renderPosts)(); // Default to posts if no match
 };
 
+export const handleSignup = async (formData) => {
+  const registerResponse = await fetch("http://localhost:8080/api/register", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+
+  const userData = await registerResponse.json();
+  console.log(userData);
+};
+
 // Initialize event listeners
 const initEventListeners = () => {
   window.addEventListener("hashchange", renderPage);
@@ -87,13 +98,14 @@ const initEventListeners = () => {
   // Toggle user menu
   userMenuButton.addEventListener("click", () => {
     if (!signinContainer.innerHTML) {
-      signinContainer.innerHTML = UserDropdown(USERS[0]);
+      // signinContainer.innerHTML = UserDropdown(USERS[0]);
+      signinContainer.innerHTML = Signin();
     }
-    // const signinForm = document.getElementById("signin-form");
-    // signinForm.classList.toggle("hidden");
+    const signinForm = document.getElementById("signin-form");
+    signinForm.classList.toggle("hidden");
 
-    const logoutDiv = document.getElementById("logout");
-    logoutDiv.classList.toggle("hidden");
+    // const logoutDiv = document.getElementById("logout");
+    // logoutDiv.classList.toggle("hidden");
 
     // Add event listener to the signup link
     const signupLink = document.getElementById("signup-link");

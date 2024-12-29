@@ -1,3 +1,5 @@
+import { handleSignup } from "../main.js";
+
 const Signup = () => {
   return /* HTML */ `
     <div class="flex flex-l items-center justify-center bg-gray-900 w-full">
@@ -12,7 +14,7 @@ const Signup = () => {
               Create your account
             </h2>
           </div>
-          <form class="space-y-4 md:space-y-6" action="/signup" method="POST">
+          <form class="space-y-4 md:space-y-6" id="signup-form">
             <div class="flex space-x-4">
               <div class="w-1/2">
                 <label
@@ -212,5 +214,34 @@ const Signup = () => {
     </div>
   `;
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  const signupForm = document.getElementById("signup-form");
+
+  if (signupForm) {
+    const first_name = document.getElementById("first-name").value;
+    const last_name = document.getElementById("last-name").value;
+    const age = document.getElementById("age").value;
+    const gender = document.getElementById("gender").value;
+    const email = document.getElementById("email").value;
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = {
+        first_name,
+        last_name,
+        age,
+        gender,
+        email,
+        username,
+        password,
+      };
+
+      await handleSignup(formData);
+    });
+  }
+});
 
 export default Signup;
