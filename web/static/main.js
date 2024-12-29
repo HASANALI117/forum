@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar.js";
 import Footer from "./components/Footer.js";
 import Home from "./components/Home.js";
 import Signin from "./components/Signin.js";
+import UserDropdown from "./components/UserDropdown.js";
 import Signup from "./components/Signup.js";
 import PostPage from "./components/PostPage.js";
 import CreatePost from "./components/CreatePost.js";
@@ -86,10 +87,13 @@ const initEventListeners = () => {
   // Toggle user menu
   userMenuButton.addEventListener("click", () => {
     if (!signinContainer.innerHTML) {
-      signinContainer.innerHTML = Signin();
+      signinContainer.innerHTML = UserDropdown(USERS[0]);
     }
-    const signinForm = document.getElementById("signin-form");
-    signinForm.classList.toggle("hidden");
+    // const signinForm = document.getElementById("signin-form");
+    // signinForm.classList.toggle("hidden");
+
+    const logoutDiv = document.getElementById("logout");
+    logoutDiv.classList.toggle("hidden");
 
     // Add event listener to the signup link
     const signupLink = document.getElementById("signup-link");

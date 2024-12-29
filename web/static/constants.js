@@ -32,16 +32,19 @@ export const USERS = [
     username: "hasan",
     image: "https://picsum.photos/200",
     date: "11/12/2024",
+    email: "hasan@gmail.com",
   },
   {
     username: "hasan",
     image: "https://picsum.photos/200",
     date: "11/12/2024",
+    email: "hasan@gmail.com",
   },
   {
     username: "hasan",
     image: "https://picsum.photos/200",
     date: "11/12/2024",
+    email: "hasan@gmail.com",
   },
 ];
 
