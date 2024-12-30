@@ -2,25 +2,25 @@
 export const NavLinks = [
   {
     name: "Home",
-    href: "",
+    href: "/",
     icon: "bxs-home",
     current: true,
   },
   {
     name: "My Posts",
-    href: "#my-posts",
+    href: "/my-posts",
     icon: "bxs-notepad",
     current: false,
   },
   {
     name: "Categories",
-    href: "#categories",
+    href: "/categories",
     icon: "bxs-category",
     current: false,
   },
   {
     name: "Create Post",
-    href: "#create-post",
+    href: "/create-post",
     icon: "bx-plus",
     current: false,
   },
@@ -150,4 +150,13 @@ export const MESSAGES = [
     content: "I'm doing well, thank you!",
     timestamp: "10:10 AM",
   },
+];
+
+export const CATEGORIES = [
+  { id: "category-1", name: "Full-stack" },
+  { id: "category-2", name: "Front-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
+  { id: "category-3", name: "Back-end" },
 ];

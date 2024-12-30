@@ -1,6 +1,9 @@
 import Navbar from "./views/Navbar.js";
 import Footer from "./views/Footer.js";
 import Home from "./views/Home.js";
+import PostView from "./views/PostView.js";
+import PostCreate from "./views/PostCreate.js";
+import Signup from "./views/Signup.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -42,7 +45,9 @@ const navigateTo = (url) => {
 const router = async () => {
   const routes = [
     { path: "/", view: Home },
-    // { path: "/about", view: About },
+    { path: "/post/:id", view: PostView },
+    { path: "/create-post", view: PostCreate },
+    { path: "/signup", view: Signup },
   ];
 
   // Test each route for potential match
