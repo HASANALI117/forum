@@ -1,4 +1,6 @@
 import Navbar from "./views/Navbar.js";
+import Footer from "./views/Footer.js";
+import Home from "./views/Home.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -16,13 +18,32 @@ const getParams = (match) => {
   );
 };
 
+const renderNavbar = async () => {
+  const navbarView = new Navbar();
+  document.getElementById("navbar").innerHTML = await navbarView.getHtml();
+};
+
+const renderFooter = async () => {
+  const footerView = new Footer();
+  document.getElementById("footer").innerHTML = await footerView.getHtml();
+};
+
+const renderPage = async () => {
+  const match = await router();
+  const pageView = new match.route.view(getParams(match));
+  document.getElementById("root").innerHTML = await pageView.getHtml();
+};
+
 const navigateTo = (url) => {
   history.pushState(null, null, url);
-  router();
+  renderPage();
 };
 
 const router = async () => {
-  const routes = [{ path: "/", view: Navbar }];
+  const routes = [
+    { path: "/", view: Home },
+    // { path: "/about", view: About },
+  ];
 
   // Test each route for potential match
   const potentialMatches = routes.map((route) => {
@@ -35,25 +56,28 @@ const router = async () => {
   let match = potentialMatches.find(
     (potentialMatch) => potentialMatch.result !== null
   );
+
   if (!match) {
-    return;
+    match = {
+      route: routes[0],
+      result: [location.pathname],
+    };
   }
 
-  const pageView = new match.route.view(getParams(match));
-  document.getElementById("root").innerHTML = await pageView.getHtml();
+  return match;
 };
 
-window.addEventListener("popstate", router);
-
-window.addEventListener("popstate", router);
+window.addEventListener("popstate", renderPage);
 
 document.addEventListener("DOMContentLoaded", async () => {
+  await renderNavbar();
+  await renderFooter();
+  await renderPage();
+
   document.body.addEventListener("click", function (e) {
     if (e.target.matches("[data-link]")) {
       e.preventDefault();
       navigateTo(e.target.href);
     }
   });
-
-  router();
 });
