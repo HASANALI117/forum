@@ -4,6 +4,7 @@ import Home from "./views/Home.js";
 import PostView from "./views/PostView.js";
 import PostCreate from "./views/PostCreate.js";
 import Signup from "./views/Signup.js";
+import Signin from "./views/Signin.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -36,7 +37,9 @@ const renderPage = async () => {
   const pageView = new match.route.view(getParams(match));
   document.getElementById("root").innerHTML = await pageView.getHtml();
 
-  //   pageView.onMounted();
+  if (typeof pageView.onMounted === "function") {
+    await pageView.onMounted();
+  }
 };
 
 const navigateTo = (url) => {
@@ -50,6 +53,7 @@ const router = async () => {
     { path: "/post/:id", view: PostView },
     { path: "/create-post", view: PostCreate },
     { path: "/signup", view: Signup },
+    { path: "/signin", view: Signin },
   ];
 
   // Test each route for potential match

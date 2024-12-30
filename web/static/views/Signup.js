@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import { handleFormSubmit, customFetch } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -17,14 +18,14 @@ export default class extends AbstractView {
             <div class="flex space-x-4">
               <div class="w-1/2 mb-10">
                 <label
-                  for="first-name"
+                  for="firstName"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
                   >First Name</label
                 >
                 <input
                   type="text"
-                  name="first-name"
-                  id="first-name"
+                  name="firstName"
+                  id="firstName"
                   class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   placeholder="John"
                   required=""
@@ -33,14 +34,14 @@ export default class extends AbstractView {
 
               <div class="w-1/2 mb-10">
                 <label
-                  for="last-name"
+                  for="lastName"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
                   >Last Name</label
                 >
                 <input
                   type="text"
-                  name="last-name"
-                  id="last-name"
+                  name="lastName"
+                  id="lastName"
                   class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   placeholder="Cena"
                   required=""
@@ -77,8 +78,8 @@ export default class extends AbstractView {
                   required=""
                 >
                   <option value="" disabled selected>Select your gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
                 </select>
               </div>
             </div>
@@ -217,12 +218,16 @@ export default class extends AbstractView {
   }
 
   async onMounted() {
-    const form = document.getElementById("signup-form");
-    form.addEventListener("submit", (event) => {
-      event.preventDefault();
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      console.log(data);
+    handleFormSubmit("signup-form", (data) => {
+      customFetch("http://localhost:8080/api/register", "POST", {
+        nickname: data.username,
+        email: data.email,
+        password: data.password,
+        age: parseInt(data.age, 10),
+        gender: data.gender,
+        first_name: data.firstName,
+        last_name: data.lastName,
+      });
     });
   }
 }

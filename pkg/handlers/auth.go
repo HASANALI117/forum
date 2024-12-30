@@ -1,4 +1,3 @@
-
 package handlers
 
 import (
@@ -6,9 +5,9 @@ import (
 	"net/http"
 	"time"
 
+	database "forum/pkg/db"
 	helpers "forum/pkg/helpers"
 	models "forum/pkg/models"
-	database "forum/pkg/db"
 )
 
 // Middleware to ensure user is authenticated
@@ -32,7 +31,7 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 		}
 		var u models.User
 		err := json.NewDecoder(r.Body).Decode(&u)
-		if (err != nil) {
+		if err != nil {
 			http.Error(w, "Invalid input", http.StatusBadRequest)
 			return
 		}
@@ -43,6 +42,12 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 			return
 		}
 		w.WriteHeader(http.StatusOK)
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message": "User registered successfully",
+			"user":    u,
+		})
+
 	}
 }
 
@@ -84,6 +89,11 @@ func LoginHandler(db *database.DBWrapper) http.HandlerFunc {
 			Expires:  time.Now().Add(24 * time.Hour),
 		})
 		w.WriteHeader(http.StatusOK)
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message": "User logged in successfully",
+			"user":    u,
+		})
 	}
 }
 

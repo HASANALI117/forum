@@ -4,25 +4,26 @@ export const NavLinks = [
     name: "Home",
     href: "/",
     icon: "bxs-home",
-    current: true,
   },
   {
     name: "My Posts",
     href: "/my-posts",
     icon: "bxs-notepad",
-    current: false,
   },
   {
     name: "Categories",
     href: "/categories",
     icon: "bxs-category",
-    current: false,
   },
   {
     name: "Create Post",
     href: "/create-post",
     icon: "bx-plus",
-    current: false,
+  },
+  {
+    name: "Sign In",
+    href: "/signin",
+    icon: "bx-user",
   },
 ];
 

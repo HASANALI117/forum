@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import { handleFormSubmit, customFetch } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -7,12 +8,12 @@ export default class extends AbstractView {
 
   async getHtml() {
     return /* HTML */ `
-      <div id="signin-form" class="hidden">
+      <div class="">
         <div
-          class="absolute left-0 z-10 mt-2 w-64 flex min-h-full flex-col justify-center px-6 pb-4 lg:px-8 bg-gray-900"
+          class="mt-2 w-64 flex min-h-full flex-col justify-center px-6 pb-4 lg:px-8 bg-gray-900"
         >
           <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" action="/signin" method="GET">
+            <form class="space-y-6" id="signin-form">
               <div>
                 <label
                   for="username"
@@ -81,5 +82,14 @@ export default class extends AbstractView {
         </div>
       </div>
     `;
+  }
+
+  async onMounted() {
+    handleFormSubmit("signin-form", (data) => {
+      customFetch("http://localhost:8080/api/login", "POST", {
+        identifier: data.username,
+        password: data.password,
+      });
+    });
   }
 }
