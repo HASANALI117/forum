@@ -154,10 +154,7 @@ export const MESSAGES = [
 ];
 
 export const CATEGORIES = [
-  { id: "category-1", name: "Full-stack" },
-  { id: "category-2", name: "Front-end" },
-  { id: "category-3", name: "Back-end" },
-  { id: "category-3", name: "Back-end" },
-  { id: "category-3", name: "Back-end" },
-  { id: "category-3", name: "Back-end" },
+  { id: "1", name: "Full-stack" },
+  { id: "2", name: "Front-end" },
+  { id: "3", name: "Back-end" },
 ];

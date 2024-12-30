@@ -1,5 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import { CATEGORIES } from "../constants.js";
+import { customFetch, handleFormSubmit } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -12,12 +13,13 @@ export default class extends AbstractView {
         <div class="flex h-6 items-center">
           <input
             id="${category.id}"
-            name="${category.id}"
+            name="category"
+            value="${category.name}"
             type="radio"
             class="h-4 w-4 rounded border-white/10 bg-white/5 text-indigo-600 focus:ring-indigo-600 focus:ring-offset-gray-900"
           />
           <label
-            for="${category.id}"
+            for="${category.name}"
             class="ml-2 text-sm font-medium text-white"
           >
             ${category.name}
@@ -30,8 +32,7 @@ export default class extends AbstractView {
       <div class="flex justify-center items-center min-h-screen">
         <form
           class="bg-gray-900 w-3/5 rounded-lg shadow p-12"
-          action="/create-post"
-          method="POST"
+          id="post-create-form"
         >
           <h2
             class="text-center text-2xl font-bold leading-9 tracking-tight text-white"
@@ -88,5 +89,23 @@ export default class extends AbstractView {
         </form>
       </div>
     `;
+  }
+
+  async onMounted() {
+    handleFormSubmit("post-create-form", async (data) => {
+      const response = await customFetch(
+        "http://localhost:8080/api/create_post",
+        "POST",
+        {
+          category: data.category,
+          title: data.title,
+          content: data.content,
+        }
+      );
+
+      if (response) {
+        window.location.href = "/";
+      }
+    });
   }
 }

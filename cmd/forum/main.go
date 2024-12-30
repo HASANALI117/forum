@@ -31,6 +31,7 @@ func main() {
 
 	http.HandleFunc("/api/posts", handlers.GetPostsHandler(dbWrapper))
 	http.HandleFunc("/api/create_post", handlers.CreatePostHandler(dbWrapper))
+	http.HandleFunc("/api/post/", handlers.GetPostByIDHandler(dbWrapper))
 	http.HandleFunc("/api/comments", handlers.GetCommentsHandler(dbWrapper))
 	http.HandleFunc("/api/create_comment", handlers.CreateCommentHandler(dbWrapper))
 

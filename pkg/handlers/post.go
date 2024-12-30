@@ -1,12 +1,12 @@
-
 package handlers
 
 import (
 	"encoding/json"
 	"net/http"
+	"strings"
 
-	helpers "forum/pkg/helpers"
 	database "forum/pkg/db"
+	helpers "forum/pkg/helpers"
 )
 
 // Posts and Comments
@@ -25,12 +25,25 @@ func CreatePostHandler(db *database.DBWrapper) http.HandlerFunc {
 
 		u, _ := GetCurrentUser(db, r)
 
-		err = helpers.CreatePost(db.DB.DBConn, u.ID, p.Category, p.Title, p.Content)
+		postID, err := helpers.CreatePost(db.DB.DBConn, u.ID, p.Category, p.Title, p.Content)
 		if err != nil {
 			http.Error(w, "Could not create post", http.StatusInternalServerError)
 			return
 		}
+
+		// Retrieve the created post details
+		post, err := helpers.GetPostByID(db.DB.DBConn, postID)
+		if err != nil {
+			http.Error(w, "Could not retrieve post details", http.StatusInternalServerError)
+			return
+		}
+
 		w.WriteHeader(http.StatusOK)
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"message": "Post created successfully",
+			"post":    post,
+		})
 	}, db)
 }
 
@@ -43,6 +56,30 @@ func GetPostsHandler(db *database.DBWrapper) http.HandlerFunc {
 		}
 
 		json.NewEncoder(w).Encode(posts)
+	}
+}
+
+func GetPostByIDHandler(db *database.DBWrapper) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		// Extract post ID from URL path
+		pathParts := strings.Split(r.URL.Path, "/")
+		if len(pathParts) < 4 || pathParts[3] == "" {
+			http.Error(w, "Missing post ID", http.StatusBadRequest)
+			return
+		}
+		postID := pathParts[3]
+
+		post, err := helpers.GetPostByID(db.DB.DBConn, postID)
+		if err != nil {
+			http.Error(w, "Could not retrieve post details", http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"post": post,
+		})
 	}
 }
 

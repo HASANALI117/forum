@@ -1,18 +1,22 @@
-
 package helpers
 
 import (
 	"database/sql"
-	"time"
-	"github.com/google/uuid"
 	models "forum/pkg/models"
+	"time"
+
+	"github.com/google/uuid"
 )
 
-func CreatePost(db *sql.DB, userID, category, title, content string) error {
+func CreatePost(db *sql.DB, userID, category, title, content string) (string, error) {
 	id := uuid.New().String()
 	_, err := db.Exec(`INSERT INTO posts(id, user_id, category, title, content, created_at)
 	VALUES(?, ?, ?, ?, ?, ?)`, id, userID, category, title, content, time.Now())
-	return err
+
+	if err != nil {
+		return "", err
+	}
+	return id, nil
 }
 
 func GetPosts(db *sql.DB) ([]models.Post, error) {
@@ -34,4 +38,15 @@ func GetPosts(db *sql.DB) ([]models.Post, error) {
 	}
 
 	return posts, nil
+}
+
+func GetPostByID(db *sql.DB, postID string) (*models.Post, error) {
+	row := db.QueryRow(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.nickname
+        FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?`, postID)
+	post := &models.Post{}
+	err := row.Scan(&post.ID, &post.UserID, &post.Category, &post.Title, &post.Content, &post.CreatedAt, &post.UserName)
+	if err != nil {
+		return nil, err
+	}
+	return post, nil
 }

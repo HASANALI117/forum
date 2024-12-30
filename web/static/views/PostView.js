@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import Comment from "./Comment.js";
-import { POSTS } from "../constants.js";
+import { customFetch, formatTimeAgo } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -8,24 +8,27 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const postId = Number(this.params.id);
+    const postId = this.params.id;
 
-    console.log(postId);
+    const response = await customFetch(
+      `http://localhost:8080/api/post/${postId}`,
+      "GET"
+    );
 
-    const post = POSTS.find((post) => post.id === postId);
+    const post = response.post;
 
-    console.log(post);
+    const formattedTime = formatTimeAgo(post.CreatedAt);
 
     if (!post) {
       return /* HTML */ `<div class="text-white">Post not found</div>`;
     }
 
-    const commentsHTML = await Promise.all(
-      post.comments.map(async (comment) => {
-        const commentsView = new Comment({ comment, post });
-        return await commentsView.getHtml();
-      })
-    ).then((htmlArray) => htmlArray.join(""));
+    // const commentsHTML = await Promise.all(
+    //   post.comments.map(async (comment) => {
+    //     const commentsView = new Comment({ comment, post });
+    //     return await commentsView.getHtml();
+    //   })
+    // ).then((htmlArray) => htmlArray.join(""));
 
     return /* HTML */ `
       <div class="flex items-center justify-center my-8">
@@ -38,44 +41,42 @@ export default class extends AbstractView {
             />
             <div class="flex flex-col ml-4 text-sm text-gray-400">
               <div>
-                <span class="font-semibold">u/${post.username}</span> •
-                <span>${post.created_at}</span>
+                <span class="font-semibold">u/${post.UserName}</span> •
+                <span>${formattedTime}</span>
               </div>
-              <span class="font-semibold">c/${post.category}</span>
+              <span class="font-semibold">c/${post.Category}</span>
             </div>
           </div>
 
           <hr class="my-4 border-gray-600" />
 
-          <h1 class="text-lg font-semibold text-white mb-2">${post.title}</h1>
-          <p class="text-md text-gray-300 line-clamp">${post.content}</p>
+          <h1 class="text-lg font-semibold text-white mb-2">${post.Title}</h1>
+          <p class="text-md text-gray-300 line-clamp">${post.Content}</p>
           <!-- Icons -->
           <div class="flex mt-6">
             <div
               class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
             >
               <i class="bx bxs-like text-xl"></i>
-              <span class="ml-2">${post.likes}</span>
+              <span class="ml-2">12</span>
             </div>
             <div
               class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
             >
               <i class="bx bxs-dislike text-xl"></i>
-              <span class="ml-2">${post.dislikes}</span>
+              <span class="ml-2">12</span>
             </div>
             <div
               class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
             >
               <i class="bx bxs-message-rounded-dots text-xl"></i>
-              <span class="ml-2">${post.comments.length}</span>
+              <span class="ml-2">12</span>
             </div>
           </div>
 
           <!-- Comments -->
-          ${commentsHTML}
 
           <!-- Comment Form -->
-
           <div class="mt-16">
             <form id="comment-form">
               <label
