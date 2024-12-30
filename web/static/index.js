@@ -35,6 +35,8 @@ const renderPage = async () => {
   const match = await router();
   const pageView = new match.route.view(getParams(match));
   document.getElementById("root").innerHTML = await pageView.getHtml();
+
+  //   pageView.onMounted();
 };
 
 const navigateTo = (url) => {

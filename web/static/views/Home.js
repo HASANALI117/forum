@@ -1,7 +1,8 @@
 import AbstractView from "./AbstractView.js";
 import Post from "./Post.js";
 import Chat from "./Chat.js";
-import { POSTS, USERS, MESSAGES } from "../constants.js"; // Assuming you have these constants
+import { POSTS, USERS, MESSAGES } from "../constants.js";
+import { customFetch } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -9,8 +10,10 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
+    const posts = await customFetch("http://localhost:8080/api/posts", "GET");
+
     const postsHTML = await Promise.all(
-      POSTS.map(async (post) => {
+      posts.map(async (post) => {
         const postView = new Post({ post });
         return await postView.getHtml();
       })
