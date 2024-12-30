@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import Post from "./Post.js";
 import Chat from "./Chat.js";
-import { POSTS, USERS, MESSAGES } from "../constants.js";
+import { USERS, MESSAGES } from "../constants.js";
 import { customFetch } from "../utils.js";
 
 export default class extends AbstractView {

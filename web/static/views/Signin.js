@@ -85,11 +85,19 @@ export default class extends AbstractView {
   }
 
   async onMounted() {
-    handleFormSubmit("signin-form", (data) => {
-      customFetch("http://localhost:8080/api/login", "POST", {
-        identifier: data.username,
-        password: data.password,
-      });
+    handleFormSubmit("signin-form", async (data) => {
+      const response = await customFetch(
+        "http://localhost:8080/api/login",
+        "POST",
+        {
+          identifier: data.username,
+          password: data.password,
+        }
+      );
+
+      if (response) {
+        window.location.href = "/";
+      }
     });
   }
 }

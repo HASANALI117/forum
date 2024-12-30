@@ -1,4 +1,5 @@
 import AbstractView from "./AbstractView.js";
+import { formatTimeAgo } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -12,6 +13,8 @@ export default class extends AbstractView {
       return `<div class="text-white">Post not found</div>`;
     }
 
+    const formattedTime = formatTimeAgo(post.CreatedAt);
+
     return /* HTML */ `
       <a class="m-4 w-4/5" href="/post/${post.ID}">
         <div
@@ -22,7 +25,7 @@ export default class extends AbstractView {
             <div class="flex flex-col ml-4 text-sm text-gray-400">
               <div>
                 <span class="font-semibold">u/${post.UserName}</span> •
-                <span>${post.CreatedAt}</span>
+                <span>${formattedTime}</span>
               </div>
               <span class="font-semibold">c/${post.Category}</span>
             </div>
