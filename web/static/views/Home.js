@@ -32,7 +32,11 @@ export default class extends AbstractView {
           ${postsHTML}
         </div>
         <!-- Chat Section -->
-        <div class="flex flex-col w-1/2 bg-gray-900 ml-16">${chatHTML}</div>
+        <div
+          class="flex flex-col w-1/2 bg-gray-900 ml-16 sticky top-0 h-screen overflow-y-auto"
+        >
+          ${chatHTML}
+        </div>
       </div>
     `;
   }

@@ -1,6 +1,6 @@
 import AbstractView from "./AbstractView.js";
 import Comment from "./Comment.js";
-import { customFetch, formatTimeAgo } from "../utils.js";
+import { customFetch, formatTimeAgo, handleFormSubmit } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -17,18 +17,27 @@ export default class extends AbstractView {
 
     const post = response.post;
 
-    const formattedTime = formatTimeAgo(post.CreatedAt);
-
     if (!post) {
       return /* HTML */ `<div class="text-white">Post not found</div>`;
     }
 
-    // const commentsHTML = await Promise.all(
-    //   post.comments.map(async (comment) => {
-    //     const commentsView = new Comment({ comment, post });
-    //     return await commentsView.getHtml();
-    //   })
-    // ).then((htmlArray) => htmlArray.join(""));
+    const formattedTime = formatTimeAgo(post.CreatedAt);
+
+    const commentsResponse = await customFetch(
+      `http://localhost:8080/api/comments?post_id=${postId}`,
+      "GET"
+    );
+
+    const comments = commentsResponse || [];
+
+    const commentsHTML = await Promise.all(
+      comments.map(async (comment) => {
+        const formattedTime = formatTimeAgo(comment.CreatedAt);
+
+        const commentView = new Comment({ comment, formattedTime });
+        return await commentView.getHtml();
+      })
+    ).then((htmlArray) => htmlArray.join(""));
 
     return /* HTML */ `
       <div class="flex items-center justify-center my-8">
@@ -70,11 +79,12 @@ export default class extends AbstractView {
               class="flex items-center text-gray-400 hover:text-white cursor-pointer mr-6"
             >
               <i class="bx bxs-message-rounded-dots text-xl"></i>
-              <span class="ml-2">12</span>
+              <span class="ml-2">${comments.length}</span>
             </div>
           </div>
 
           <!-- Comments -->
+          ${commentsHTML}
 
           <!-- Comment Form -->
           <div class="mt-16">
@@ -102,5 +112,23 @@ export default class extends AbstractView {
         </div>
       </div>
     `;
+  }
+
+  async onMounted() {
+    const postId = this.params.id;
+
+    handleFormSubmit("comment-form", async (data) => {
+      const response = await customFetch(
+        `http://localhost:8080/api/create_comment?post_id=${postId}`,
+        "POST",
+        {
+          content: data.comment,
+        }
+      );
+
+      if (response) {
+        window.location.reload();
+      }
+    });
   }
 }

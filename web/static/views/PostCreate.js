@@ -29,7 +29,7 @@ export default class extends AbstractView {
     ).join("");
 
     return /* HTML */ `
-      <div class="flex justify-center items-center min-h-screen">
+      <div class="flex justify-center items-center mt-10">
         <form
           class="bg-gray-900 w-3/5 rounded-lg shadow p-12"
           id="post-create-form"
@@ -67,7 +67,7 @@ export default class extends AbstractView {
               id="content"
               name="content"
               rows="3"
-              class="block w-full rounded-md mt-2 border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
+              class="block w-full h-60 resize-none rounded-md mt-2 border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
               required
             ></textarea>
           </div>

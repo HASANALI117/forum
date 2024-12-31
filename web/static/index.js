@@ -82,7 +82,7 @@ window.addEventListener("popstate", renderPage);
 
 document.addEventListener("DOMContentLoaded", async () => {
   await renderNavbar();
-  await renderFooter();
+  // await renderFooter();
   await renderPage();
 
   document.body.addEventListener("click", function (e) {

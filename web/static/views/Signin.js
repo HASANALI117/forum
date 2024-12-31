@@ -73,7 +73,7 @@ export default class extends AbstractView {
               No account?
               <a
                 id="signup-link"
-                href="#signup"
+                href="/signup"
                 class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300"
                 >Sign up</a
               >
