@@ -98,7 +98,7 @@ export default class extends AbstractView {
                 id="comment"
                 name="comment"
                 rows="4"
-                class="block w-full mt-2 p-2.5 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
+                class="block resize-none overflow-y-auto h-32 w-full mt-2 p-2.5 bg-gray-800 text-white border border-gray-600 rounded-md focus:ring-indigo-500 focus:border-indigo-500"
                 placeholder="Write your comment here..."
               ></textarea>
               <button
