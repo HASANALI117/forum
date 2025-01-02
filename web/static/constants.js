@@ -12,7 +12,7 @@ export const NavLinks = [
   },
   {
     name: "Categories",
-    href: "/categories",
+    href: "/category",
     icon: "bxs-category",
   },
   {
@@ -154,7 +154,21 @@ export const MESSAGES = [
 ];
 
 export const CATEGORIES = [
-  { id: "1", name: "Full-stack" },
-  { id: "2", name: "Front-end" },
-  { id: "3", name: "Back-end" },
+  {
+    id: "1",
+    name: "Full-stack",
+    description:
+      "Welcome to Full-stack Development! A mix of back-end & front-end development, an FS developer can do everything, but nothing exceptionally well. Feel free to ask questions or discuss all aspects of web development, or development life in general. If you’re asking a question, try to give only as much detail as necessary & read the rules first!",
+  },
+  {
+    id: "2",
+    name: "Front-end",
+    description:
+      "/r/frontend is a subreddit for front end web developers who want to move the web forward or want to learn how. If you're looking to find or share the latest and greatest tips, links, thoughts, and discussions on the world of front web development, this is the place to do it.",
+  },
+  {
+    id: "3",
+    name: "Back-end",
+    description: "For back-end programming discussion.",
+  },
 ];

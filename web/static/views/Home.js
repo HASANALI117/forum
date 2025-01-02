@@ -24,18 +24,19 @@ export default class extends AbstractView {
 
     return /* HTML */ `
       <div class="flex flex-row w-full mx-auto">
+        <!-- Chat Section -->
+        <div
+          class="flex flex-col w-1/2 bg-gray-900 mr-16 sticky top-0 h-screen overflow-y-auto"
+        >
+          ${chatHTML}
+        </div>
+
         <!-- Posts Section -->
         <div
           class="flex flex-col w-2/3 items-center justify-center flex-wrap my-8"
           id="posts"
         >
           ${postsHTML}
-        </div>
-        <!-- Chat Section -->
-        <div
-          class="flex flex-col w-1/2 bg-gray-900 ml-16 sticky top-0 h-screen overflow-y-auto"
-        >
-          ${chatHTML}
         </div>
       </div>
     `;
