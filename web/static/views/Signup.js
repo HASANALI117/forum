@@ -207,7 +207,7 @@ export default class extends AbstractView {
           <p class="mt-6 text-center text-sm text-gray-400">
             Already have an account?
             <a
-              href="/"
+              href="/signin"
               class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300 transition-all"
               >Login here</a
             >
