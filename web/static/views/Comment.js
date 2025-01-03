@@ -10,7 +10,7 @@ export default class extends AbstractView {
     const formattedTime = this.params.formattedTime;
 
     return /* HTML */ `
-      <div class="p-6 my-6">
+      <div class="px-10 py-6 my-6">
         <div class="flex items-center mb-4">
           <img class="w-10 h-10 rounded-full" src="" alt="Random Image" />
           <div class="flex flex-col ml-4 text-sm text-gray-400">

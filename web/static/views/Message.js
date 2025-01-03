@@ -9,9 +9,7 @@ export default class extends AbstractView {
     const message = this.params.message;
 
     return /* HTML */ `
-      <div
-        class="flex items-start hover:bg-gray-700 p-4 cursor-pointer transition-all"
-      >
+      <div class="flex items-start hover:bg-gray-700 p-6 transition-all">
         <img
           class="w-10 h-10 rounded-full mr-4"
           src="${message.image}"

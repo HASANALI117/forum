@@ -131,25 +131,78 @@ export const POSTS = [
 ];
 
 // Sample chat messages
-export const MESSAGES = [
+export const CHATS = [
   {
-    username: "User 1",
-    image: USERS[0].image,
-    content: "Hello, how are you?",
-    timestamp: "10:00 AM",
+    id: 1,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "Hello, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "I'm doing well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
   },
   {
-    username: "User 2",
-    image: USERS[1].image,
-    content:
-      "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
-    timestamp: "10:05 AM",
+    id: 2,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "Hello, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "I'm doing well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
   },
   {
-    username: "User 1",
-    image: USERS[0].image,
-    content: "I'm doing well, thank you!",
-    timestamp: "10:10 AM",
+    id: 3,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "HHHHHHHHHHHHHHHHHHHHHHHHHH, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "HHHHHHHHHHHHH sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "SACSCCDSDDS well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
   },
 ];
 

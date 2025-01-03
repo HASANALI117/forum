@@ -1,11 +1,13 @@
 import Navbar from "./views/Navbar.js";
-import Footer from "./views/Footer.js";
 import Home from "./views/Home.js";
 import PostView from "./views/PostView.js";
 import PostCreate from "./views/PostCreate.js";
 import Signup from "./views/Signup.js";
 import Signin from "./views/Signin.js";
 import CategoriesList from "./views/CategoriesList.js";
+import ChatView from "./views/ChatView.js";
+import UserList from "./views/UserList.js";
+import { USERS } from "./constants.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -28,9 +30,9 @@ const renderNavbar = async () => {
   document.getElementById("navbar").innerHTML = await navbarView.getHtml();
 };
 
-const renderFooter = async () => {
-  const footerView = new Footer();
-  document.getElementById("footer").innerHTML = await footerView.getHtml();
+const renderUserList = async () => {
+  const userlistView = new UserList({ users: USERS });
+  document.getElementById("userlist").innerHTML = await userlistView.getHtml();
 };
 
 const renderPage = async () => {
@@ -56,6 +58,7 @@ const router = async () => {
     { path: "/signup", view: Signup },
     { path: "/signin", view: Signin },
     { path: "/category", view: CategoriesList },
+    { path: "/chat/:id", view: ChatView },
   ];
 
   // Test each route for potential match
@@ -84,7 +87,7 @@ window.addEventListener("popstate", renderPage);
 
 document.addEventListener("DOMContentLoaded", async () => {
   await renderNavbar();
-  // await renderFooter();
+  await renderUserList();
   await renderPage();
 
   document.body.addEventListener("click", function (e) {
