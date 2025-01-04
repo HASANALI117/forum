@@ -8,6 +8,7 @@ import CategoriesList from "./views/CategoriesList.js";
 import ChatView from "./views/ChatView.js";
 import UserList from "./views/UserList.js";
 import { USERS } from "./constants.js";
+import { customFetch } from "./utils.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -31,7 +32,9 @@ const renderNavbar = async () => {
 };
 
 const renderUserList = async () => {
-  const userlistView = new UserList({ users: USERS });
+  // const userlistView = new UserList({ users: USERS });
+  const users = await customFetch("/api/online_users");
+  const userlistView = new UserList({ users: users });
   document.getElementById("userlist").innerHTML = await userlistView.getHtml();
 };
 
