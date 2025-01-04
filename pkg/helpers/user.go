@@ -1,11 +1,11 @@
-
 package helpers
 
 import (
 	"database/sql"
+	models "forum/pkg/models"
+
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
-	models "forum/pkg/models"
 )
 
 // Register a new user
@@ -20,7 +20,10 @@ func RegisterUser(db *sql.DB, user models.User) error {
 	_, err = db.Exec(`INSERT INTO users(id, nickname, email, password, age, gender, first_name, last_name)
 	VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
 		user.ID, user.Nickname, user.Email, user.Password, user.Age, user.Gender, user.FirstName, user.LastName)
-	return err
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // Authenticate user by nickname or email
