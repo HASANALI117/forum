@@ -1,5 +1,6 @@
-import AbstractView from "./AbstractView.js";
-import Message from "./Message.js";
+import AbstractView from './AbstractView.js';
+import Message from './Message.js';
+import { handleFormSubmit } from '../utils.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -16,13 +17,16 @@ export default class extends AbstractView {
             const messageView = new Message({ message });
             return await messageView.getHtml();
           })
-        ).then((htmlArray) => htmlArray.join(""));
+        ).then((htmlArray) => htmlArray.join(''));
 
         return /* HTML */ `
-          <div class="chat" data-chat-id="${chat.id}">${messagesHTML}</div>
+          <div class="chat" data-chat-id="${chat.id}">
+            ${messagesHTML}
+            <div id="message-container"></div>
+          </div>
         `;
       })
-    ).then((htmlArray) => htmlArray.join(""));
+    ).then((htmlArray) => htmlArray.join(''));
 
     return /* HTML */ `
       <div class="flex flex-col w-full bg-gray-900">
@@ -46,11 +50,41 @@ export default class extends AbstractView {
           <i
             class="bx bx-smile absolute right-16 text-gray-400 text-3xl hover:text-white"
           ></i>
-          <i
+          <button type="submit"
             class="bx bxs-send text-3xl text-white ml-1 hover:bg-gray-500 rounded-full cursor-pointer p-2"
-          ></i>
+          ></button>
         </form>
       </div>
     `;
+  }
+
+  async onMounted(ws, {sendMessage}) {
+    const chatMessages = document.getElementById('chat-messages');
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    
+    // Handle incoming WebSocket messages
+    ws.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      if (message.type === 'private_message') {
+        const messageView = new Message({ message });
+        messageView.getHtml().then(html => {
+          chatMessages.insertAdjacentHTML('beforeend', html);
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+      }
+    });
+
+    // Handle form submission
+    handleFormSubmit('chat-form', (data) => {
+      const message = chatInput.value.trim();
+      if (message) {
+        sendMessage(message);
+        chatInput.value = '';
+      }
+    });
+
+    // Auto-scroll to bottom on new messages
+    chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 }
