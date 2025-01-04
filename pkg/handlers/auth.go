@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -29,23 +30,24 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 			http.Error(w, "Invalid Method", http.StatusMethodNotAllowed)
 			return
 		}
-		var u models.User
-		err := json.NewDecoder(r.Body).Decode(&u)
+		var user models.User
+		err := json.NewDecoder(r.Body).Decode(&user)
 		if err != nil {
 			http.Error(w, "Invalid input", http.StatusBadRequest)
 			return
 		}
 
-		err = helpers.RegisterUser(db.DB.DBConn, u)
+		err = helpers.RegisterUser(db.DB.DBConn, user)
 		if err != nil {
 			http.Error(w, "Could not register user", http.StatusBadRequest)
+			fmt.Println(err)
 			return
 		}
 		w.WriteHeader(http.StatusOK)
 
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"message": "User registered successfully",
-			"user":    u,
+			"user":    user,
 		})
 
 	}
@@ -112,5 +114,20 @@ func LogoutHandler(db *database.DBWrapper) http.HandlerFunc {
 			})
 		}
 		w.WriteHeader(http.StatusOK)
+	}
+}
+
+
+func CurrentUserHandler(db *database.DBWrapper) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		user, err := GetCurrentUser(db, r)
+		if (err != nil) {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+		w.WriteHeader(http.StatusOK)
+		json.NewEncoder(w).Encode(map[string]interface{}{
+			"user": user,
+		})
 	}
 }
