@@ -10,6 +10,9 @@ export const customFetch = (url, type, data) => {
 
   return fetch(url, options)
     .then((res) => {
+      if (res.status === 401) {
+        return { error: "Unauthorized" };
+      }
       if (res.ok) {
         console.log("HTTP request successful");
         return res.json();
@@ -71,3 +74,21 @@ export const formatTimeAgo = (dateString) => {
 
   return Math.floor(seconds) + " second" + (seconds > 1 ? "s" : "") + " ago";
 };
+
+export const getCurrentUser = async () => {
+  var isUserLoggedIn = false;
+    var user = null;
+    const response = await customFetch(
+      'http://localhost:8080/api/current_user',
+      'GET'
+    );
+
+    if (response.error == 'Unauthorized') {
+      isUserLoggedIn = false;
+      user = null;
+    } else {
+      isUserLoggedIn = true;
+      user = response.user;
+    }
+    return [isUserLoggedIn, user];
+}
