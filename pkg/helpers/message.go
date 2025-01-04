@@ -1,4 +1,3 @@
-
 package helpers
 
 import (
@@ -39,6 +38,33 @@ func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.M
 		msgs = append(msgs, msg)
 	}
 	// messages are in DESC order, reverse them
+	for i, j := 0, len(msgs)-1; i < j; i, j = i+1, j-1 {
+		msgs[i], msgs[j] = msgs[j], msgs[i]
+	}
+	return msgs, nil
+}
+
+func GetAllMessages(db *sql.DB) ([]models.Message, error) {
+	rows, err := db.Query(`
+		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.nickname
+		FROM messages m
+		JOIN users us ON m.sender_id = us.id
+		ORDER BY m.created_at DESC
+	`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var msgs []models.Message
+	for rows.Next() {
+		var msg models.Message
+		err := rows.Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName)
+		if err != nil {
+			return nil, err
+		}
+		msgs = append(msgs, msg)
+	}
 	for i, j := 0, len(msgs)-1; i < j; i, j = i+1, j-1 {
 		msgs[i], msgs[j] = msgs[j], msgs[i]
 	}
