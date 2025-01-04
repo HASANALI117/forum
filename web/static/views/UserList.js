@@ -12,19 +12,19 @@ export default class extends AbstractView {
       .map(
         (user, index) => /* HTML */ ` <a
           class="flex items-center p-4 hover:bg-gray-600 cursor-pointer transition-all"
-          href="/chat/${index + 1}"
+          href="/chat/${user.id}"
         >
           <img
             class="w-10 h-10 rounded-full"
-            src="${user.image}"
-            alt="${user.username}"
+            src="${'https://picsum.photos/200'}"
+            alt="${user.nickname}"
           />
           <div class="ml-4">
-            <p class="text-white text-xl font-semibold">${user.username}</p>
+            <p class="text-white text-xl font-semibold">${user.nickname}</p>
           </div>
         </a>`
       )
-      .join("");
+      .join('');
 
     return /* HTML */ `
       <div class="flex flex-col w-full bg-gray-700">

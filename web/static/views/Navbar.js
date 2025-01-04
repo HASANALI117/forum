@@ -1,5 +1,6 @@
-import AbstractView from "./AbstractView.js";
-import { USERS, NavLinks } from "../constants.js";
+import AbstractView from './AbstractView.js';
+import { USERS, NavLinks } from '../constants.js';
+import { customFetch, getCurrentUser } from '../utils.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -7,6 +8,9 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
+    const [isUserLoggedIn, user] = await getCurrentUser();
+
+    // console.log({ user });
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
         href="${link.href}"
@@ -14,9 +18,9 @@ export default class extends AbstractView {
       >
         ${link.icon
           ? `<i class="bx ${link.icon} mr-1 text-xl"></i>`
-          : ""}${link.name}
+          : ''}${link.name}
       </a>`
-    ).join("");
+    ).join('');
 
     return /* HTML */ `
       <header class="bg-gray-800">
@@ -93,7 +97,7 @@ export default class extends AbstractView {
                   </button>
 
                   <p class="ml-4 text-xl font-medium text-white">
-                    ${USERS[0].username}
+                    ${isUserLoggedIn ? user.Nickname : 'Guest'}
                   </p>
                 </div>
 
