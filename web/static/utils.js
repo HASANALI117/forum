@@ -76,19 +76,17 @@ export const formatTimeAgo = (dateString) => {
 };
 
 export const getCurrentUser = async () => {
-  var isUserLoggedIn = false;
-    var user = null;
+  try {
     const response = await customFetch(
-      'http://localhost:8080/api/current_user',
-      'GET'
+      "http://localhost:8080/api/current_user",
+      "GET"
     );
-
-    if (response.error == 'Unauthorized') {
-      isUserLoggedIn = false;
-      user = null;
-    } else {
-      isUserLoggedIn = true;
-      user = response.user;
+    if (response.error === "Unauthorized") {
+      return [false, null];
     }
-    return [isUserLoggedIn, user];
-}
+    return [true, response.user];
+  } catch (error) {
+    console.error("Error fetching current user:", error);
+    return [false, null];
+  }
+};
