@@ -8,7 +8,7 @@ import CategoriesList from "./views/CategoriesList.js";
 import ChatView from "./views/ChatView.js";
 import UserList from "./views/UserList.js";
 import { USERS } from "./constants.js";
-import { customFetch } from "./utils.js";
+import { customFetch, getCurrentUser } from "./utils.js";
 
 const pathToRegex = (path) =>
   new RegExp("^" + path.replace(/\//g, "\\/").replace(/:\w+/g, "(.+)") + "$");
@@ -91,6 +91,14 @@ window.addEventListener("popstate", renderPage);
 document.addEventListener("DOMContentLoaded", async () => {
   await renderNavbar();
   await renderUserList();
+
+  const [isLoggedIn] = await getCurrentUser();
+  if (isLoggedIn) {
+    navigateTo("/");
+  } else {
+    navigateTo("/signin");
+  }
+
   await renderPage();
 
   document.body.addEventListener("click", function (e) {
