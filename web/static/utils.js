@@ -46,7 +46,7 @@ export const handleFormSubmit = (formId, callback) => {
       event.preventDefault();
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
-      console.log(data);
+      // console.log(data);
       if (callback) {
         callback(data);
       }

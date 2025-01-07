@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import { handleFormSubmit, customFetch } from "../utils.js";
+import { handleFormSubmit, customFetch, getCurrentUser } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -219,15 +219,37 @@ export default class extends AbstractView {
 
   async onMounted() {
     handleFormSubmit("signup-form", (data) => {
-      customFetch("http://localhost:8080/api/register", "POST", {
-        nickname: data.username,
-        email: data.email,
-        password: data.password,
-        age: parseInt(data.age, 10),
-        gender: data.gender,
-        first_name: data.firstName,
-        last_name: data.lastName,
-      });
+      customFetch(
+        "http://localhost:8080/api/register",
+        "POST",
+        {
+          nickname: data.username,
+          email: data.email,
+          password: data.password,
+          age: parseInt(data.age, 10),
+          gender: data.gender,
+          firstname: data.firstName,
+          lastname: data.lastName,
+        },
+        async (res) => {
+          if (res.user) {
+            // Delay the user fetch to allow time for session cookie to propagate
+            setTimeout(async () => {
+              const [authenticated, user] = await getCurrentUser();
+              if (authenticated) {
+                window.location.href = "/dashboard";
+              } else {
+                console.error("User not authenticated after signup.");
+              }
+            }, 2000); // Delay for 1 second
+          } else {
+            console.error("Signup failed:", res);
+          }
+        },
+        (error) => {
+          console.error("Error creating user:", error);
+        }
+      );
     });
   }
 }

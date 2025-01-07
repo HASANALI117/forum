@@ -74,12 +74,14 @@ export default class extends AbstractView {
         {
           identifier: data.username,
           password: data.password,
+        },
+        () => {
+          window.location.href = "/";
+        },
+        (error) => {
+          console.error("Error signing in:", error);
         }
       );
-
-      if (response) {
-        window.location.href = "/";
-      }
     });
   }
 }

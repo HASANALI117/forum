@@ -20,11 +20,11 @@ export const NavLinks = [
     href: "/create-post",
     icon: "bx-plus",
   },
-  {
-    name: "Sign In",
-    href: "/signin",
-    icon: "bx-user",
-  },
+  // {
+  //   name: "Sign In",
+  //   href: "/signin",
+  //   icon: "bx-user",
+  // },
 ];
 
 // Sample user data

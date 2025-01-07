@@ -43,13 +43,28 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 			fmt.Println(err)
 			return
 		}
+
+		// Automatically log in the user after registration
+		sessionToken, err := helpers.CreateSession(db.DB.DBConn, user.ID)
+		if err != nil {
+			http.Error(w, "Error creating session", http.StatusInternalServerError)
+			return
+		}
+
+		http.SetCookie(w, &http.Cookie{
+			Name:     "session_token",
+			Value:    sessionToken,
+			Path:     "/",
+			HttpOnly: true,
+			Expires:  time.Now().Add(24 * time.Hour),
+		})
+
 		w.WriteHeader(http.StatusOK)
 
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"message": "User registered successfully",
+			"message": "User registered and logged in successfully",
 			"user":    user,
 		})
-
 	}
 }
 
@@ -117,11 +132,10 @@ func LogoutHandler(db *database.DBWrapper) http.HandlerFunc {
 	}
 }
 
-
 func CurrentUserHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, err := GetCurrentUser(db, r)
-		if (err != nil) {
+		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
