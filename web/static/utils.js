@@ -1,4 +1,4 @@
-export const customFetch = (url, type, data) => {
+export const customFetch = (url, type, data, onSuccess, onError) => {
   const options = {
     method: type,
     headers: { "Content-type": "application/json" },
@@ -9,23 +9,32 @@ export const customFetch = (url, type, data) => {
   }
 
   return fetch(url, options)
-    .then((res) => {
+    .then(async (res) => {
       if (res.status === 401) {
         return { error: "Unauthorized" };
       }
       if (res.ok) {
-        console.log("HTTP request successful");
-        return res.json();
+        const jsonResponse = await res.json().catch(() => null);
+        console.log("HTTP Request Successful", jsonResponse);
+
+        if (onSuccess) {
+          onSuccess(jsonResponse);
+        }
+
+        return jsonResponse;
       } else {
-        console.log("HTTP request unsuccessful");
+        const error = new Error("Request failed");
+        if (onError) {
+          onError(error);
+        }
+        throw error;
       }
     })
-    .then((data) => {
-      console.log(data);
-      return data;
-    })
     .catch((error) => {
-      console.log(error);
+      console.error("Fetch error:", error);
+      if (onError) {
+        onError(jsonResponse);
+      }
       throw error;
     });
 };

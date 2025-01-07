@@ -29,6 +29,9 @@ const getParams = (match) => {
 const renderNavbar = async () => {
   const navbarView = new Navbar();
   document.getElementById("navbar").innerHTML = await navbarView.getHtml();
+  if (typeof navbarView.onMounted === "function") {
+    await navbarView.onMounted();
+  }
 };
 
 const renderUserList = async () => {
@@ -93,13 +96,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   await renderUserList();
 
   const [isLoggedIn] = await getCurrentUser();
-  if (isLoggedIn) {
-    navigateTo("/");
-  } else {
-    navigateTo("/signin");
-  }
+  const currentPath = window.location.pathname;
 
-  await renderPage();
+  if (isLoggedIn) {
+    await renderPage();
+  } else if (currentPath !== "/signup") {
+    navigateTo("/signin");
+  } else {
+    await renderPage();
+  }
 
   document.body.addEventListener("click", function (e) {
     if (e.target.matches("[data-link]")) {
