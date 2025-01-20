@@ -72,7 +72,7 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 func LoginHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			helpers.Error(w, "Invalid Method", http.StatusMethodNotAllowed, fmt.Errorf("Invalid Method: %s", r.Method))
+			helpers.Error(w, "Invalid Method", http.StatusMethodNotAllowed, fmt.Errorf("invalid method: %s", r.Method))
 			return
 		}
 
