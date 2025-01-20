@@ -64,9 +64,9 @@ export default class extends AbstractView {
         JSON.stringify({
           type: 'private_message',
           content: content,
-          receiver_id: this.chatId,
-          sender_id: this.user.ID,
-          sender_name: this.user.Nickname,
+          receiverId: this.chatId,
+          senderId: this.user.ID,
+          senderName: this.user.Nickname,
         })
       );
       console.log('Message sent:', {
