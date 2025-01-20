@@ -16,7 +16,7 @@ func AuthRequired(next http.HandlerFunc, db *database.DBWrapper) http.HandlerFun
 	return func(w http.ResponseWriter, r *http.Request) {
 		_, err := GetCurrentUser(db, r)
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			helpers.Error(w, "Unauthorized", http.StatusUnauthorized, err)
 			return
 		}
 		next.ServeHTTP(w, r)
@@ -27,19 +27,19 @@ func AuthRequired(next http.HandlerFunc, db *database.DBWrapper) http.HandlerFun
 func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			http.Error(w, "Invalid Method", http.StatusMethodNotAllowed)
+			helpers.Error(w, "invalid method", http.StatusMethodNotAllowed, fmt.Errorf("invalid method: %s", r.Method))
 			return
 		}
 		var user models.User
 		err := json.NewDecoder(r.Body).Decode(&user)
 		if err != nil {
-			http.Error(w, "Invalid input", http.StatusBadRequest)
+			helpers.Error(w, "Invalid input", http.StatusBadRequest, err)
 			return
 		}
 
 		err = helpers.RegisterUser(db.DB.DBConn, user)
 		if err != nil {
-			http.Error(w, "Could not register user", http.StatusBadRequest)
+			helpers.Error(w, "Could not register user", http.StatusBadRequest, err)
 			fmt.Println(err)
 			return
 		}
@@ -47,7 +47,7 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 		// Automatically log in the user after registration
 		sessionToken, err := helpers.CreateSession(db.DB.DBConn, user.ID)
 		if err != nil {
-			http.Error(w, "Error creating session", http.StatusInternalServerError)
+			helpers.Error(w, "Error creating session", http.StatusInternalServerError, err)
 			return
 		}
 
@@ -72,7 +72,7 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 func LoginHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
-			http.Error(w, "Invalid Method", http.StatusMethodNotAllowed)
+			helpers.Error(w, "Invalid Method", http.StatusMethodNotAllowed, fmt.Errorf("Invalid Method: %s", r.Method))
 			return
 		}
 
@@ -82,19 +82,19 @@ func LoginHandler(db *database.DBWrapper) http.HandlerFunc {
 		}
 		err := json.NewDecoder(r.Body).Decode(&creds)
 		if err != nil {
-			http.Error(w, "Invalid input", http.StatusBadRequest)
+			helpers.Error(w, "Invalid input", http.StatusBadRequest, err)
 			return
 		}
 
 		u, err := helpers.AuthenticateUser(db.DB.DBConn, creds.Identifier, creds.Password)
 		if err != nil {
-			http.Error(w, "Invalid credentials", http.StatusUnauthorized)
+			helpers.Error(w, "Invalid credentials", http.StatusUnauthorized, err)
 			return
 		}
 
 		sessionToken, err := helpers.CreateSession(db.DB.DBConn, u.ID)
 		if err != nil {
-			http.Error(w, "Error creating session", http.StatusInternalServerError)
+			helpers.Error(w, "Error creating session", http.StatusInternalServerError, err)
 			return
 		}
 
@@ -136,7 +136,7 @@ func CurrentUserHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		user, err := GetCurrentUser(db, r)
 		if err != nil {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			helpers.Error(w, "Unauthorized", http.StatusUnauthorized, err)
 			return
 		}
 		w.WriteHeader(http.StatusOK)
