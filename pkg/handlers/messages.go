@@ -25,7 +25,7 @@ func GetMessagesHandler(db *database.DBWrapper) http.HandlerFunc {
 		currentUser, _ := GetCurrentUser(db, r)
 		msgs, err := helpers.GetMessages(db.DB.DBConn, currentUser.ID, otherUserID, limit, offset)
 		if err != nil {
-			http.Error(w, "Could not get messages", http.StatusInternalServerError)
+			helpers.Error(w, "Could not get messages", http.StatusInternalServerError, err)
 			return
 		}
 		json.NewEncoder(w).Encode(msgs)
@@ -36,7 +36,7 @@ func GetAllMessagesHandler(db *database.DBWrapper) http.HandlerFunc {
 	return AuthRequired(func(w http.ResponseWriter, r *http.Request) {
 		msgs, err := helpers.GetAllMessages(db.DB.DBConn)
 		if err != nil {
-			http.Error(w, "Could not get all messages", http.StatusInternalServerError)
+			helpers.Error(w, "Could not get all messages", http.StatusInternalServerError, err)
 			return
 		}
 		json.NewEncoder(w).Encode(msgs)

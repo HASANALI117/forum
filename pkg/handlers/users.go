@@ -23,7 +23,7 @@ func GetUsersListHandler(db *database.DBWrapper) http.HandlerFunc {
 	return AuthRequired(func(w http.ResponseWriter, r *http.Request) {
 		usrs, err := helpers.GetAllUsers(db.DB.DBConn)
 		if err != nil {
-			http.Error(w, "Could not get users", http.StatusInternalServerError)
+			helpers.Error(w, "Could not get users", http.StatusInternalServerError, err)
 			return
 		}
 		json.NewEncoder(w).Encode(usrs)
