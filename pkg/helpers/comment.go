@@ -16,7 +16,7 @@ func CreateComment(db *sql.DB, userID, postID, content string) error {
 }
 
 func GetCommentsForPost(db *sql.DB, postID string) ([]models.Comment, error) {
-	rows, err := db.Query(`SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.nickname
+	rows, err := db.Query(`SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username
 		FROM comments c JOIN users u ON c.user_id = u.id 
 		WHERE c.post_id = ?
 		ORDER BY c.created_at ASC`, postID)

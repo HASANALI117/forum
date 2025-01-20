@@ -17,7 +17,7 @@ func StoreMessage(db *sql.DB, senderID, receiverID, content string) error {
 // GetMessages between two users with pagination (last N)
 func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.Message, error) {
 	rows, err := db.Query(`
-		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.nickname
+		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username
 		FROM messages m
 		JOIN users us ON m.sender_id = us.id
 		WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?)
@@ -46,7 +46,7 @@ func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.M
 
 func GetAllMessages(db *sql.DB) ([]models.Message, error) {
 	rows, err := db.Query(`
-		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.nickname
+		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username
 		FROM messages m
 		JOIN users us ON m.sender_id = us.id
 		ORDER BY m.created_at DESC
