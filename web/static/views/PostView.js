@@ -50,17 +50,17 @@ export default class extends AbstractView {
             />
             <div class="flex flex-col ml-4 text-sm text-gray-400">
               <div>
-                <span class="font-semibold">u/${post.UserName}</span> •
+                <span class="font-semibold">u/${post.userName}</span> •
                 <span>${formattedTime}</span>
               </div>
-              <span class="font-semibold">c/${post.Category}</span>
+              <span class="font-semibold">c/${post.category}</span>
             </div>
           </div>
 
           <hr class="my-4 border-gray-600" />
 
-          <h1 class="text-lg font-semibold text-white mb-2">${post.Title}</h1>
-          <p class="text-md text-gray-300 line-clamp">${post.Content}</p>
+          <h1 class="text-lg font-semibold text-white mb-2">${post.title}</h1>
+          <p class="text-md text-gray-300 line-clamp">${post.content}</p>
           <!-- Icons -->
           <div class="flex mt-6">
             <div

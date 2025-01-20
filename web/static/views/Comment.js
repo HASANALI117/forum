@@ -15,13 +15,13 @@ export default class extends AbstractView {
           <img class="w-10 h-10 rounded-full" src="" alt="Random Image" />
           <div class="flex flex-col ml-4 text-sm text-gray-400">
             <div>
-              <span class="font-semibold">${comment.UserID}</span> •
+              <span class="font-semibold">${comment.userId}</span> •
               <span>${formattedTime}</span>
             </div>
           </div>
         </div>
         <hr class="my-4 border-gray-600" />
-        <p class="text-md text-gray-300 line-clamp">${comment.Content}</p>
+        <p class="text-md text-gray-300 line-clamp">${comment.content}</p>
         <!-- Icons -->
         <div class="flex mt-6">
           <div

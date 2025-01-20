@@ -99,7 +99,7 @@ export default class extends AbstractView {
                   </button>
 
                   <p class="ml-4 text-xl font-medium text-white">
-                    ${isUserLoggedIn ? user.Nickname : "Guest"}
+                    ${isUserLoggedIn ? user.username : "Guest"}
                   </p>
                 </div>
 

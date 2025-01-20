@@ -17,10 +17,10 @@ export default class extends AbstractView {
           <img
             class="w-10 h-10 rounded-full"
             src="${'https://picsum.photos/200'}"
-            alt="${user.nickname}"
+            alt="${user.username}"
           />
           <div class="ml-4">
-            <p class="text-white text-xl font-semibold">${user.nickname}</p>
+            <p class="text-white text-xl font-semibold">${user.username}</p>
           </div>
         </a>`
       )

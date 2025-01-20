@@ -13,12 +13,12 @@ export default class extends AbstractView {
         <img
           class="w-10 h-10 rounded-full mr-4"
           src="${message.image}"
-          alt="${message.username}"
+          alt="${message.senderName}"
         />
         <div class="flex flex-col">
           <div class="flex items-center">
-            <p class="text-white font-semibold">${message.username}</p>
-            <span class="ml-2 text-gray-400 text-sm">${message.timestamp}</span>
+            <p class="text-white font-semibold">${message.senderName}</p>
+            <span class="ml-2 text-gray-400 text-sm">${message.createdAt}</span>
           </div>
           <p class="text-gray-300">${message.content}</p>
         </div>

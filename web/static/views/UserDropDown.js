@@ -16,19 +16,19 @@ export default class extends AbstractView {
         >
           <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <div class="font-semibold my-6 text-sm text-gray-400 text-left">
-              Name: <span class="font-normal">${user.FirstName}</span>
+              Name: <span class="font-normal">${user.firstName + ' ' + user.lastName}</span>
             </div>
             <div class="font-semibold my-6 text-sm text-gray-400 text-left">
-              Age: <span class="font-normal">${user.Age}</span>
+              Age: <span class="font-normal">${user.age}</span>
             </div>
             <div class="font-semibold my-6 text-sm text-gray-400 text-left">
-              Gender: <span class="font-normal">${user.Gender}</span>
+              Gender: <span class="font-normal">${user.gender}</span>
             </div>
             <div class="font-semibold my-6 text-sm text-gray-400 text-left">
-              Username: <span class="font-normal">${user.Nickname}</span>
+              Username: <span class="font-normal">${user.username}</span>
             </div>
             <div class="font-semibold my-6 text-sm text-gray-400 text-left">
-              Email: <span class="font-normal">${user.Email}</span>
+              Email: <span class="font-normal">${user.email}</span>
             </div>
 
             <div class="my-4">

@@ -223,13 +223,13 @@ export default class extends AbstractView {
         "http://localhost:8080/api/register",
         "POST",
         {
-          nickname: data.username,
+          username: data.username,
           email: data.email,
           password: data.password,
           age: parseInt(data.age, 10),
           gender: data.gender,
-          firstname: data.firstName,
-          lastname: data.lastName,
+          firstName: data.firstName,
+          lastName: data.lastName,
         },
         async (res) => {
           if (res.user) {
