@@ -15,16 +15,16 @@ import (
 type WSMessage struct {
 	Type       string `json:"type"` // e.g. "private_message"
 	Content    string `json:"content"`
-	ReceiverID string `json:"receiver_id"`
-	SenderID   string `json:"sender_id"`
-	SenderName string `json:"sender_name"`
+	ReceiverID string `json:"receiverId"`
+	SenderID   string `json:"senderId"`
+	SenderName string `json:"senderName"`
 }
 
 type Client struct {
 	UserID   string
 	Conn     *websocket.Conn
 	Send     chan WSMessage
-	NickName string
+	UserName string
 }
 
 type Hub struct {
@@ -84,7 +84,7 @@ func (h *Hub) GetOnlineUsers() []map[string]string {
 	for _, c := range h.clients {
 		users = append(users, map[string]string{
 			"id":       c.UserID,
-			"nickname": c.NickName,
+			"username": c.UserName,
 		})
 	}
 	return users
@@ -140,7 +140,7 @@ func ServeWs(h *Hub, db *database.DBWrapper, w http.ResponseWriter, r *http.Requ
 		UserID:   user.ID,
 		Conn:     conn,
 		Send:     make(chan WSMessage, 256),
-		NickName: user.Nickname,
+		UserName: user.Username,
 	}
 	h.register <- client
 
