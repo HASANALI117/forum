@@ -30,11 +30,54 @@ func GetUsersListHandler(db *database.DBWrapper) http.HandlerFunc {
 	}, db)
 }
 
-func OnlineUsersHandler(h *ws.Hub) http.HandlerFunc {
+func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		users := h.GetOnlineUsers()
-		data, _ := json.Marshal(users)
+		currentUser, err := helpers.GetCurrentUser(db, r)
+		if (err != nil) {
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		// Get online users
+		onlineUsers := h.GetOnlineUsers()
+		
+		// Get users with chat history
+		historyUsers, err := helpers.GetUsersWithChatHistory(db.DB.DBConn, currentUser.ID)
+		if err != nil {
+			http.Error(w, "Failed to fetch users", http.StatusInternalServerError)
+			return
+		}
+
+		// Create a map to store unique users
+		uniqueUsers := make(map[string]map[string]string)
+
+		// Add online users to map
+		for _, user := range onlineUsers {
+			uniqueUsers[user["id"]] = map[string]string{
+				"id":       user["id"],
+				"username": user["username"],
+				"status":   "online",
+			}
+		}
+
+		// Add history users to map
+		for _, user := range historyUsers {
+			if _, exists := uniqueUsers[user.ID]; !exists {
+				uniqueUsers[user.ID] = map[string]string{
+					"id":       user.ID,
+					"username": user.Username,
+					"status":   "offline",
+				}
+			}
+		}
+
+		// Convert map to slice
+		result := make([]map[string]string, 0, len(uniqueUsers))
+		for _, user := range uniqueUsers {
+			result = append(result, user)
+		}
+
 		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
+		json.NewEncoder(w).Encode(result)
 	}
 }
