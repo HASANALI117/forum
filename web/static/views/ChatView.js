@@ -6,26 +6,47 @@ import { getCurrentUser, customFetch, handleFormSubmit } from '../utils.js';
 export default class extends AbstractView {
   constructor(params) {
     super(params);
-    this.chatId = null;
+    this.chatterId = null;
     this.user = null;
     this.ws = null;
+    this.currentPage = 0;
+    this.totalPages = 1;
+    this.isLoading = false;
   }
 
   async getHtml() {
     const [isUserLoggedIn, user] = await getCurrentUser();
     this.user = user;
-    this.chatId = this.params.id;
-    const chat = CHATS[0];
+    this.chatterId = this.params.id;
+
+    const { messages, currentPage, totalMessages, totalPages } =
+      await customFetch(
+        `/api/get_messages?user_id=${this.chatterId}&limit=10&page=${this.currentPage}`
+      );
+
+    this.totalPages = totalPages;
+    this.currentPage = currentPage;
 
     this.ws = new WebSocket('ws://localhost:8080/ws');
 
     this.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      if (message.type === 'private_message') {
-        console.log('Message received:', message);
+      if (
+        message.type === 'private_message' &&
+        (message.senderId === this.chatterId ||
+          message.senderId === this.user.id)
+      ) {
+        console.log('Message received from chatter:', message);
         const messageView = new Message({ message });
         messageView.getHtml().then((html) => {
           const chatMessages = document.getElementById('chat-messages');
+          
+          // Remove empty state message if it exists
+          const emptyState = chatMessages.querySelector('.flex.flex-col.items-center.justify-center');
+          if (emptyState) {
+            chatMessages.removeChild(emptyState);
+          }
+          
           chatMessages.insertAdjacentHTML('beforeend', html);
           chatMessages.scrollTop = chatMessages.scrollHeight;
         });
@@ -34,9 +55,9 @@ export default class extends AbstractView {
 
     this.ws.onopen = () => {
       console.log('WebSocket connection established');
-      if (this.user) {
-        this.sendMessage('Hello, world!');
-      }
+      // if (this.user) {
+      //   this.sendMessage('Hello, world!');
+      // }
     };
 
     this.ws.onclose = () => {
@@ -47,12 +68,31 @@ export default class extends AbstractView {
       console.error('WebSocket error:', error);
     };
 
-    const chatsHTML = await Promise.all(
-      chat.messages.map(async (message) => {
-        const messageView = new Message({ message });
-        return await messageView.getHtml();
-      })
-    ).then((htmlArray) => htmlArray.join(''));
+    let chatsHTML;
+    if (messages.length > 0) {
+      chatsHTML = await Promise.all(
+        messages.map(async (message) => {
+          const messageView = new Message({ message });
+          return await messageView.getHtml();
+        })
+      ).then((htmlArray) => htmlArray.join(''));
+    } else {
+      // Get chatter's name from USERS constant
+      const chatter = USERS.find((user) => user.id === this.chatterId);
+      const chatterName = chatter ? chatter.username : 'this user';
+
+      chatsHTML = /* HTML */ `
+        <div
+          class="flex flex-col items-center justify-center h-full text-gray-400"
+        >
+          <i class="bx bx-message-rounded-dots text-6xl mb-4"></i>
+          <p class="text-lg">Start chatting with ${chatterName}</p>
+          <p class="text-sm">
+            Send your first message to begin the conversation
+          </p>
+        </div>
+      `;
+    }
 
     return /* HTML */ `
       <div class="flex flex-grow h-screen">
@@ -93,14 +133,14 @@ export default class extends AbstractView {
         JSON.stringify({
           type: 'private_message',
           content: content,
-          receiverId: this.chatId,
+          receiverId: this.chatterId,
           senderId: this.user.id,
           senderName: this.user.username,
         })
       );
       console.log('Message sent:', {
         content,
-        ReceiverID: this.chatId,
+        ReceiverID: this.chatterId,
         SenderID: this.user.id,
         SenderName: this.user.username,
       });
@@ -122,6 +162,56 @@ export default class extends AbstractView {
       if (message) {
         this.sendMessage(message);
         chatInput.value = '';
+      }
+    });
+
+    // Infinite scroll setup
+    chatMessages.addEventListener('scroll', async () => {
+      if (
+        chatMessages.scrollTop === 0 &&
+        !this.isLoading &&
+        this.currentPage < this.totalPages - 1
+      ) {
+        this.isLoading = true;
+
+        // Show loading indicator
+        const loading = document.createElement('div');
+        loading.className = 'text-center text-gray-400 py-2';
+        loading.textContent = 'Loading older messages...';
+        chatMessages.prepend(loading);
+
+        // Get scroll height before loading new messages
+        const oldScrollHeight = chatMessages.scrollHeight;
+
+        // Fetch older messages
+        const { messages: olderMessages } = await customFetch(
+          `/api/get_messages?user_id=${this.chatterId}&limit=10&page=${
+            this.currentPage + 1
+          }`
+        );
+
+        // Remove loading indicator
+        chatMessages.removeChild(loading);
+
+        if (olderMessages.length > 0) {
+          this.currentPage++;
+
+          // Prepend new messages
+          const olderMessagesHTML = await Promise.all(
+            olderMessages.map(async (message) => {
+              const messageView = new Message({ message });
+              return await messageView.getHtml();
+            })
+          ).then((htmlArray) => htmlArray.join(''));
+
+          chatMessages.insertAdjacentHTML('afterbegin', olderMessagesHTML);
+
+          // Maintain scroll position
+          const newScrollHeight = chatMessages.scrollHeight;
+          chatMessages.scrollTop = newScrollHeight - oldScrollHeight;
+        }
+
+        this.isLoading = false;
       }
     });
 
