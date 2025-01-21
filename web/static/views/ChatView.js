@@ -8,7 +8,6 @@ export default class extends AbstractView {
     super(params);
     this.chatterId = null;
     this.user = null;
-    this.ws = null;
     this.currentPage = 1;
     this.totalPages = 1;
     this.isLoading = false;
@@ -27,16 +26,15 @@ export default class extends AbstractView {
     this.totalPages = totalPages;
     this.currentPage = currentPage;
 
-    this.ws = new WebSocket('ws://localhost:8080/ws');
-
-    this.ws.onmessage = (event) => {
+    window.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
+      console.log('Message received:', message);
       if (
         message.type === 'private_message' &&
         (message.senderId === this.chatterId ||
           message.senderId === this.user.id)
       ) {
-        console.log('Message received from chatter:', message);
+        // console.log('Message received from chatter:', message);
         const messageView = new Message({ message });
         messageView.getHtml().then((html) => {
           const chatMessages = document.getElementById('chat-messages');
@@ -52,22 +50,9 @@ export default class extends AbstractView {
           chatMessages.insertAdjacentHTML('beforeend', html);
           chatMessages.scrollTop = chatMessages.scrollHeight;
         });
+      } else if (message.type === 'update_user_list') {
+        window.renderUserList();
       }
-    };
-
-    this.ws.onopen = () => {
-      console.log('WebSocket connection established');
-      // if (this.user) {
-      //   this.sendMessage('Hello, world!');
-      // }
-    };
-
-    this.ws.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
-
-    this.ws.onerror = (error) => {
-      console.error('WebSocket error:', error);
     };
 
     let chatsHTML;
@@ -130,8 +115,8 @@ export default class extends AbstractView {
   }
 
   sendMessage(content) {
-    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(
+    if (window.ws && window.ws.readyState === WebSocket.OPEN) {
+      window.ws.send(
         JSON.stringify({
           type: 'private_message',
           content: content,
@@ -153,6 +138,7 @@ export default class extends AbstractView {
 
   async onMounted() {
     console.log('ChatView mounted');
+    console.log(window.abc);
 
     const chatMessages = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
