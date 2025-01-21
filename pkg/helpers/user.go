@@ -3,6 +3,8 @@ package helpers
 import (
 	"database/sql"
 	models "forum/pkg/models"
+	database "forum/pkg/db"
+	"net/http"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -61,4 +63,13 @@ func GetAllUsers(db *sql.DB) ([]models.User, error) {
 		usrs = append(usrs, u)
 	}
 	return usrs, nil
+}
+
+func GetCurrentUser(db *database.DBWrapper, r *http.Request) (*models.User, error) {
+	cookie, err := r.Cookie("session_token")
+	if (err != nil) {
+		return nil, err
+	}
+	user, err := GetUserBySession(db.DB.DBConn, cookie.Value)
+	return user, err
 }

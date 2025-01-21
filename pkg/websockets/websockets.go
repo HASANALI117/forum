@@ -7,7 +7,6 @@ import (
 	"time"
 
 	database "forum/pkg/db"
-	handlers "forum/pkg/handlers"
 	helpers "forum/pkg/helpers"
 
 	"github.com/gorilla/websocket"
@@ -155,7 +154,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func ServeWs(h *Hub, db *database.DBWrapper, w http.ResponseWriter, r *http.Request) {
-	user, err := handlers.GetCurrentUser(db, r)
+	user, err := helpers.GetCurrentUser(db, r)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return

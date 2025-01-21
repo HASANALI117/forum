@@ -5,18 +5,18 @@ import (
 	"net/http"
 
 	helpers "forum/pkg/helpers"
-	models "forum/pkg/models"
 	database "forum/pkg/db"
+	ws "forum/pkg/websockets"
 )
 
-func GetCurrentUser(db *database.DBWrapper, r *http.Request) (*models.User, error) {
-	cookie, err := r.Cookie("session_token")
-	if err != nil {
-		return nil, err
-	}
-	user, err := helpers.GetUserBySession(db.DB.DBConn, cookie.Value)
-	return user, err
-}
+// func GetCurrentUser(db *database.DBWrapper, r *http.Request) (*models.User, error) {
+// 	cookie, err := r.Cookie("session_token")
+// 	if (err != nil) {
+// 		return nil, err
+// 	}
+// 	user, err := helpers.GetUserBySession(db.DB.DBConn, cookie.Value)
+// 	return user, err
+// }
 
 // The online users or user list
 func GetUsersListHandler(db *database.DBWrapper) http.HandlerFunc {
@@ -28,4 +28,13 @@ func GetUsersListHandler(db *database.DBWrapper) http.HandlerFunc {
 		}
 		json.NewEncoder(w).Encode(usrs)
 	}, db)
+}
+
+func OnlineUsersHandler(h *ws.Hub) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		users := h.GetOnlineUsers()
+		data, _ := json.Marshal(users)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(data)
+	}
 }

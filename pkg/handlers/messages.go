@@ -25,7 +25,7 @@ func GetMessagesHandler(db *database.DBWrapper) http.HandlerFunc {
 		page, _ := strconv.Atoi(pageStr)
 		offset := (page - 1) * limit
 
-		currentUser, _ := GetCurrentUser(db, r)
+		currentUser, _ := helpers.GetCurrentUser(db, r)
 		msgs, err := helpers.GetMessages(db.DB.DBConn, currentUser.ID, otherUserID, limit, offset)
 		if err != nil {
 			helpers.Error(w, "Could not get messages", http.StatusInternalServerError, err)

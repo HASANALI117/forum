@@ -3,21 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
-	"encoding/json"
 
 	db "forum/pkg/db"
 	handlers "forum/pkg/handlers"
 	ws "forum/pkg/websockets"
 )
-
-func OnlineUsersHandler(h *ws.Hub) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		users := h.GetOnlineUsers()
-		data, _ := json.Marshal(users)
-		w.Header().Set("Content-Type", "application/json")
-		w.Write(data)
-	}
-}
 
 func main() {
 
@@ -49,7 +39,7 @@ func main() {
 	http.HandleFunc("/api/all_messages", handlers.GetAllMessagesHandler(dbWrapper))
 	http.HandleFunc("/api/users_list", handlers.GetUsersListHandler(dbWrapper))
 	http.HandleFunc("/api/current_user", handlers.CurrentUserHandler(dbWrapper))
-	http.HandleFunc("/api/online_users", OnlineUsersHandler(hub))
+	http.HandleFunc("/api/online_users", handlers.OnlineUsersHandler(hub))
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		ws.ServeWs(hub, dbWrapper, w, r)
