@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	database "forum/pkg/db"
 	handlers "forum/pkg/handlers"
@@ -13,11 +14,12 @@ import (
 )
 
 type WSMessage struct {
-	Type       string `json:"type"` // e.g. "private_message"
-	Content    string `json:"content"`
-	ReceiverID string `json:"receiverId"`
-	SenderID   string `json:"senderId"`
-	SenderName string `json:"senderName"`
+	Type       string    `json:"type"` // e.g. "private_message"
+	Content    string    `json:"content"`
+	ReceiverID string    `json:"receiverId"`
+	SenderID   string    `json:"senderId"`
+	SenderName string    `json:"senderName"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
 
 type Client struct {
@@ -102,6 +104,7 @@ func (c *Client) readPump(h *Hub) {
 			log.Println("read error:", err)
 			break
 		}
+		msg.CreatedAt = time.Now()
 		// Broadcast the message
 		h.broadcast <- msg
 	}
