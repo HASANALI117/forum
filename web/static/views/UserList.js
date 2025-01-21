@@ -14,11 +14,16 @@ export default class extends AbstractView {
           class="flex items-center p-4 hover:bg-gray-600 cursor-pointer transition-all"
           href="/chat/${user.id}"
         >
-          <img
-            class="w-10 h-10 rounded-full"
-            src="${'https://picsum.photos/200'}"
-            alt="${user.username}"
-          />
+          <div class="relative">
+            <img
+              class="w-10 h-10 rounded-full"
+              src="${'https://picsum.photos/200'}"
+              alt="${user.username}"
+            />
+            ${user.status === 'online' ? /* HTML */ `
+              <div class="absolute w-3 h-3 bg-green-500 rounded-full border-2 border-white bottom-0 right-0"></div>
+            ` : ''}
+          </div>
           <div class="ml-4">
             <p class="text-white text-xl font-semibold">${user.username}</p>
           </div>
