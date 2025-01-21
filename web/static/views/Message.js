@@ -1,4 +1,5 @@
-import AbstractView from "./AbstractView.js";
+import AbstractView from './AbstractView.js';
+import { formatTimeAgo } from '../utils.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -18,7 +19,9 @@ export default class extends AbstractView {
         <div class="flex flex-col">
           <div class="flex items-center">
             <p class="text-white font-semibold">${message.senderName}</p>
-            <span class="ml-2 text-gray-400 text-sm">${message.createdAt}</span>
+            <span class="ml-2 text-gray-400 text-sm timestamp" data-timestamp="${message.createdAt}">
+              ${formatTimeAgo(message.createdAt)}
+            </span>
           </div>
           <p class="text-gray-300">${message.content}</p>
         </div>
