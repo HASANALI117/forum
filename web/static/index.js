@@ -11,6 +11,7 @@ import { customFetch, getCurrentUser } from './utils.js';
 
 // Global WebSocket connection
 window.ws = new WebSocket('ws://localhost:8080/ws');
+window.currentUser = null;
 
 window.ws.onopen = () => {
   console.log('WebSocket connection established');
@@ -32,7 +33,6 @@ window.ws.onerror = (error) => {
 //     renderUserList();
 //   }
 // };
-
 
 const pathToRegex = (path) =>
   new RegExp('^' + path.replace(/\//g, '\\/').replace(/:\w+/g, '(.+)') + '$');
@@ -60,7 +60,12 @@ const renderNavbar = async () => {
 
 const renderUserList = async () => {
   const users = await customFetch('/api/online_users');
-  const userlistView = new UserList({ users: users });
+  
+  const filteredUsers = window.currentUser
+    ? users.filter(user => user.id !== window.currentUser.id)
+    : users;
+
+  const userlistView = new UserList({ users: filteredUsers });
   document.getElementById('userlist').innerHTML = await userlistView.getHtml();
 };
 
@@ -119,7 +124,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   await renderNavbar();
   await renderUserList();
 
-  const [isLoggedIn] = await getCurrentUser();
+  const [isLoggedIn, currentUser] = await getCurrentUser();
+  window.currentUser = currentUser;
   const currentPath = window.location.pathname;
 
   if (isLoggedIn) {
