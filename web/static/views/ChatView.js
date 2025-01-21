@@ -9,7 +9,7 @@ export default class extends AbstractView {
     this.chatterId = null;
     this.user = null;
     this.ws = null;
-    this.currentPage = 0;
+    this.currentPage = 1;
     this.totalPages = 1;
     this.isLoading = false;
   }
@@ -40,13 +40,15 @@ export default class extends AbstractView {
         const messageView = new Message({ message });
         messageView.getHtml().then((html) => {
           const chatMessages = document.getElementById('chat-messages');
-          
+
           // Remove empty state message if it exists
-          const emptyState = chatMessages.querySelector('.flex.flex-col.items-center.justify-center');
+          const emptyState = chatMessages.querySelector(
+            '.flex.flex-col.items-center.justify-center'
+          );
           if (emptyState) {
             chatMessages.removeChild(emptyState);
           }
-          
+
           chatMessages.insertAdjacentHTML('beforeend', html);
           chatMessages.scrollTop = chatMessages.scrollHeight;
         });

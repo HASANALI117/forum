@@ -23,9 +23,10 @@ func GetMessagesHandler(db *database.DBWrapper) http.HandlerFunc {
 			limit = 10
 		}
 		page, _ := strconv.Atoi(pageStr)
+		offset := (page - 1) * limit
 
 		currentUser, _ := GetCurrentUser(db, r)
-		msgs, err := helpers.GetMessages(db.DB.DBConn, currentUser.ID, otherUserID, limit, page)
+		msgs, err := helpers.GetMessages(db.DB.DBConn, currentUser.ID, otherUserID, limit, offset)
 		if err != nil {
 			helpers.Error(w, "Could not get messages", http.StatusInternalServerError, err)
 			return
@@ -43,8 +44,8 @@ func GetMessagesHandler(db *database.DBWrapper) http.HandlerFunc {
 
 		response := map[string]interface{}{
 			"messages":      msgs,
-			"currentPage":   page/limit + 1,
-			"totalPages":    totalMessages/limit + 1,
+			"currentPage":   page,
+			"totalPages":    (totalMessages + limit - 1) / limit,
 			"totalMessages": totalMessages,
 		}
 
