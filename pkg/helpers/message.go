@@ -44,6 +44,16 @@ func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.M
 	return msgs, nil
 }
 
+func GetTotalMessagesCount(db *sql.DB, userA, userB string) (int, error) {
+	var count int
+	err := db.QueryRow(`
+		SELECT COUNT(*)
+		FROM messages
+		WHERE (sender_id = ? AND receiver_id = ?) OR (sender_id = ? AND receiver_id = ?)
+	`, userA, userB, userB, userA).Scan(&count)
+	return count, err
+}
+
 func GetAllMessages(db *sql.DB) ([]models.Message, error) {
 	rows, err := db.Query(`
 		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username
