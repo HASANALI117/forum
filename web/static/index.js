@@ -7,7 +7,6 @@ import Signin from "./views/Signin.js";
 import CategoriesList from "./views/CategoriesList.js";
 import ChatView from "./views/ChatView.js";
 import UserList from "./views/UserList.js";
-import { USERS } from "./constants.js";
 import { customFetch, getCurrentUser } from "./utils.js";
 
 const pathToRegex = (path) =>
