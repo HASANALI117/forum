@@ -76,6 +76,11 @@ func (h *Hub) Run() {
 			if receiverClient, ok := h.clients[msg.ReceiverID]; ok {
 				receiverClient.Send <- msg
 				fmt.Println("Message sent to receiver:", msg.ReceiverID)
+				}
+			// Send to sender
+			if senderClient, ok := h.clients[msg.SenderID]; ok {
+				senderClient.Send <- msg
+				fmt.Println("Message sent to sender:", msg.SenderID)
 			}
 		}
 	}
