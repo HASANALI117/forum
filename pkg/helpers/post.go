@@ -20,7 +20,7 @@ func CreatePost(db *sql.DB, userID, category, title, content string) (string, er
 }
 
 func GetPosts(db *sql.DB) ([]models.Post, error) {
-	rows, err := db.Query(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username
+	rows, err := db.Query(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username, u.image
 		FROM posts p JOIN users u ON p.user_id = u.id ORDER BY p.created_at DESC`)
 	if err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func GetPosts(db *sql.DB) ([]models.Post, error) {
 	var posts []models.Post
 	for rows.Next() {
 		var p models.Post
-		err := rows.Scan(&p.ID, &p.UserID, &p.Category, &p.Title, &p.Content, &p.CreatedAt, &p.UserName)
+		err := rows.Scan(&p.ID, &p.UserID, &p.Category, &p.Title, &p.Content, &p.CreatedAt, &p.UserName, &p.UserImage)
 		if err != nil {
 			return nil, err
 		}
@@ -41,10 +41,10 @@ func GetPosts(db *sql.DB) ([]models.Post, error) {
 }
 
 func GetPostByID(db *sql.DB, postID string) (*models.Post, error) {
-	row := db.QueryRow(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username
+	row := db.QueryRow(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username, u.image
         FROM posts p JOIN users u ON p.user_id = u.id WHERE p.id = ?`, postID)
 	post := &models.Post{}
-	err := row.Scan(&post.ID, &post.UserID, &post.Category, &post.Title, &post.Content, &post.CreatedAt, &post.UserName)
+	err := row.Scan(&post.ID, &post.UserID, &post.Category, &post.Title, &post.Content, &post.CreatedAt, &post.UserName, &post.UserImage)
 	if err != nil {
 		return nil, err
 	}

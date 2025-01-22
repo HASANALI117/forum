@@ -21,7 +21,7 @@ export default class extends AbstractView {
       return /* HTML */ `<div class="text-white">Post not found</div>`;
     }
 
-    const formattedTime = formatTimeAgo(post.CreatedAt);
+    const formattedTime = formatTimeAgo(post.createdAt);
 
     const commentsResponse = await customFetch(
       `http://localhost:8080/api/comments?post_id=${postId}`,
@@ -32,7 +32,7 @@ export default class extends AbstractView {
 
     const commentsHTML = await Promise.all(
       comments.map(async (comment) => {
-        const formattedTime = formatTimeAgo(comment.CreatedAt);
+        const formattedTime = formatTimeAgo(comment.createdAt);
 
         const commentView = new Comment({ comment, formattedTime });
         return await commentView.getHtml();
@@ -45,7 +45,7 @@ export default class extends AbstractView {
           <div class="flex items-center mb-4">
             <img
               class="w-10 h-10 rounded-full"
-              src="${post.image}"
+              src="${post.userImage}"
               alt="Random Image"
             />
             <div class="flex flex-col ml-4 text-sm text-gray-400">

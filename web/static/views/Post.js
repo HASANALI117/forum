@@ -21,7 +21,11 @@ export default class extends AbstractView {
           class="bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all line-clamp"
         >
           <div class="flex items-center mb-4">
-            <img class="w-10 h-10 rounded-full" src="" alt="Random Image" />
+            <img
+              class="w-10 h-10 rounded-full"
+              src=${post.userImage}
+              alt="Random Image"
+            />
             <div class="flex flex-col ml-4 text-sm text-gray-400">
               <div>
                 <span class="font-semibold">u/${post.userName}</span> •

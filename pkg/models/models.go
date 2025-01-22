@@ -7,13 +7,14 @@ import (
 // User model
 type User struct {
 	ID        string `json:"id"`
-	Username  string `json:"username"` // changed from Nickname to Username
+	Username  string `json:"username"`
 	Email     string `json:"email"`
 	Password  string `json:"password"`
 	Age       int    `json:"age"`
 	Gender    string `json:"gender"`
 	FirstName string `json:"firstName"`
 	LastName  string `json:"lastName"`
+	Image     string `json:"image"`
 }
 
 // Post model
@@ -24,7 +25,8 @@ type Post struct {
 	Title     string    `json:"title"`
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"createdAt"`
-	UserName  string    `json:"userName"` // can be joined for display
+	UserName  string    `json:"userName"`
+	UserImage string    `json:"userImage"`
 }
 
 // Comment model
@@ -35,6 +37,7 @@ type Comment struct {
 	Content   string    `json:"content"`
 	CreatedAt time.Time `json:"createdAt"`
 	UserName  string    `json:"userName"`
+	UserImage string    `json:"userImage"`
 }
 
 // Message model

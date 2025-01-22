@@ -87,7 +87,7 @@ func GetPostByIDHandler(db *database.DBWrapper) http.HandlerFunc {
 }
 
 func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
-	rows, err := db.Query(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username
+	rows, err := db.Query(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username, u.image
         FROM posts p JOIN users u ON p.user_id = u.id WHERE p.user_id = ? ORDER BY p.created_at DESC`, userID)
 	if err != nil {
 		return nil, err
@@ -97,7 +97,7 @@ func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
 	var posts []models.Post
 	for rows.Next() {
 		var p models.Post
-		err := rows.Scan(&p.ID, &p.UserID, &p.Category, &p.Title, &p.Content, &p.CreatedAt, &p.UserName)
+		err := rows.Scan(&p.ID, &p.UserID, &p.Category, &p.Title, &p.Content, &p.CreatedAt, &p.UserName, &p.UserImage)
 		if err != nil {
 			return nil, err
 		}

@@ -124,7 +124,6 @@ window.addEventListener("popstate", renderPage);
 
 document.addEventListener("DOMContentLoaded", async () => {
   await renderNavbar();
-  await renderUserList();
 
   const [isLoggedIn, currentUser] = await getCurrentUser();
   window.currentUser = currentUser;
@@ -136,6 +135,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     navigateTo("/signin");
   } else {
     await renderPage();
+    await renderUserList();
   }
 
   document.body.addEventListener("click", function (e) {

@@ -8,18 +8,16 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    // const user = await customFetch(
-    //   'http://localhost:8080/api/current_user',
-    //   'GET'
-    // );
     const posts = await customFetch("http://localhost:8080/api/posts", "GET");
-
-    const postsHTML = await Promise.all(
-      posts.map(async (post) => {
-        const postView = new Post({ post });
-        return await postView.getHtml();
-      })
-    ).then((htmlArray) => htmlArray.join(""));
+    let postsHTML = "";
+    if (posts) {
+      postsHTML = await Promise.all(
+        posts.map(async (post) => {
+          const postView = new Post({ post });
+          return await postView.getHtml();
+        })
+      ).then((htmlArray) => htmlArray.join(""));
+    }
 
     return /* HTML */ `
       <div class="flex flex-row">
@@ -28,7 +26,9 @@ export default class extends AbstractView {
           class="flex flex-col items-center justify-center flex-wrap my-8"
           id="posts"
         >
-          ${postsHTML}
+          ${posts
+            ? postsHTML
+            : `<div class="text-white">No posts available.</div>`}
         </div>
       </div>
     `;

@@ -1,7 +1,7 @@
 import AbstractView from "./AbstractView.js";
 import SigninCard from "./SigninCard.js";
 import { USERS, NavLinks } from "../constants.js";
-import { customFetch, getCurrentUser } from "../utils.js";
+import { getCurrentUser } from "../utils.js";
 import UserDropDown from "./UserDropDown.js";
 
 export default class extends AbstractView {
@@ -12,7 +12,7 @@ export default class extends AbstractView {
   async getHtml() {
     const [isUserLoggedIn, response] = await getCurrentUser();
 
-    const user = response.user;
+    const user = response ? response.user : null;
 
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
@@ -94,7 +94,7 @@ export default class extends AbstractView {
 
                     <img
                       class="w-10 h-10 rounded-full"
-                      src=${USERS[0].image}
+                      src=${isUserLoggedIn ? user.image : USERS[0].image}
                       alt="User Image"
                     />
                   </button>
@@ -120,7 +120,7 @@ export default class extends AbstractView {
   async onMounted() {
     const [isUserLoggedIn, response] = await getCurrentUser();
 
-    const user = response.user;
+    const user = response ? response.user : null;
 
     const userMenuButton = document.getElementById("user-menu-button");
     const signinContainer = document.getElementById("signin-container");

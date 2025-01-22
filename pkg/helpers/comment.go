@@ -1,11 +1,11 @@
-
 package helpers
 
 import (
 	"database/sql"
-	"time"
-	"github.com/google/uuid"
 	models "forum/pkg/models"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 func CreateComment(db *sql.DB, userID, postID, content string) error {
@@ -16,7 +16,7 @@ func CreateComment(db *sql.DB, userID, postID, content string) error {
 }
 
 func GetCommentsForPost(db *sql.DB, postID string) ([]models.Comment, error) {
-	rows, err := db.Query(`SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username
+	rows, err := db.Query(`SELECT c.id, c.post_id, c.user_id, c.content, c.created_at, u.username, u.image
 		FROM comments c JOIN users u ON c.user_id = u.id 
 		WHERE c.post_id = ?
 		ORDER BY c.created_at ASC`, postID)
@@ -28,7 +28,7 @@ func GetCommentsForPost(db *sql.DB, postID string) ([]models.Comment, error) {
 	var comments []models.Comment
 	for rows.Next() {
 		var cmt models.Comment
-		err := rows.Scan(&cmt.ID, &cmt.PostID, &cmt.UserID, &cmt.Content, &cmt.CreatedAt, &cmt.UserName)
+		err := rows.Scan(&cmt.ID, &cmt.PostID, &cmt.UserID, &cmt.Content, &cmt.CreatedAt, &cmt.UserName, &cmt.UserImage)
 		if err != nil {
 			return nil, err
 		}
