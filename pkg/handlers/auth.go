@@ -14,7 +14,7 @@ import (
 // Middleware to ensure user is authenticated
 func AuthRequired(next http.HandlerFunc, db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		_, err := GetCurrentUser(db, r)
+		_, err := helpers.GetCurrentUser(db, r)
 		if err != nil {
 			helpers.Error(w, "Unauthorized", http.StatusUnauthorized, err)
 			return
@@ -134,7 +134,7 @@ func LogoutHandler(db *database.DBWrapper) http.HandlerFunc {
 
 func CurrentUserHandler(db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		user, err := GetCurrentUser(db, r)
+		user, err := helpers.GetCurrentUser(db, r)
 		if err != nil {
 			helpers.Error(w, "Unauthorized", http.StatusUnauthorized, err)
 			return

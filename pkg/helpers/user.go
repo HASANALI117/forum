@@ -3,6 +3,8 @@ package helpers
 import (
 	"database/sql"
 	models "forum/pkg/models"
+	database "forum/pkg/db"
+	"net/http"
 
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -19,6 +21,7 @@ func RegisterUser(db *sql.DB, user models.User) error {
 
 	_, err = db.Exec(`INSERT INTO users(id, username, email, password, age, gender, first_name, last_name)
 	VALUES(?, ?, ?, ?, ?, ?, ?, ?)`,
+
 		user.ID, user.Username, user.Email, user.Password, user.Age, user.Gender, user.FirstName, user.LastName)
 	if err != nil {
 		return err
@@ -61,4 +64,40 @@ func GetAllUsers(db *sql.DB) ([]models.User, error) {
 		usrs = append(usrs, u)
 	}
 	return usrs, nil
+}
+
+func GetCurrentUser(db *database.DBWrapper, r *http.Request) (*models.User, error) {
+	cookie, err := r.Cookie("session_token")
+	if (err != nil) {
+		return nil, err
+	}
+	user, err := GetUserBySession(db.DB.DBConn, cookie.Value)
+	return user, err
+}
+
+func GetUsersWithChatHistory(db *sql.DB, userID string) ([]models.User, error) {
+	query := `
+		SELECT DISTINCT u.id, u.username, u.email, u.password, u.age, u.gender, u.first_name, u.last_name 
+		FROM users u 
+		INNER JOIN messages m 
+		ON (u.id = m.sender_id OR u.id = m.receiver_id)
+		WHERE (m.sender_id = ? OR m.receiver_id = ?)
+		AND u.id != ?`
+	
+	rows, err := db.Query(query, userID, userID, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var users []models.User
+	for rows.Next() {
+		var u models.User
+		err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Age, &u.Gender, &u.FirstName, &u.LastName)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, u)
+	}
+	return users, nil
 }

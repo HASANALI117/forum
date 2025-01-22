@@ -61,6 +61,10 @@ export const formatTimeAgo = (dateString) => {
   const now = new Date();
   const seconds = Math.floor((now - date) / 1000);
 
+  if (seconds < 60) {
+    return "now";
+  }
+
   let interval = Math.floor(seconds / 31536000);
   if (interval >= 1)
     return interval + " year" + (interval > 1 ? "s" : "") + " ago";
@@ -77,12 +81,21 @@ export const formatTimeAgo = (dateString) => {
   if (interval >= 1)
     return interval + " hour" + (interval > 1 ? "s" : "") + " ago";
 
-  interval = Math.floor(seconds / 60);
-  if (interval >= 1)
-    return interval + " min" + (interval > 1 ? "s" : "") + " ago";
-
-  return Math.floor(seconds) + " second" + (seconds > 1 ? "s" : "") + " ago";
+  return Math.floor(seconds / 60) + " min" + (interval > 1 ? "s" : "") + " ago";
 };
+
+export const updateTimestamps = () => {
+  const timeElements = document.querySelectorAll('.timestamp');
+  timeElements.forEach(element => {
+    const timestamp = element.getAttribute('data-timestamp');
+    if (timestamp) {
+      element.textContent = formatTimeAgo(timestamp);
+    }
+  });
+};
+
+// Start the timer to update timestamps every minute
+setInterval(updateTimestamps, 60000);
 
 export const getCurrentUser = async () => {
   try {

@@ -24,7 +24,7 @@ func CreatePostHandler(db *database.DBWrapper) http.HandlerFunc {
 			return
 		}
 
-		u, _ := GetCurrentUser(db, r)
+		u, _ := helpers.GetCurrentUser(db, r)
 
 		postID, err := helpers.CreatePost(db.DB.DBConn, u.ID, p.Category, p.Title, p.Content)
 		if err != nil {
@@ -96,7 +96,7 @@ func CreateCommentHandler(db *database.DBWrapper) http.HandlerFunc {
 			return
 		}
 
-		u, _ := GetCurrentUser(db, r)
+		u, _ := helpers.GetCurrentUser(db, r)
 		err = helpers.CreateComment(db.DB.DBConn, u.ID, postID, c.Content)
 		if err != nil {
 			helpers.Error(w, "Could not create comment", http.StatusInternalServerError, err)

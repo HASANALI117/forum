@@ -4,20 +4,21 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	database "forum/pkg/db"
-	handlers "forum/pkg/handlers"
 	helpers "forum/pkg/helpers"
 
 	"github.com/gorilla/websocket"
 )
 
 type WSMessage struct {
-	Type       string `json:"type"` // e.g. "private_message"
-	Content    string `json:"content"`
-	ReceiverID string `json:"receiverId"`
-	SenderID   string `json:"senderId"`
-	SenderName string `json:"senderName"`
+	Type       string    `json:"type"` // e.g. "private_message"
+	Content    string    `json:"content"`
+	ReceiverID string    `json:"receiverId"`
+	SenderID   string    `json:"senderId"`
+	SenderName string    `json:"senderName"`
+	CreatedAt  time.Time `json:"createdAt"`
 }
 
 type Client struct {
@@ -53,29 +54,55 @@ func (h *Hub) Run() {
 			fmt.Println("Client connected:", client.UserID)
 			fmt.Println("Total clients:", len(h.clients))
 			fmt.Println("Clients:", h.clients)
+			// Notify all clients to update the online users list with rate limiting
+			go h.NotifyAllClientsToUpdateUserList()
 		case client := <-h.unregister:
 			if c, ok := h.clients[client.UserID]; ok && c == client {
 				delete(h.clients, client.UserID)
 				close(client.Send)
 				fmt.Println("Client disconnected:", client.UserID)
+				// Notify all clients to update the online users list with rate limiting
+				go h.NotifyAllClientsToUpdateUserList()
 			}
 		case msg := <-h.broadcast:
-			fmt.Println("message received")
-			fmt.Println("Broadcasting message:", msg)
-			fmt.Println("sender:", msg.SenderID)
-			fmt.Println("receiver:", msg.ReceiverID)
-			// Store message in DB
-			err := helpers.StoreMessage(h.db.DB.DBConn, msg.SenderID, msg.ReceiverID, msg.Content)
-			if err != nil {
-				log.Println("error storing message:", err)
-				continue
-			}
-			// Send to receiver if online
-			if receiverClient, ok := h.clients[msg.ReceiverID]; ok {
-				receiverClient.Send <- msg
-				fmt.Println("Message sent to receiver:", msg.ReceiverID)
+			switch msg.Type {
+			case "private_message":
+				fmt.Println("message received")
+				fmt.Println("Broadcasting message:", msg)
+				fmt.Println("sender:", msg.SenderID)
+				fmt.Println("receiver:", msg.ReceiverID)
+				// Store message in DB
+				err := helpers.StoreMessage(h.db.DB.DBConn, msg.SenderID, msg.ReceiverID, msg.Content)
+				if err != nil {
+					log.Println("error storing message:", err)
+					continue
+				}
+				// Send to receiver if online
+				if receiverClient, ok := h.clients[msg.ReceiverID]; ok {
+					receiverClient.Send <- msg
+					fmt.Println("Message sent to receiver:", msg.ReceiverID)
+				}
+				// Send to sender
+				if senderClient, ok := h.clients[msg.SenderID]; ok {
+					senderClient.Send <- msg
+					fmt.Println("Message sent to sender:", msg.SenderID)
+				}
+			case "update_user_list": // notify all clients to call /api/online_users to update the list
+				fmt.Println("Broadcasting message:", msg)
+				for _, c := range h.clients {
+					c.Send <- msg
+				}
 			}
 		}
+	}
+}
+
+func (h *Hub) NotifyAllClientsToUpdateUserList() {
+	time.Sleep(500 * time.Millisecond) // Rate limit updates
+	select {
+	case h.broadcast <- WSMessage{Type: "update_user_list"}:
+	default:
+		log.Println("Broadcast channel full, skipping user list update")
 	}
 }
 
@@ -102,6 +129,7 @@ func (c *Client) readPump(h *Hub) {
 			log.Println("read error:", err)
 			break
 		}
+		msg.CreatedAt = time.Now()
 		// Broadcast the message
 		h.broadcast <- msg
 	}
@@ -126,7 +154,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func ServeWs(h *Hub, db *database.DBWrapper, w http.ResponseWriter, r *http.Request) {
-	user, err := handlers.GetCurrentUser(db, r)
+	user, err := helpers.GetCurrentUser(db, r)
 	if err != nil {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
