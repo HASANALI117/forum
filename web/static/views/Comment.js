@@ -25,7 +25,7 @@ export default class extends AbstractView {
           </div>
         </div>
         <hr class="my-4 border-gray-600" />
-        <p class="text-md text-gray-300 line-clamp">${comment.content}</p>
+        <p class="text-md text-gray-300">${comment.content}</p>
         <!-- Icons -->
         <div class="flex mt-6">
           <div

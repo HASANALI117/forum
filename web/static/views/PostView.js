@@ -60,7 +60,7 @@ export default class extends AbstractView {
           <hr class="my-4 border-gray-600" />
 
           <h1 class="text-lg font-semibold text-white mb-2">${post.title}</h1>
-          <p class="text-md text-gray-300 line-clamp">${post.content}</p>
+          <p class="text-md text-gray-300">${post.content}</p>
           <!-- Icons -->
           <div class="flex mt-6">
             <div
