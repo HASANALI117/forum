@@ -14,8 +14,8 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const [isUserLoggedIn, user] = await getCurrentUser();
-    this.user = user;
+    const [isUserLoggedIn, res] = await getCurrentUser();
+    this.user = res.user;
     this.chatterId = this.params.id;
 
     const { messages, currentPage, totalMessages, totalPages } =
@@ -138,7 +138,7 @@ export default class extends AbstractView {
 
   async onMounted() {
     console.log('ChatView mounted');
-    console.log(window.abc);
+    console.log(window.currentUser);
 
     const chatMessages = document.getElementById('chat-messages');
     const chatForm = document.getElementById('chat-form');
