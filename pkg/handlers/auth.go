@@ -37,7 +37,7 @@ func RegisterHandler(db *database.DBWrapper) http.HandlerFunc {
 			return
 		}
 
-		err = helpers.RegisterUser(db.DB.DBConn, user)
+		err = helpers.RegisterUser(db.DB.DBConn, &user)
 		if err != nil {
 			helpers.Error(w, "Could not register user", http.StatusBadRequest, err)
 			fmt.Println(err)

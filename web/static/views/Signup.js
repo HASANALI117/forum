@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import { handleFormSubmit, customFetch } from "../utils.js";
+import { handleFormSubmit, customFetch, getCurrentUser } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -235,14 +235,17 @@ export default class extends AbstractView {
           if (res.user) {
             // Delay the user fetch to allow time for session cookie to propagate
             setTimeout(async () => {
-              const authenticated = !!window.currentUser;
-              const user = window.currentUser;
-              if (authenticated) {
-                window.location.href = "/dashboard";
+              const [isLoggedIn, response] = await getCurrentUser();
+              window.isLoggedIn = isLoggedIn;
+              window.currentUser = response ? response.user : null;
+              console.log("Checking if user is logged in:", isLoggedIn);
+
+              if (isLoggedIn) {
+                window.location.href = "/";
               } else {
                 console.error("User not authenticated after signup.");
               }
-            }, 2000); // Delay for 1 second
+            }, 4000); // Delay for 2 second
           } else {
             console.error("Signup failed:", res);
           }

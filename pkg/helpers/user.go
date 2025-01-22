@@ -14,7 +14,7 @@ import (
 )
 
 // Register a new user
-func RegisterUser(db *sql.DB, user models.User) error {
+func RegisterUser(db *sql.DB, user *models.User) error {
 	hashed, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
 	if err != nil {
 		return err

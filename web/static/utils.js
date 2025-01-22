@@ -2,6 +2,7 @@ export const customFetch = (url, type, data, onSuccess, onError) => {
   const options = {
     method: type,
     headers: { "Content-type": "application/json" },
+    credentials: "include",
   };
 
   if (type !== "GET") {

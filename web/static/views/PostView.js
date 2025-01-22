@@ -123,12 +123,11 @@ export default class extends AbstractView {
         "POST",
         {
           content: data.comment,
+        },
+        () => {
+          window.location.href = `/post/${postId}`;
         }
       );
-
-      if (response) {
-        window.location.reload();
-      }
     });
   }
 }
