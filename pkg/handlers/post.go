@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -8,6 +9,7 @@ import (
 
 	database "forum/pkg/db"
 	helpers "forum/pkg/helpers"
+	models "forum/pkg/models"
 )
 
 // Posts and Comments
@@ -82,6 +84,27 @@ func GetPostByIDHandler(db *database.DBWrapper) http.HandlerFunc {
 			"post": post,
 		})
 	}
+}
+
+func GetPostsByUserID(db *sql.DB, userID string) ([]models.Post, error) {
+	rows, err := db.Query(`SELECT p.id, p.user_id, p.category, p.title, p.content, p.created_at, u.username
+        FROM posts p JOIN users u ON p.user_id = u.id WHERE p.user_id = ? ORDER BY p.created_at DESC`, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var posts []models.Post
+	for rows.Next() {
+		var p models.Post
+		err := rows.Scan(&p.ID, &p.UserID, &p.Category, &p.Title, &p.Content, &p.CreatedAt, &p.UserName)
+		if err != nil {
+			return nil, err
+		}
+		posts = append(posts, p)
+	}
+
+	return posts, nil
 }
 
 func CreateCommentHandler(db *database.DBWrapper) http.HandlerFunc {

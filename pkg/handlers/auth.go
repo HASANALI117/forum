@@ -139,9 +139,18 @@ func CurrentUserHandler(db *database.DBWrapper) http.HandlerFunc {
 			helpers.Error(w, "Unauthorized", http.StatusUnauthorized, err)
 			return
 		}
+
+		// Fetch user's posts
+		posts, err := GetPostsByUserID(db.DB.DBConn, user.ID)
+		if err != nil {
+			helpers.Error(w, "Could not get user's posts", http.StatusInternalServerError, err)
+			return
+		}
+
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
-			"user": user,
+			"user":  user,
+			"posts": posts,
 		})
 	}
 }

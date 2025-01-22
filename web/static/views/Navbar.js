@@ -10,9 +10,10 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const [isUserLoggedIn, user] = await getCurrentUser();
+    const [isUserLoggedIn, response] = await getCurrentUser();
 
-    // console.log({ user });
+    const user = response.user;
+
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
         href="${link.href}"
@@ -117,7 +118,9 @@ export default class extends AbstractView {
   }
 
   async onMounted() {
-    const [isUserLoggedIn, user] = await getCurrentUser();
+    const [isUserLoggedIn, response] = await getCurrentUser();
+
+    const user = response.user;
 
     const userMenuButton = document.getElementById("user-menu-button");
     const signinContainer = document.getElementById("signin-container");

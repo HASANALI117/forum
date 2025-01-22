@@ -85,9 +85,9 @@ export const formatTimeAgo = (dateString) => {
 };
 
 export const updateTimestamps = () => {
-  const timeElements = document.querySelectorAll('.timestamp');
-  timeElements.forEach(element => {
-    const timestamp = element.getAttribute('data-timestamp');
+  const timeElements = document.querySelectorAll(".timestamp");
+  timeElements.forEach((element) => {
+    const timestamp = element.getAttribute("data-timestamp");
     if (timestamp) {
       element.textContent = formatTimeAgo(timestamp);
     }
@@ -106,7 +106,7 @@ export const getCurrentUser = async () => {
     if (response.error === "Unauthorized") {
       return [false, null];
     }
-    return [true, response.user];
+    return [true, response];
   } catch (error) {
     console.error("Error fetching current user:", error);
     return [false, null];

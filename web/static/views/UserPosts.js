@@ -8,7 +8,9 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const [isUserLoggedIn, user] = await getCurrentUser();
+    const [isUserLoggedIn, response] = await getCurrentUser();
+
+    const posts = response.posts;
 
     const postsHTML = await Promise.all(
       posts.map(async (post) => {
