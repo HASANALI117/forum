@@ -14,8 +14,8 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const [isUserLoggedIn, res] = await getCurrentUser();
-    this.user = res.user;
+    // const [isUserLoggedIn, res] = await getCurrentUser();
+    this.user = window.currentUser;
     this.chatterId = this.params.id;
 
     const { messages, currentPage, totalMessages, totalPages } =
