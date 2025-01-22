@@ -135,8 +135,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     navigateTo("/signin");
   } else {
     await renderPage();
-    await renderUserList();
   }
+
+  await renderUserList();
 
   document.body.addEventListener("click", function (e) {
     if (e.target.matches("[data-link]")) {
