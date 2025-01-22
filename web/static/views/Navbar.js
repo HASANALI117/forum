@@ -1,7 +1,7 @@
-import AbstractView from './AbstractView.js';
-import SigninCard from './SigninCard.js';
-import { USERS, NavLinks } from '../constants.js';
-import UserDropDown from './UserDropDown.js';
+import AbstractView from "./AbstractView.js";
+import SigninCard from "./SigninCard.js";
+import { USERS, NavLinks } from "../constants.js";
+import UserDropDown from "./UserDropDown.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -9,10 +9,10 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const isUserLoggedIn = !!window.currentUser;
+    const isLoggedIn = window.isLoggedIn;
     const user = window.currentUser;
 
-    // const user = response ? response.user : null;
+    console.log(window.currentUser);
 
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
@@ -21,9 +21,9 @@ export default class extends AbstractView {
       >
         ${link.icon
           ? `<i class="bx ${link.icon} mr-1 text-xl"></i>`
-          : ''}${link.name}
+          : ""}${link.name}
       </a>`
-    ).join('');
+    ).join("");
 
     return /* HTML */ `
       <header class="bg-gray-800">
@@ -94,13 +94,13 @@ export default class extends AbstractView {
 
                     <img
                       class="w-10 h-10 rounded-full"
-                      src=${isUserLoggedIn ? user.image : USERS[0].image}
+                      src=${isLoggedIn ? user.image : USERS[0].image}
                       alt="User Image"
                     />
                   </button>
 
                   <p class="ml-4 text-xl font-medium text-white">
-                    ${isUserLoggedIn ? user.username : 'Guest'}
+                    ${isLoggedIn ? user.username : "Guest"}
                   </p>
                 </div>
 
@@ -118,29 +118,29 @@ export default class extends AbstractView {
   }
 
   async onMounted() {
-    const isUserLoggedIn = !!window.currentUser;
-    const response = window.currentUser;
+    const isLoggedIn = window.isLoggedIn;
+    const user = window.currentUser;
 
-    const user = response ? response.user : null;
+    console.log(isLoggedIn);
 
-    const userMenuButton = document.getElementById('user-menu-button');
-    const signinContainer = document.getElementById('signin-container');
+    const userMenuButton = document.getElementById("user-menu-button");
+    const signinContainer = document.getElementById("signin-container");
 
-    userMenuButton.addEventListener('click', async () => {
-      if (isUserLoggedIn) {
+    userMenuButton.addEventListener("click", async () => {
+      if (isLoggedIn) {
         const userDropDownCard = new UserDropDown({ user });
         signinContainer.innerHTML = await userDropDownCard.getHtml();
-        signinContainer.classList.toggle('hidden');
+        signinContainer.classList.toggle("hidden");
 
-        if (typeof userDropDownCard.onMounted === 'function') {
+        if (typeof userDropDownCard.onMounted === "function") {
           await userDropDownCard.onMounted();
         }
       } else {
         const signinCard = new SigninCard();
         signinContainer.innerHTML = await signinCard.getHtml();
-        signinContainer.classList.toggle('hidden');
+        signinContainer.classList.toggle("hidden");
 
-        if (typeof signinCard.onMounted === 'function') {
+        if (typeof signinCard.onMounted === "function") {
           await signinCard.onMounted();
         }
       }
