@@ -26,6 +26,7 @@ type Client struct {
 	Conn     *websocket.Conn
 	Send     chan WSMessage
 	UserName string
+	Image    string
 }
 
 type Hub struct {
@@ -112,6 +113,7 @@ func (h *Hub) GetOnlineUsers() []map[string]string {
 		users = append(users, map[string]string{
 			"id":       c.UserID,
 			"username": c.UserName,
+			"image":    c.Image,
 		})
 	}
 	return users
@@ -169,6 +171,7 @@ func ServeWs(h *Hub, db *database.DBWrapper, w http.ResponseWriter, r *http.Requ
 		Conn:     conn,
 		Send:     make(chan WSMessage, 256),
 		UserName: user.Username,
+		Image:    user.Image,
 	}
 	h.register <- client
 

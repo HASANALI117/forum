@@ -12,8 +12,6 @@ export default class extends AbstractView {
     const isLoggedIn = window.isLoggedIn;
     const user = window.currentUser;
 
-    console.log(window.currentUser);
-
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
         href="${link.href}"
@@ -120,8 +118,6 @@ export default class extends AbstractView {
   async onMounted() {
     const isLoggedIn = window.isLoggedIn;
     const user = window.currentUser;
-
-    console.log(isLoggedIn);
 
     const userMenuButton = document.getElementById("user-menu-button");
     const signinContainer = document.getElementById("signin-container");

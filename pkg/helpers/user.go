@@ -63,7 +63,7 @@ func GetAllUsers(db *sql.DB) ([]models.User, error) {
 	var usrs []models.User
 	for rows.Next() {
 		var u models.User
-		err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Age, &u.Gender, &u.FirstName, &u.LastName)
+		err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Age, &u.Gender, &u.FirstName, &u.LastName, &u.Image)
 		if err != nil {
 			return nil, err
 		}
@@ -83,7 +83,7 @@ func GetCurrentUser(db *database.DBWrapper, r *http.Request) (*models.User, erro
 
 func GetUsersWithChatHistory(db *sql.DB, userID string) ([]models.User, error) {
 	query := `
-		SELECT DISTINCT u.id, u.username, u.email, u.password, u.age, u.gender, u.first_name, u.last_name 
+		SELECT DISTINCT u.id, u.username, u.email, u.password, u.age, u.gender, u.first_name, u.last_name, u.image 
 		FROM users u 
 		INNER JOIN messages m 
 		ON (u.id = m.sender_id OR u.id = m.receiver_id)
@@ -99,7 +99,7 @@ func GetUsersWithChatHistory(db *sql.DB, userID string) ([]models.User, error) {
 	var users []models.User
 	for rows.Next() {
 		var u models.User
-		err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Age, &u.Gender, &u.FirstName, &u.LastName)
+		err := rows.Scan(&u.ID, &u.Username, &u.Email, &u.Password, &u.Age, &u.Gender, &u.FirstName, &u.LastName, &u.Image)
 		if err != nil {
 			return nil, err
 		}

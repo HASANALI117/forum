@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	helpers "forum/pkg/helpers"
 	database "forum/pkg/db"
+	helpers "forum/pkg/helpers"
 	ws "forum/pkg/websockets"
 )
 
@@ -33,14 +33,14 @@ func GetUsersListHandler(db *database.DBWrapper) http.HandlerFunc {
 func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		currentUser, err := helpers.GetCurrentUser(db, r)
-		if (err != nil) {
+		if err != nil {
 			http.Error(w, "Unauthorized", http.StatusUnauthorized)
 			return
 		}
 
 		// Get online users
 		onlineUsers := h.GetOnlineUsers()
-		
+
 		// Get users with chat history
 		historyUsers, err := helpers.GetUsersWithChatHistory(db.DB.DBConn, currentUser.ID)
 		if err != nil {
@@ -56,6 +56,7 @@ func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 			uniqueUsers[user["id"]] = map[string]string{
 				"id":       user["id"],
 				"username": user["username"],
+				"image":    user["image"],
 				"status":   "online",
 			}
 		}
@@ -66,6 +67,7 @@ func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 				uniqueUsers[user.ID] = map[string]string{
 					"id":       user.ID,
 					"username": user.Username,
+					"image":    user.Image,
 					"status":   "offline",
 				}
 			}
