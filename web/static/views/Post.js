@@ -1,5 +1,5 @@
-import AbstractView from './AbstractView.js';
-import { formatTimeAgo } from '../utils.js';
+import AbstractView from "./AbstractView.js";
+import { formatTimeAgo } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -16,9 +16,9 @@ export default class extends AbstractView {
     const formattedTime = formatTimeAgo(post.createdAt);
 
     return /* HTML */ `
-      <a class="m-4 w-4/5" href="/post/${post.id}">
+      <a class="m-4 w-100" href="/post/${post.id}">
         <div
-          class="bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all"
+          class="bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all line-clamp"
         >
           <div class="flex items-center mb-4">
             <img class="w-10 h-10 rounded-full" src="" alt="Random Image" />
