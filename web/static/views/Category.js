@@ -12,7 +12,7 @@ export default class extends AbstractView {
     return /* HTML */ `
       <a class="m-4" href="/category/${category.id}">
         <div
-          class=" w-96 h-full bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all"
+          class="ml-12 w-96 h-full bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all"
         >
           <div class="flex items-center mb-4">
             <img class="w-10 h-10 rounded-full" src="" alt="Random Image" />

@@ -17,7 +17,7 @@ export default class extends AbstractView {
     ).then((htmlArray) => htmlArray.join(""));
 
     return /* HTML */ `
-      <div class="flex flex-row">
+      <div class="flex flex-row ml-12">
         <!-- Posts Section -->
         <div
           class="flex flex-col items-center justify-center flex-wrap my-8"

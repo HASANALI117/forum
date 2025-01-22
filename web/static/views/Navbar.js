@@ -102,7 +102,7 @@ export default class extends AbstractView {
                   </p>
                 </div>
 
-                <div id="signin-container"></div>
+                <div id="signin-container" class="hidden"></div>
               </div>
             </div>
           </div>
@@ -122,24 +122,24 @@ export default class extends AbstractView {
     const userMenuButton = document.getElementById("user-menu-button");
     const signinContainer = document.getElementById("signin-container");
 
-    userMenuButton.addEventListener("click", async () => {
-      if (isLoggedIn) {
-        const userDropDownCard = new UserDropDown({ user });
-        signinContainer.innerHTML = await userDropDownCard.getHtml();
-        signinContainer.classList.toggle("hidden");
+    if (isLoggedIn) {
+      const userDropDownCard = new UserDropDown({ user });
+      signinContainer.innerHTML = await userDropDownCard.getHtml();
 
-        if (typeof userDropDownCard.onMounted === "function") {
-          await userDropDownCard.onMounted();
-        }
-      } else {
-        const signinCard = new SigninCard();
-        signinContainer.innerHTML = await signinCard.getHtml();
-        signinContainer.classList.toggle("hidden");
-
-        if (typeof signinCard.onMounted === "function") {
-          await signinCard.onMounted();
-        }
+      if (typeof userDropDownCard.onMounted === "function") {
+        await userDropDownCard.onMounted();
       }
+    } else {
+      const signinCard = new SigninCard();
+      signinContainer.innerHTML = await signinCard.getHtml();
+
+      if (typeof signinCard.onMounted === "function") {
+        await signinCard.onMounted();
+      }
+    }
+
+    userMenuButton.addEventListener("click", async () => {
+      signinContainer.classList.toggle("hidden");
     });
   }
 }
