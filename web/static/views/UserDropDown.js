@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import { customFetch, getCurrentUser } from "../utils.js";
+import { customFetch } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {

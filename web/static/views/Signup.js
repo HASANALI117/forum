@@ -1,5 +1,5 @@
 import AbstractView from "./AbstractView.js";
-import { handleFormSubmit, customFetch, getCurrentUser } from "../utils.js";
+import { handleFormSubmit, customFetch } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -235,7 +235,8 @@ export default class extends AbstractView {
           if (res.user) {
             // Delay the user fetch to allow time for session cookie to propagate
             setTimeout(async () => {
-              const [authenticated, user] = await getCurrentUser();
+              const authenticated = !!window.currentUser;
+              const user = window.currentUser;
               if (authenticated) {
                 window.location.href = "/dashboard";
               } else {

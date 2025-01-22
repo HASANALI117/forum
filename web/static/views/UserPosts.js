@@ -1,6 +1,5 @@
-import AbstractView from "./AbstractView.js";
-import Post from "./Post.js";
-import { getCurrentUser } from "../utils.js";
+import AbstractView from './AbstractView.js';
+import Post from './Post.js';
 
 export default class extends AbstractView {
   constructor(params) {
@@ -8,16 +7,17 @@ export default class extends AbstractView {
   }
 
   async getHtml() {
-    const [isUserLoggedIn, response] = await getCurrentUser();
+    const isUserLoggedIn = !!window.currentUser;
+    // const response = window.currentUser;
 
-    const posts = response.posts;
+    const posts = window.currentUserPosts;
 
     const postsHTML = await Promise.all(
       posts.map(async (post) => {
         const postView = new Post({ post });
         return await postView.getHtml();
       })
-    ).then((htmlArray) => htmlArray.join(""));
+    ).then((htmlArray) => htmlArray.join(''));
 
     return /* HTML */ `
       <div class="flex flex-row">
