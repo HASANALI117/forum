@@ -210,18 +210,26 @@ export const CATEGORIES = [
   {
     id: "1",
     name: "Full-stack",
+    image:
+      "https://images-platform.99static.com/FWvZUrBBgg_FQbdXlquX0lf2KSI=/500x500/top/smart/99designs-contests-attachments/28/28801/attachment_28801044",
     description:
       "Welcome to Full-stack Development! A mix of back-end & front-end development, an FS developer can do everything, but nothing exceptionally well. Feel free to ask questions or discuss all aspects of web development, or development life in general. If you’re asking a question, try to give only as much detail as necessary & read the rules first!",
   },
   {
     id: "2",
     name: "Front-end",
+    image:
+      "https://img.freepik.com/free-vector/gradient-coding-logo-template_23-2148809439.jpg",
+
     description:
       "/r/frontend is a subreddit for front end web developers who want to move the web forward or want to learn how. If you're looking to find or share the latest and greatest tips, links, thoughts, and discussions on the world of front web development, this is the place to do it.",
   },
   {
     id: "3",
     name: "Back-end",
+    image:
+      "https://backenddigital.com/wp-content/uploads/2022/02/Backend-Digital.jpg",
+
     description: "For back-end programming discussion.",
   },
 ];
