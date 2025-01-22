@@ -42,10 +42,11 @@ type Comment struct {
 
 // Message model
 type Message struct {
-	ID         string    `json:"id"`
-	SenderID   string    `json:"senderId"`
-	ReceiverID string    `json:"receiverId"`
-	Content    string    `json:"content"`
-	CreatedAt  time.Time `json:"createdAt"`
-	SenderName string    `json:"senderName"`
+	ID          string    `json:"id"`
+	SenderID    string    `json:"senderId"`
+	ReceiverID  string    `json:"receiverId"`
+	Content     string    `json:"content"`
+	CreatedAt   time.Time `json:"createdAt"`
+	SenderName  string    `json:"senderName"`
+	SenderImage string    `json:"senderImage"`
 }

@@ -2,9 +2,10 @@ package helpers
 
 import (
 	"database/sql"
-	"time"
-	"github.com/google/uuid"
 	models "forum/pkg/models"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 func StoreMessage(db *sql.DB, senderID, receiverID, content string) error {
@@ -17,7 +18,7 @@ func StoreMessage(db *sql.DB, senderID, receiverID, content string) error {
 // GetMessages between two users with pagination (last N)
 func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.Message, error) {
 	rows, err := db.Query(`
-		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username
+		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username, us.image
 		FROM messages m
 		JOIN users us ON m.sender_id = us.id
 		WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?)
@@ -31,7 +32,7 @@ func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.M
 	var msgs []models.Message
 	for rows.Next() {
 		var msg models.Message
-		err := rows.Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName)
+		err := rows.Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName, &msg.SenderImage)
 		if err != nil {
 			return nil, err
 		}
@@ -56,7 +57,7 @@ func GetTotalMessagesCount(db *sql.DB, userA, userB string) (int, error) {
 
 func GetAllMessages(db *sql.DB) ([]models.Message, error) {
 	rows, err := db.Query(`
-		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username
+		SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username, us.image
 		FROM messages m
 		JOIN users us ON m.sender_id = us.id
 		ORDER BY m.created_at DESC
@@ -69,7 +70,7 @@ func GetAllMessages(db *sql.DB) ([]models.Message, error) {
 	var msgs []models.Message
 	for rows.Next() {
 		var msg models.Message
-		err := rows.Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName)
+		err := rows.Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName, &msg.SenderImage)
 		if err != nil {
 			return nil, err
 		}
