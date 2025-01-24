@@ -159,7 +159,7 @@ export default class extends AbstractView {
 
     chatMessages.addEventListener('scroll', async () => {
       if (
-        chatMessages.scrollTop <= 100 && // More forgiving threshold
+        chatMessages.scrollTop <= 0 && // More forgiving threshold
         !this.isLoading &&
         this.currentPage < this.totalPages
       ) {
@@ -171,8 +171,11 @@ export default class extends AbstractView {
         // Only show loading indicator if one doesn't already exist
         if (!loadingElement || !loadingElement.parentNode) {
           loadingElement = document.createElement('div');
-          loadingElement.className = 'text-center text-gray-400 py-2';
-          loadingElement.textContent = 'Loading older messages...';
+          loadingElement.className = 'text-center text-gray-400 py-2 flex items-center justify-center gap-2';
+          loadingElement.innerHTML = `
+            <i class="bx bx-loader-circle animate-spin text-xl"></i>
+            <span>Loading older messages...</span>
+          `;
           chatMessages.prepend(loadingElement);
         }
 
@@ -219,7 +222,7 @@ export default class extends AbstractView {
             }
             this.isLoading = false;
           }
-        }, 500); // 500ms delay before loading
+        }, 750); 
       }
     });
 
