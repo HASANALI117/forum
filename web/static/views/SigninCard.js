@@ -13,7 +13,7 @@ export default class extends AbstractView {
           class="border-2 border-white rounded absolute left-0 mt-2 w-64 flex min-h-full flex-col justify-center px-6 pb-4 lg:px-8 bg-gray-900"
         >
           <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form class="space-y-6" id="signin-form">
+            <form class="space-y-6" id="signin-form-card">
               <div>
                 <label
                   for="username"
@@ -85,7 +85,7 @@ export default class extends AbstractView {
   }
 
   async onMounted() {
-    handleFormSubmit("signin-form", async (data) => {
+    handleFormSubmit("signin-form-card", async (data) => {
       const response = await customFetch(
         "http://localhost:8080/api/login",
         "POST",
