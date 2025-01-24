@@ -154,52 +154,72 @@ export default class extends AbstractView {
     });
 
     // Infinite scroll setup
+    let loadingTimeout;
+    let loadingElement;
+
     chatMessages.addEventListener('scroll', async () => {
       if (
-        chatMessages.scrollTop === 0 &&
+        chatMessages.scrollTop <= 100 && // More forgiving threshold
         !this.isLoading &&
-        this.currentPage < this.totalPages - 1
+        this.currentPage < this.totalPages
       ) {
-        this.isLoading = true;
-
-        // Show loading indicator
-        const loading = document.createElement('div');
-        loading.className = 'text-center text-gray-400 py-2';
-        loading.textContent = 'Loading older messages...';
-        chatMessages.prepend(loading);
-
-        // Get scroll height before loading new messages
-        const oldScrollHeight = chatMessages.scrollHeight;
-
-        // Fetch older messages
-        const { messages: olderMessages } = await customFetch(
-          `/api/get_messages?user_id=${this.chatterId}&limit=10&page=${
-            this.currentPage + 1
-          }`
-        );
-
-        // Remove loading indicator
-        chatMessages.removeChild(loading);
-
-        if (olderMessages.length > 0) {
-          this.currentPage++;
-
-          // Prepend new messages
-          const olderMessagesHTML = await Promise.all(
-            olderMessages.map(async (message) => {
-              const messageView = new Message({ message });
-              return await messageView.getHtml();
-            })
-          ).then((htmlArray) => htmlArray.join(''));
-
-          chatMessages.insertAdjacentHTML('afterbegin', olderMessagesHTML);
-
-          // Maintain scroll position
-          const newScrollHeight = chatMessages.scrollHeight;
-          chatMessages.scrollTop = newScrollHeight - oldScrollHeight;
+        // Clear any existing timeout
+        if (loadingTimeout) {
+          clearTimeout(loadingTimeout);
         }
 
-        this.isLoading = false;
+        // Only show loading indicator if one doesn't already exist
+        if (!loadingElement || !loadingElement.parentNode) {
+          loadingElement = document.createElement('div');
+          loadingElement.className = 'text-center text-gray-400 py-2';
+          loadingElement.textContent = 'Loading older messages...';
+          chatMessages.prepend(loadingElement);
+        }
+
+        // Set timeout to delay loading
+        loadingTimeout = setTimeout(async () => {
+          try {
+            this.isLoading = true;
+
+            // Get scroll position and height before loading
+            const oldScrollTop = chatMessages.scrollTop;
+            const oldScrollHeight = chatMessages.scrollHeight;
+
+            // Fetch older messages
+            const { messages: olderMessages } = await customFetch(
+              `/api/get_messages?user_id=${this.chatterId}&limit=10&page=${
+                this.currentPage + 1
+              }`
+            );
+
+            if (olderMessages.length > 0) {
+              this.currentPage++;
+
+              // Prepend new messages
+              const olderMessagesHTML = await Promise.all(
+                olderMessages.map(async (message) => {
+                  const messageView = new Message({ message });
+                  return await messageView.getHtml();
+                })
+              ).then((htmlArray) => htmlArray.join(''));
+
+              chatMessages.insertAdjacentHTML('afterbegin', olderMessagesHTML);
+
+              // Calculate and set new scroll position
+              const newScrollHeight = chatMessages.scrollHeight;
+              const heightAdded = newScrollHeight - oldScrollHeight;
+              chatMessages.scrollTop = oldScrollTop + heightAdded;
+            }
+          } catch (error) {
+            console.error('Error loading older messages:', error);
+          } finally {
+            // Remove loading indicator if it exists
+            if (loadingElement && loadingElement.parentNode) {
+              chatMessages.removeChild(loadingElement);
+            }
+            this.isLoading = false;
+          }
+        }, 500); // 500ms delay before loading
       }
     });
 
