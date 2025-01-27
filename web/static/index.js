@@ -9,10 +9,12 @@ import ChatView from "./views/ChatView.js";
 import UserList from "./views/UserList.js";
 import { customFetch, getCurrentUser } from "./utils.js";
 import UserPosts from "./views/UserPosts.js";
+import Toast from "./Toast.js";
 
-// Global WebSocket connection
+// Global instances
 window.ws = new WebSocket("ws://localhost:8080/ws");
 window.currentUser = null;
+window.toast = new Toast();
 
 window.ws.onopen = () => {
   console.log("WebSocket connection established");

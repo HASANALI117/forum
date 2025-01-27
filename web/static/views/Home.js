@@ -1,10 +1,15 @@
 import AbstractView from "./AbstractView.js";
 import Post from "./Post.js";
 import { customFetch } from "../utils.js";
+import Toast from "../Toast.js";
 
 export default class extends AbstractView {
   constructor(params) {
     super(params);
+  }
+
+  async onMounted() {
+    window.toast.show('Welcome to the Forum!', 'success', 3000);
   }
 
   async getHtml() {
