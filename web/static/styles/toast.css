@@ -1,0 +1,65 @@
+.toast {
+  position: fixed;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  color: #fff;
+  font-size: 1rem;
+  z-index: 9999;
+  transition: all 0.3s ease;
+}
+
+/* Horizontal positions */
+.toast-center {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.toast-left {
+  left: 20px;
+}
+
+.toast-right {
+  right: 20px;
+}
+
+/* Vertical positions */
+.toast-bottom {
+  bottom: 20px;
+}
+
+.toast-top {
+  top: 20px;
+}
+
+/* Animation states */
+.toast.fade-out.toast-center {
+  opacity: 0;
+  transform: translate(-50%, 20px);
+}
+
+.toast.fade-out.toast-left {
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+.toast.fade-out.toast-right {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+/* Toast types */
+.toast-info {
+  background-color: #5bc0de;
+}
+
+.toast-warning {
+  background-color: #f0ad4e;
+}
+
+.toast-success {
+  background-color: #5cb85c;
+}
+
+.toast-error {
+  background-color: #d9534f;
+}
