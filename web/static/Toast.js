@@ -1,7 +1,6 @@
 export default class Toast {
   constructor() {
-    this.toastContainer = null;
-    this.timeout = null;
+    this.toasts = [];
   }
 
   show(message, type = 'info', options = {}) {
@@ -19,13 +18,8 @@ export default class Toast {
       ...options
     };
 
-    // Clear any existing toast
-    if (this.toastContainer) {
-      this.hide();
-    }
-
     // Create toast element
-    this.toastContainer = document.createElement('div');
+    const toastElement = document.createElement('div');
     
     // Add position classes
     const positionClasses = [
@@ -34,40 +28,87 @@ export default class Toast {
     ];
     
     // Add all classes
-    this.toastContainer.className = [
+    toastElement.className = [
       'toast',
       `toast-${type}`,
       ...positionClasses
     ].join(' ');
 
-    this.toastContainer.textContent = message;
+    toastElement.textContent = message;
+
+    // Calculate offset based on existing toasts
+    const existingToasts = this.toasts.filter(t => 
+      t.position.horizontal === config.position.horizontal && 
+      t.position.vertical === config.position.vertical
+    );
+    
+    const offset = existingToasts.length * 60; // 60px spacing between toasts
+    if (config.position.vertical === 'bottom') {
+      toastElement.style.bottom = `${20 + offset}px`;
+    } else {
+      toastElement.style.top = `${20 + offset}px`;
+    }
 
     // Add to document
-    document.body.appendChild(this.toastContainer);
+    document.body.appendChild(toastElement);
+
+    // Create toast object
+    const toast = {
+      element: toastElement,
+      timeout: null,
+      position: config.position
+    };
+
+    // Add to toasts array
+    this.toasts.push(toast);
 
     // Set timer to remove toast
-    this.timeout = setTimeout(() => {
-      this.hide();
+    toast.timeout = setTimeout(() => {
+      this.hide(toast);
     }, config.duration);
 
     // Get computed styles to force a reflow
-    getComputedStyle(this.toastContainer).opacity;
+    getComputedStyle(toastElement).opacity;
   }
 
-  hide() {
-    if (this.toastContainer) {
-      clearTimeout(this.timeout);
-      
-      // Add fade-out class for animation
-      this.toastContainer.classList.add('fade-out');
-      
-      // Remove element after animation
-      setTimeout(() => {
-        if (this.toastContainer && this.toastContainer.parentNode) {
-          this.toastContainer.parentNode.removeChild(this.toastContainer);
-          this.toastContainer = null;
+  hide(toast) {
+    if (!toast || !toast.element) return;
+
+    clearTimeout(toast.timeout);
+    
+    // Add fade-out class for animation
+    toast.element.classList.add('fade-out');
+    
+    // Remove element after animation
+    setTimeout(() => {
+      if (toast.element && toast.element.parentNode) {
+        toast.element.parentNode.removeChild(toast.element);
+        
+        // Remove from toasts array
+        const index = this.toasts.indexOf(toast);
+        if (index > -1) {
+          this.toasts.splice(index, 1);
         }
-      }, 300); // Match transition duration from CSS
-    }
+
+        // Adjust positions of remaining toasts
+        this.updateToastPositions(toast.position);
+      }
+    }, 300); // Match transition duration from CSS
+  }
+
+  updateToastPositions(position) {
+    const relevantToasts = this.toasts.filter(t => 
+      t.position.horizontal === position.horizontal && 
+      t.position.vertical === position.vertical
+    );
+
+    relevantToasts.forEach((toast, index) => {
+      const offset = index * 60;
+      if (position.vertical === 'bottom') {
+        toast.element.style.bottom = `${20 + offset}px`;
+      } else {
+        toast.element.style.top = `${20 + offset}px`;
+      }
+    });
   }
 }
