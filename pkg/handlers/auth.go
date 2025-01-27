@@ -88,7 +88,7 @@ func LoginHandler(db *database.DBWrapper) http.HandlerFunc {
 
 		u, err := helpers.AuthenticateUser(db.DB.DBConn, creds.Identifier, creds.Password)
 		if err != nil {
-			helpers.Error(w, "Invalid credentials", http.StatusUnauthorized, err)
+			helpers.Error(w, "Invalid credentials", http.StatusBadRequest, err)
 			return
 		}
 
