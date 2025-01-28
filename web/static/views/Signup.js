@@ -1,44 +1,47 @@
-const Signup = () => {
-  return /* HTML */ `
-    <div class="flex flex-l items-center justify-center bg-gray-900 w-full">
-      <div
-        class="w-full rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700"
-      >
-        <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-          <div class="sm:mx-auto sm:w-full sm:max-w-md">
-            <h2
-              class="text-center text-2xl font-bold leading-9 tracking-tight text-white"
-            >
-              Create your account
-            </h2>
-          </div>
-          <form class="space-y-4 md:space-y-6" action="/signup" method="POST">
+import AbstractView from "./AbstractView.js";
+import { handleFormSubmit, customFetch, getCurrentUser } from "../utils.js";
+
+export default class extends AbstractView {
+  constructor(params) {
+    super(params);
+  }
+
+  async getHtml() {
+    return /* HTML */ `
+      <div class="flex flex-l items-center justify-center min-h-screen my-8">
+        <div class="bg-gray-900 w-3/5 rounded-lg shadow p-12">
+          <h2 class="text-center text-2xl font-bold text-white">
+            Create your account
+          </h2>
+
+          <form class="mt-10" id="signup-form">
             <div class="flex space-x-4">
-              <div class="w-1/2">
+              <div class="w-1/2 mb-10">
                 <label
-                  for="first-name"
+                  for="firstName"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
                   >First Name</label
                 >
                 <input
                   type="text"
-                  name="first-name"
-                  id="first-name"
+                  name="firstName"
+                  id="firstName"
                   class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   placeholder="John"
                   required=""
                 />
               </div>
-              <div class="w-1/2">
+
+              <div class="w-1/2 mb-10">
                 <label
-                  for="last-name"
+                  for="lastName"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
                   >Last Name</label
                 >
                 <input
                   type="text"
-                  name="last-name"
-                  id="last-name"
+                  name="lastName"
+                  id="lastName"
                   class="block w-full rounded-md border-0 bg-gray-800 p-2 text-white shadow-sm ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-indigo-500 sm:text-sm sm:leading-6"
                   placeholder="Cena"
                   required=""
@@ -47,7 +50,7 @@ const Signup = () => {
             </div>
 
             <div class="flex space-x-4">
-              <div class="w-1/2">
+              <div class="w-1/2 mb-10">
                 <label
                   for="age"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
@@ -62,7 +65,7 @@ const Signup = () => {
                   required=""
                 />
               </div>
-              <div class="w-1/2">
+              <div class="w-1/2 mb-10">
                 <label
                   for="gender"
                   class="block mb-2 text-sm font-medium text-white dark:text-white"
@@ -75,13 +78,13 @@ const Signup = () => {
                   required=""
                 >
                   <option value="" disabled selected>Select your gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
+                  <option value="M">Male</option>
+                  <option value="F">Female</option>
                 </select>
               </div>
             </div>
 
-            <div>
+            <div class="mb-10">
               <label
                 for="email"
                 class="block mb-2 text-sm font-medium text-white dark:text-white"
@@ -96,7 +99,8 @@ const Signup = () => {
                 required=""
               />
             </div>
-            <div>
+
+            <div class="mb-10">
               <label
                 for="username"
                 class="block mb-2 text-sm font-medium text-white dark:text-white"
@@ -111,7 +115,8 @@ const Signup = () => {
                 required=""
               />
             </div>
-            <div>
+
+            <div class="mb-10">
               <label
                 for="password"
                 class="block mb-2 text-sm font-medium text-white dark:text-white"
@@ -202,15 +207,53 @@ const Signup = () => {
           <p class="mt-6 text-center text-sm text-gray-400">
             Already have an account?
             <a
-              href="/"
+              href="/signin"
               class="font-semibold leading-6 text-indigo-400 hover:text-indigo-300 transition-all"
               >Login here</a
             >
           </p>
         </div>
       </div>
-    </div>
-  `;
-};
+    `;
+  }
 
-export default Signup;
+  async onMounted() {
+    handleFormSubmit("signup-form", (data) => {
+      customFetch(
+        "http://localhost:8080/api/register",
+        "POST",
+        {
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          age: parseInt(data.age, 10),
+          gender: data.gender,
+          firstName: data.firstName,
+          lastName: data.lastName,
+        },
+        async (res) => {
+          if (res.user) {
+            // Delay the user fetch to allow time for session cookie to propagate
+            setTimeout(async () => {
+              const [isLoggedIn, response] = await getCurrentUser();
+              window.isLoggedIn = isLoggedIn;
+              window.currentUser = response ? response.user : null;
+              console.log("Checking if user is logged in:", isLoggedIn);
+
+              if (isLoggedIn) {
+                window.location.href = "/";
+              } else {
+                console.error("User not authenticated after signup.");
+              }
+            }, 1000); // Delay for 2 second
+          } else {
+            console.error("Signup failed:", res);
+          }
+        },
+        (error) => {
+          console.error("Error creating user:", error);
+        }
+      );
+    });
+  }
+}

@@ -31,11 +31,15 @@ func main() {
 
 	http.HandleFunc("/api/posts", handlers.GetPostsHandler(dbWrapper))
 	http.HandleFunc("/api/create_post", handlers.CreatePostHandler(dbWrapper))
+	http.HandleFunc("/api/post/", handlers.GetPostByIDHandler(dbWrapper))
 	http.HandleFunc("/api/comments", handlers.GetCommentsHandler(dbWrapper))
 	http.HandleFunc("/api/create_comment", handlers.CreateCommentHandler(dbWrapper))
 
 	http.HandleFunc("/api/get_messages", handlers.GetMessagesHandler(dbWrapper))
+	http.HandleFunc("/api/all_messages", handlers.GetAllMessagesHandler(dbWrapper))
 	http.HandleFunc("/api/users_list", handlers.GetUsersListHandler(dbWrapper))
+	http.HandleFunc("/api/current_user", handlers.CurrentUserHandler(dbWrapper))
+	http.HandleFunc("/api/online_users", handlers.OnlineUsersHandler(hub, dbWrapper))
 
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		ws.ServeWs(hub, dbWrapper, w, r)

@@ -2,28 +2,29 @@
 export const NavLinks = [
   {
     name: "Home",
-    href: "",
+    href: "/",
     icon: "bxs-home",
-    current: true,
   },
   {
     name: "My Posts",
-    href: "#my-posts",
+    href: "/my-posts",
     icon: "bxs-notepad",
-    current: false,
   },
   {
     name: "Categories",
-    href: "#categories",
+    href: "/category",
     icon: "bxs-category",
-    current: false,
   },
   {
     name: "Create Post",
-    href: "#create-post",
+    href: "/create-post",
     icon: "bx-plus",
-    current: false,
   },
+  // {
+  //   name: "Sign In",
+  //   href: "/signin",
+  //   icon: "bx-user",
+  // },
 ];
 
 // Sample user data
@@ -130,24 +131,105 @@ export const POSTS = [
 ];
 
 // Sample chat messages
-export const MESSAGES = [
+export const CHATS = [
   {
-    username: "User 1",
-    image: USERS[0].image,
-    content: "Hello, how are you?",
-    timestamp: "10:00 AM",
+    id: 1,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "Hello, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "I'm doing well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
   },
   {
-    username: "User 2",
-    image: USERS[1].image,
-    content:
-      "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
-    timestamp: "10:05 AM",
+    id: 2,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "Hello, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "loremdvssdvnsdv  sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "I'm doing well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
   },
   {
-    username: "User 1",
-    image: USERS[0].image,
-    content: "I'm doing well, thank you!",
-    timestamp: "10:10 AM",
+    id: 3,
+    messages: [
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "HHHHHHHHHHHHHHHHHHHHHHHHHH, how are you?",
+        timestamp: "10:00 AM",
+      },
+      {
+        username: "User 2",
+        image: USERS[1].image,
+        content:
+          "HHHHHHHHHHHHH sdv sdviono no niosdv nodv nov nionoisdv  sdvnsdv noniowef sdv niosev no niosdv niosdv iose niowef oniio eniowe niowef nioo wenioniowe nioe nio wenio wefnionio weniowef ",
+        timestamp: "10:05 AM",
+      },
+      {
+        username: "User 1",
+        image: USERS[0].image,
+        content: "SACSCCDSDDS well, thank you!",
+        timestamp: "10:10 AM",
+      },
+    ],
+  },
+];
+
+export const CATEGORIES = [
+  {
+    id: "1",
+    name: "Full-stack",
+    image:
+      "https://images-platform.99static.com/FWvZUrBBgg_FQbdXlquX0lf2KSI=/500x500/top/smart/99designs-contests-attachments/28/28801/attachment_28801044",
+    description:
+      "Welcome to Full-stack Development! A mix of back-end & front-end development, an FS developer can do everything, but nothing exceptionally well. Feel free to ask questions or discuss all aspects of web development, or development life in general. If you’re asking a question, try to give only as much detail as necessary & read the rules first!",
+  },
+  {
+    id: "2",
+    name: "Front-end",
+    image:
+      "https://img.freepik.com/free-vector/gradient-coding-logo-template_23-2148809439.jpg",
+
+    description:
+      "/r/frontend is a subreddit for front end web developers who want to move the web forward or want to learn how. If you're looking to find or share the latest and greatest tips, links, thoughts, and discussions on the world of front web development, this is the place to do it.",
+  },
+  {
+    id: "3",
+    name: "Back-end",
+    image:
+      "https://backenddigital.com/wp-content/uploads/2022/02/Backend-Digital.jpg",
+
+    description: "For back-end programming discussion.",
   },
 ];

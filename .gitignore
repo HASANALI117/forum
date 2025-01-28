@@ -4,6 +4,7 @@
 *.dll
 *.so
 *.dylib
+*.db
 
 # Test binary, built with `go test -c`
 *.test
@@ -16,6 +17,8 @@
 
 # Go workspace file
 go.work
-.air.toml
+# .air.toml
 tmp/
 .vscode
+
+pkg/db/forum.db

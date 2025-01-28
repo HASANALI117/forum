@@ -37,11 +37,22 @@
     />
     <link rel="stylesheet" href="/static/styles/styles.css" />
     <link rel="stylesheet" href="/static/styles/signup.css" />
+    <link rel="stylesheet" href="/static/styles/toast.css" />
     <title>Forum</title>
   </head>
   <body class="flex flex-col min-h-screen">
-    <main id="root" class="flex-grow"></main>
+    <div id="navbar"></div>
 
-    <script type="module" src="/static/main.js"></script>
+    <div class="flex flex-row flex-grow">
+      <div
+        id="userlist"
+        class="w-48 bg-gray-700 sticky top-0 h-screen overflow-y-auto"
+      ></div>
+      <main id="root" class="w-full"></main>
+    </div>
+
+    <div id="footer"></div>
+
+    <script type="module" src="/static/index.js"></script>
   </body>
 </html>
