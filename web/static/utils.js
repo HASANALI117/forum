@@ -52,9 +52,9 @@ export const customFetch = async (url, type, data, onSuccess, onError) => {
     throw error;
   } catch (error) {
     console.error('Fetch error:', error);
-    window.toast.show('Network error occurred', 'error', {
-      position: { horizontal: 'right', vertical: 'top' }
-    });
+    // window.toast.show('Network error occurred', 'error', {
+    //   position: { horizontal: 'right', vertical: 'top' }
+    // });
     if (onError) {
       onError(error);
     }
@@ -74,9 +74,9 @@ export const handleFormSubmit = (formId, callback) => {
           await callback(data);
         }
       } catch (error) {
-        window.toast.show(error.message || 'Form submission failed', 'error', {
-          position: { horizontal: 'right', vertical: 'top' }
-        });
+        // window.toast.show(error.message || 'Form submission failed', 'error', {
+        //   position: { horizontal: 'right', vertical: 'top' }
+        // });
       }
     });
   } else {
