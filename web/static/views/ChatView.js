@@ -131,6 +131,7 @@ export default class extends AbstractView {
           receiverId: this.chatterId,
           senderId: this.user.id,
           senderName: this.user.username,
+          senderImage: this.user.image,
         })
       );
       console.log('Message sent:', {
@@ -138,6 +139,7 @@ export default class extends AbstractView {
         ReceiverID: this.chatterId,
         SenderID: this.user.id,
         SenderName: this.user.username,
+        senderImage: this.user.image,
       });
     } else {
       console.error('WebSocket is not open');
