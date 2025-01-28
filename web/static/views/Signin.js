@@ -78,9 +78,9 @@ export default class extends AbstractView {
         () => {
           window.location.href = "/";
         },
-        (error) => {
-          console.error("Error signing in:", error);
-        }
+        // (error) => {
+        //   console.error("Error signing in:", error);
+        // }
       );
     });
   }

@@ -245,7 +245,7 @@ export default class extends AbstractView {
               } else {
                 console.error("User not authenticated after signup.");
               }
-            }, 4000); // Delay for 2 second
+            }, 1000); // Delay for 2 second
           } else {
             console.error("Signup failed:", res);
           }
