@@ -42,7 +42,26 @@ func GetMessages(db *sql.DB, userA, userB string, limit, offset int) ([]models.M
 	for i, j := 0, len(msgs)-1; i < j; i, j = i+1, j-1 {
 		msgs[i], msgs[j] = msgs[j], msgs[i]
 	}
-	return msgs, nil
+return msgs, nil
+}
+
+// GetLatestMessageBetweenUsers gets the most recent message between the current user and another user
+func GetLatestMessageBetweenUsers(db *sql.DB, userA, userB string) (*models.Message, error) {
+    var msg models.Message
+    err := db.QueryRow(`
+        SELECT m.id, m.sender_id, m.receiver_id, m.content, m.created_at, us.username, us.image
+        FROM messages m
+        JOIN users us ON m.sender_id = us.id
+        WHERE (m.sender_id = ? AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = ?)
+        ORDER BY m.created_at DESC LIMIT 1
+    `, userA, userB, userB, userA).Scan(&msg.ID, &msg.SenderID, &msg.ReceiverID, &msg.Content, &msg.CreatedAt, &msg.SenderName, &msg.SenderImage)
+    if err == sql.ErrNoRows {
+        return nil, nil
+    }
+    if err != nil {
+        return nil, err
+    }
+    return &msg, nil
 }
 
 func GetTotalMessagesCount(db *sql.DB, userA, userB string) (int, error) {

@@ -73,10 +73,34 @@ func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 			}
 		}
 
-		// Convert map to slice
-		result := make([]map[string]string, 0, len(uniqueUsers))
+		// Get latest messages for each user
+		result := make([]map[string]interface{}, 0, len(uniqueUsers))
 		for _, user := range uniqueUsers {
-			result = append(result, user)
+			userData := map[string]interface{}{
+				"id":       user["id"],
+				"username": user["username"],
+				"image":    user["image"],
+				"status":   user["status"],
+			}
+
+			// Get latest message between current user and this user
+			latestMsg, err := helpers.GetLatestMessageBetweenUsers(db.DB.DBConn, currentUser.ID, user["id"])
+			if err != nil {
+				http.Error(w, "Failed to fetch messages", http.StatusInternalServerError)
+				return
+			}
+
+			if latestMsg != nil {
+				userData["lastMessage"] = map[string]interface{}{
+					"content":      latestMsg.Content,
+					"sender_id":    latestMsg.SenderID,
+					"created_at":   latestMsg.CreatedAt,
+					"sender_name":  latestMsg.SenderName,
+					"sender_image": latestMsg.SenderImage,
+				}
+			}
+
+			result = append(result, userData)
 		}
 
 		w.Header().Set("Content-Type", "application/json")
