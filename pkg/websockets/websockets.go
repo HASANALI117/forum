@@ -18,6 +18,7 @@ type WSMessage struct {
 	ReceiverID string    `json:"receiverId"`
 	SenderID   string    `json:"senderId"`
 	SenderName string    `json:"senderName"`
+	SenderImage string   `json:"senderImage"`
 	CreatedAt  time.Time `json:"createdAt"`
 }
 
@@ -72,6 +73,7 @@ func (h *Hub) Run() {
 				fmt.Println("Broadcasting message:", msg)
 				fmt.Println("sender:", msg.SenderID)
 				fmt.Println("receiver:", msg.ReceiverID)
+				fmt.Println("image:", msg.SenderImage)
 				// Store message in DB
 				err := helpers.StoreMessage(h.db.DB.DBConn, msg.SenderID, msg.ReceiverID, msg.Content)
 				if err != nil {
