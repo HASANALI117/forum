@@ -29,27 +29,35 @@ export default class extends AbstractView {
     window.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
       console.log('Message received:', message);
-      if (
-        message.type === 'private_message' &&
-        (message.senderId === this.chatterId ||
-          message.senderId === this.user.id)
-      ) {
+      if (message.type === 'private_message') {
         // console.log('Message received from chatter:', message);
-        const messageView = new Message({ message });
-        messageView.getHtml().then((html) => {
-          const chatMessages = document.getElementById('chat-messages');
+        window.renderUserList();
+        if (
+          message.senderId === this.chatterId ||
+          message.senderId === this.user.id
+        ) {
+          const messageView = new Message({ message });
+          messageView.getHtml().then((html) => {
+            const chatMessages = document.getElementById('chat-messages');
 
-          // Remove empty state message if it exists
-          const emptyState = chatMessages.querySelector(
-            '.flex.flex-col.items-center.justify-center'
+            // Remove empty state message if it exists
+            const emptyState = chatMessages.querySelector(
+              '.flex.flex-col.items-center.justify-center'
+            );
+            if (emptyState) {
+              chatMessages.removeChild(emptyState);
+            }
+
+            chatMessages.insertAdjacentHTML('beforeend', html);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          });
+        } else {
+          window.toast.show(
+            `New message received from ${message.senderName}`,
+            'info',
+            3000
           );
-          if (emptyState) {
-            chatMessages.removeChild(emptyState);
-          }
-
-          chatMessages.insertAdjacentHTML('beforeend', html);
-          chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
+        }
       } else if (message.type === 'update_user_list') {
         window.renderUserList();
       }
@@ -171,7 +179,8 @@ export default class extends AbstractView {
         // Only show loading indicator if one doesn't already exist
         if (!loadingElement || !loadingElement.parentNode) {
           loadingElement = document.createElement('div');
-          loadingElement.className = 'text-center text-gray-400 py-2 flex items-center justify-center gap-2';
+          loadingElement.className =
+            'text-center text-gray-400 py-2 flex items-center justify-center gap-2';
           loadingElement.innerHTML = `
             <i class="bx bx-loader-circle animate-spin text-xl"></i>
             <span>Loading older messages...</span>
@@ -222,7 +231,7 @@ export default class extends AbstractView {
             }
             this.isLoading = false;
           }
-        }, 750); 
+        }, 750);
       }
     });
 

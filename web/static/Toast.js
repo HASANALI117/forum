@@ -8,9 +8,9 @@ export default class Toast {
     const defaultOptions = {
       duration: 3000,
       position: {
-        horizontal: 'center', // 'left', 'center', 'right'
-        vertical: 'bottom'    // 'top', 'bottom'
-      }
+        horizontal: 'left', // 'left', 'center', 'right'
+        vertical: 'top', // 'top', 'bottom'
+      },
     };
 
     const config = {
