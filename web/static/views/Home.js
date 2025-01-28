@@ -8,9 +8,9 @@ export default class extends AbstractView {
     super(params);
   }
 
-  async onMounted() {
-    window.toast.show('Welcome to the Forum!', 'success', 3000);
-  }
+  // async onMounted() {
+  //   window.toast.show('Welcome to the Forum!', 'success', 3000);
+  // }
 
   async getHtml() {
     const posts = await customFetch("http://localhost:8080/api/posts", "GET");
