@@ -8,12 +8,15 @@ export default class extends AbstractView {
 
   async getHtml() {
     const users = [...this.params.users];
-    
+
     // Sort users: chat history first, most recent messages first
     users.sort((a, b) => {
       // If both have messages, sort by most recent
       if (a.lastMessage && b.lastMessage) {
-        return new Date(b.lastMessage.created_at) - new Date(a.lastMessage.created_at);
+        return (
+          new Date(b.lastMessage.created_at) -
+          new Date(a.lastMessage.created_at)
+        );
       }
       // If only one has a message, that one goes first
       if (a.lastMessage) return -1;
@@ -27,6 +30,7 @@ export default class extends AbstractView {
         (user, index) => /* HTML */ ` <a
           class="flex items-center justify-between p-4 hover:bg-gray-600 cursor-pointer transition-all"
           href="/chat/${user.id}"
+          data-link
         >
           <div class="relative">
             <img
@@ -49,9 +53,8 @@ export default class extends AbstractView {
           <div class="flex flex-1 min-w-0">
             <div class="ml-4 flex-1 min-w-0">
               <p class="text-white text-xl font-semibold">${user.username}</p>
-              ${
-                user.lastMessage
-                  ? `<div class="flex mt-1 text-gray-400 min-w-0">
+              ${user.lastMessage
+                ? `<div class="flex mt-1 text-gray-400 min-w-0">
                       <p class="text-sm truncate min-w-0 flex-1">
                         ${
                           user.lastMessage.sender_name === user.username
@@ -63,8 +66,7 @@ export default class extends AbstractView {
                         · ${formatTimeAgo(user.lastMessage.created_at)}
                       </p>
                     </div>`
-                  : ''
-              }
+                : ""}
             </div>
           </div>
         </a>`
