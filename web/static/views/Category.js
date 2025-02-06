@@ -10,7 +10,7 @@ export default class extends AbstractView {
     const category = this.params.category;
 
     return /* HTML */ `
-      <a class="m-4" href="/category/${category.id}">
+      <a class="m-4" href="/category/${category.id}" data-link>
         <div
           class="ml-12 w-96 h-full bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all"
         >

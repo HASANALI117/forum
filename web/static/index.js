@@ -96,6 +96,10 @@ const renderPage = async () => {
 const navigateTo = (url) => {
   history.pushState(null, null, url);
   renderPage();
+
+  if (window.isLoggedIn) {
+    renderNavbar();
+  }
 };
 
 const router = async () => {

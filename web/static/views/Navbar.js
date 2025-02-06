@@ -11,11 +11,14 @@ export default class extends AbstractView {
   async getHtml() {
     const isLoggedIn = window.isLoggedIn;
     const user = window.currentUser;
+    const currentPath = window.location.pathname;
 
     const navItems = NavLinks.map(
       (link) => /* HTML */ ` <a
         href="${link.href}"
-        class="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white"
+        class="inline-flex items-center rounded-md ${currentPath === link.href
+          ? "bg-gray-900"
+          : ""} px-3 py-2 text-sm font-medium text-white"
         data-link
       >
         ${link.icon
