@@ -141,13 +141,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
   window.isLoggedIn = isLoggedIn;
 
-  await renderNavbar();
-  await renderUserList();
-
   const currentPath = window.location.pathname;
 
   if (isLoggedIn) {
     await renderPage();
+    await renderNavbar();
+    await renderUserList();
   } else if (currentPath !== "/signup") {
     navigateTo("/signin");
   } else {
