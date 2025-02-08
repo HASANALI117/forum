@@ -10,13 +10,13 @@ export default class extends AbstractView {
     const post = this.params.post;
 
     if (!post) {
-      return `<div class="text-white">Post not found</div>`;
+      return `<div class="text-white text-center text-2xl mt-8">Post not found</div>`;
     }
 
     const formattedTime = formatTimeAgo(post.createdAt);
 
     return /* HTML */ `
-      <a class="m-4 w-100" href="/post/${post.id}">
+      <a class="m-4 w-100" href="/post/${post.id}" data-link>
         <div
           class="bg-gray-900 rounded-2xl p-12 shadow-lg hover:shadow-2xl transition-all line-clamp"
         >

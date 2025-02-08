@@ -9,6 +9,10 @@ export default class extends AbstractView {
   async getHtml() {
     const posts = window.currentUserPosts;
 
+    if (!posts) {
+      return `<div class="text-white text-center text-2xl mt-8">No Posts by this user</div>`;
+    }
+
     const postsHTML = await Promise.all(
       posts.map(async (post) => {
         const postView = new Post({ post });

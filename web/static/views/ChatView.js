@@ -1,7 +1,7 @@
-import AbstractView from './AbstractView.js';
-import Message from './Message.js';
-import { USERS, CHATS } from '../constants.js';
-import { getCurrentUser, customFetch, handleFormSubmit } from '../utils.js';
+import AbstractView from "./AbstractView.js";
+import Message from "./Message.js";
+import { USERS, CHATS } from "../constants.js";
+import { getCurrentUser, customFetch, handleFormSubmit } from "../utils.js";
 
 export default class extends AbstractView {
   constructor(params) {
@@ -11,6 +11,7 @@ export default class extends AbstractView {
     this.currentPage = 1;
     this.totalPages = 1;
     this.isLoading = false;
+    this.typingTimeout = null;
   }
 
   async getHtml() {
@@ -28,8 +29,18 @@ export default class extends AbstractView {
 
     window.ws.onmessage = (event) => {
       const message = JSON.parse(event.data);
-      console.log('Message received:', message);
-      if (message.type === 'private_message') {
+      console.log("Message received:", message);
+      if (
+        message.type === "typing_start" &&
+        message.senderId === this.chatterId
+      ) {
+        this.showTypingIndicator(message.senderName);
+      } else if (
+        message.type === "typing_end" &&
+        message.senderId === this.chatterId
+      ) {
+        this.hideTypingIndicator();
+      } else if (message.type === "private_message") {
         // console.log('Message received from chatter:', message);
         window.renderUserList();
         if (
@@ -38,27 +49,27 @@ export default class extends AbstractView {
         ) {
           const messageView = new Message({ message });
           messageView.getHtml().then((html) => {
-            const chatMessages = document.getElementById('chat-messages');
+            const chatMessages = document.getElementById("chat-messages");
 
             // Remove empty state message if it exists
             const emptyState = chatMessages.querySelector(
-              '.flex.flex-col.items-center.justify-center'
+              ".flex.flex-col.items-center.justify-center"
             );
             if (emptyState) {
               chatMessages.removeChild(emptyState);
             }
 
-            chatMessages.insertAdjacentHTML('beforeend', html);
+            chatMessages.insertAdjacentHTML("beforeend", html);
             chatMessages.scrollTop = chatMessages.scrollHeight;
           });
         } else {
           window.toast.show(
             `New message received from ${message.senderName}`,
-            'info',
+            "info",
             3000
           );
         }
-      } else if (message.type === 'update_user_list') {
+      } else if (message.type === "update_user_list") {
         window.renderUserList();
       }
     };
@@ -70,11 +81,11 @@ export default class extends AbstractView {
           const messageView = new Message({ message });
           return await messageView.getHtml();
         })
-      ).then((htmlArray) => htmlArray.join(''));
+      ).then((htmlArray) => htmlArray.join(""));
     } else {
       // Get chatter's name from USERS constant
       const chatter = USERS.find((user) => user.id === this.chatterId);
-      const chatterName = chatter ? chatter.username : 'this user';
+      const chatterName = chatter ? chatter.username : "this user";
 
       chatsHTML = /* HTML */ `
         <div
@@ -98,6 +109,27 @@ export default class extends AbstractView {
           >
             ${chatsHTML}
           </div>
+
+          <!-- Typing indicator -->
+          <div id="typing-indicator" class="hidden px-4 py-2">
+            <div class="flex items-center space-x-2 text-gray-400">
+              <div class="flex space-x-1">
+                <div
+                  class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                ></div>
+                <div
+                  class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style="animation-delay: 0.2s"
+                ></div>
+                <div
+                  class="w-2 h-2 bg-gray-400 rounded-full animate-bounce"
+                  style="animation-delay: 0.4s"
+                ></div>
+              </div>
+              <span></span>
+            </div>
+          </div>
+
           <form
             id="chat-form"
             class="m-4 flex justify-center items-center relative sticky bottom-0 py-4"
@@ -126,7 +158,7 @@ export default class extends AbstractView {
     if (window.ws && window.ws.readyState === WebSocket.OPEN) {
       window.ws.send(
         JSON.stringify({
-          type: 'private_message',
+          type: "private_message",
           content: content,
           receiverId: this.chatterId,
           senderId: this.user.id,
@@ -134,7 +166,7 @@ export default class extends AbstractView {
           senderImage: this.user.image,
         })
       );
-      console.log('Message sent:', {
+      console.log("Message sent:", {
         content,
         ReceiverID: this.chatterId,
         SenderID: this.user.id,
@@ -142,24 +174,93 @@ export default class extends AbstractView {
         senderImage: this.user.image,
       });
     } else {
-      console.error('WebSocket is not open');
+      console.error("WebSocket is not open");
     }
   }
 
   async onMounted() {
-    console.log('ChatView mounted');
+    console.log("ChatView mounted");
     console.log(window.currentUser);
 
-    const chatMessages = document.getElementById('chat-messages');
-    const chatForm = document.getElementById('chat-form');
-    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById("chat-messages");
+    const chatForm = document.getElementById("chat-form");
+    const chatInput = document.getElementById("chat-input");
+
+    // Add input event listener for typing indicator
+    chatInput.addEventListener("input", () => {
+      // Clear any existing timeout
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+
+      // Only send typing_start if there's content
+      if (chatInput.value.trim()) {
+        window.ws.send(
+          JSON.stringify({
+            type: "typing_start",
+            receiverId: this.chatterId,
+            senderId: this.user.id,
+            senderName: this.user.username,
+          })
+        );
+
+        // Set new timeout to end typing after 2 seconds of no input
+        this.typingTimeout = setTimeout(() => {
+          window.ws.send(
+            JSON.stringify({
+              type: "typing_end",
+              receiverId: this.chatterId,
+              senderId: this.user.id,
+            })
+          );
+        }, 1000);
+      } else {
+        window.ws.send(
+          JSON.stringify({
+            type: "typing_end",
+            receiverId: this.chatterId,
+            senderId: this.user.id,
+          })
+        );
+      }
+    });
+
+    // Stop typing and clear timeout when input loses focus
+    chatInput.addEventListener("blur", () => {
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+      window.ws.send(
+        JSON.stringify({
+          type: "typing_end",
+          receiverId: this.chatterId,
+          senderId: this.user.id,
+        })
+      );
+    });
+
+    // Stop typing and clear timeout when Enter is pressed
+    chatInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") {
+        if (this.typingTimeout) {
+          clearTimeout(this.typingTimeout);
+        }
+        window.ws.send(
+          JSON.stringify({
+            type: "typing_end",
+            receiverId: this.chatterId,
+            senderId: this.user.id,
+          })
+        );
+      }
+    });
 
     // Handle form submission
-    handleFormSubmit('chat-form', (data) => {
+    handleFormSubmit("chat-form", (data) => {
       const message = chatInput.value.trim();
       if (message) {
         this.sendMessage(message);
-        chatInput.value = '';
+        chatInput.value = "";
       }
     });
 
@@ -167,7 +268,7 @@ export default class extends AbstractView {
     let loadingTimeout;
     let loadingElement;
 
-    chatMessages.addEventListener('scroll', async () => {
+    chatMessages.addEventListener("scroll", async () => {
       if (
         chatMessages.scrollTop <= 0 && // More forgiving threshold
         !this.isLoading &&
@@ -180,9 +281,9 @@ export default class extends AbstractView {
 
         // Only show loading indicator if one doesn't already exist
         if (!loadingElement || !loadingElement.parentNode) {
-          loadingElement = document.createElement('div');
+          loadingElement = document.createElement("div");
           loadingElement.className =
-            'text-center text-gray-400 py-2 flex items-center justify-center gap-2';
+            "text-center text-gray-400 py-2 flex items-center justify-center gap-2";
           loadingElement.innerHTML = `
             <i class="bx bx-loader-circle animate-spin text-xl"></i>
             <span>Loading older messages...</span>
@@ -215,9 +316,9 @@ export default class extends AbstractView {
                   const messageView = new Message({ message });
                   return await messageView.getHtml();
                 })
-              ).then((htmlArray) => htmlArray.join(''));
+              ).then((htmlArray) => htmlArray.join(""));
 
-              chatMessages.insertAdjacentHTML('afterbegin', olderMessagesHTML);
+              chatMessages.insertAdjacentHTML("afterbegin", olderMessagesHTML);
 
               // Calculate and set new scroll position
               const newScrollHeight = chatMessages.scrollHeight;
@@ -225,7 +326,7 @@ export default class extends AbstractView {
               chatMessages.scrollTop = oldScrollTop + heightAdded;
             }
           } catch (error) {
-            console.error('Error loading older messages:', error);
+            console.error("Error loading older messages:", error);
           } finally {
             // Remove loading indicator if it exists
             if (loadingElement && loadingElement.parentNode) {
@@ -239,5 +340,16 @@ export default class extends AbstractView {
 
     // Auto-scroll to bottom on new messages
     chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
+
+  showTypingIndicator(username) {
+    const indicator = document.getElementById("typing-indicator");
+    indicator.querySelector("span").innerText = `${username} is typing...`;
+    indicator.classList.remove("hidden");
+  }
+
+  hideTypingIndicator() {
+    const indicator = document.getElementById("typing-indicator");
+    indicator.classList.add("hidden");
   }
 }

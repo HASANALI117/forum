@@ -33,7 +33,7 @@ export default class extends AbstractView {
         >
           ${posts
             ? postsHTML
-            : `<div class="text-white">No posts available.</div>`}
+            : `<div class="text-white text-center text-2xl mt-8">No posts available</div>`}
         </div>
       </div>
     `;

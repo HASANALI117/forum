@@ -13,13 +13,13 @@ import (
 )
 
 type WSMessage struct {
-	Type       string    `json:"type"` // e.g. "private_message"
-	Content    string    `json:"content"`
-	ReceiverID string    `json:"receiverId"`
-	SenderID   string    `json:"senderId"`
-	SenderName string    `json:"senderName"`
-	SenderImage string   `json:"senderImage"`
-	CreatedAt  time.Time `json:"createdAt"`
+	Type        string    `json:"type"` // e.g. "private_message"
+	Content     string    `json:"content"`
+	ReceiverID  string    `json:"receiverId"`
+	SenderID    string    `json:"senderId"`
+	SenderName  string    `json:"senderName"`
+	SenderImage string    `json:"senderImage"`
+	CreatedAt   time.Time `json:"createdAt"`
 }
 
 type Client struct {
@@ -94,6 +94,11 @@ func (h *Hub) Run() {
 				fmt.Println("Broadcasting message:", msg)
 				for _, c := range h.clients {
 					c.Send <- msg
+				}
+			case "typing_start", "typing_end":
+				// Send typing status only to receiver
+				if receiverClient, ok := h.clients[msg.ReceiverID]; ok {
+					receiverClient.Send <- msg
 				}
 			}
 		}
