@@ -73,6 +73,29 @@ func OnlineUsersHandler(h *ws.Hub, db *database.DBWrapper) http.HandlerFunc {
 			}
 		}
 
+		// Get all registered users and add them if not already present
+		allUsers, err := helpers.GetAllUsers(db.DB.DBConn)
+		if err != nil {
+			http.Error(w, "Failed to fetch users", http.StatusInternalServerError)
+			return
+		}
+
+		// Add remaining users as offline
+		for _, user := range allUsers {
+			// Skip current user
+			if user.ID == currentUser.ID {
+				continue
+			}
+			if _, exists := uniqueUsers[user.ID]; !exists {
+				uniqueUsers[user.ID] = map[string]string{
+					"id":       user.ID,
+					"username": user.Username,
+					"image":    user.Image,
+					"status":   "offline",
+				}
+			}
+		}
+
 		// Get latest messages for each user
 		result := make([]map[string]interface{}, 0, len(uniqueUsers))
 		for _, user := range uniqueUsers {

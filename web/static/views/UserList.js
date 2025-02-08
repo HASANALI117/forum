@@ -8,21 +8,33 @@ export default class extends AbstractView {
 
   async getHtml() {
     const users = [...this.params.users];
-
-    // Sort users: chat history first, most recent messages first
+    
+    // Sort users based on the specified priority:
+    // 1. Users with chat history (sorted by most recent message)
+    // 2. Online users without chat history (sorted alphabetically)
+    // 3. Offline users without chat history (sorted alphabetically)
     users.sort((a, b) => {
-      // If both have messages, sort by most recent
+      // If both have messages, sort by most recent first
       if (a.lastMessage && b.lastMessage) {
         return (
           new Date(b.lastMessage.created_at) -
           new Date(a.lastMessage.created_at)
         );
       }
+      
       // If only one has a message, that one goes first
       if (a.lastMessage) return -1;
       if (b.lastMessage) return 1;
-      // If neither has messages, keep original order
-      return 0;
+      
+      // For users without messages:
+      // If one is online and other is offline, online goes first
+      if (a.status !== b.status) {
+        return a.status === "online" ? -1 : 1;
+      }
+      
+      // If both users have same status (both online or both offline),
+      // sort alphabetically by username
+      return a.username.localeCompare(b.username);
     });
 
     const usersHTML = users
