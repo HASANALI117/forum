@@ -11,6 +11,7 @@ export default class extends AbstractView {
     this.currentPage = 1;
     this.totalPages = 1;
     this.isLoading = false;
+    this.typingTimeout = null;
   }
 
   async getHtml() {
@@ -187,6 +188,11 @@ export default class extends AbstractView {
 
     // Add input event listener for typing indicator
     chatInput.addEventListener("input", () => {
+      // Clear any existing timeout
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
+
       // Only send typing_start if there's content
       if (chatInput.value.trim()) {
         window.ws.send(
@@ -197,6 +203,17 @@ export default class extends AbstractView {
             senderName: this.user.username,
           })
         );
+
+        // Set new timeout to end typing after 2 seconds of no input
+        this.typingTimeout = setTimeout(() => {
+          window.ws.send(
+            JSON.stringify({
+              type: "typing_end",
+              receiverId: this.chatterId,
+              senderId: this.user.id,
+            })
+          );
+        }, 1000);
       } else {
         window.ws.send(
           JSON.stringify({
@@ -208,8 +225,11 @@ export default class extends AbstractView {
       }
     });
 
-    // Stop typing when input loses focus
+    // Stop typing and clear timeout when input loses focus
     chatInput.addEventListener("blur", () => {
+      if (this.typingTimeout) {
+        clearTimeout(this.typingTimeout);
+      }
       window.ws.send(
         JSON.stringify({
           type: "typing_end",
@@ -219,9 +239,12 @@ export default class extends AbstractView {
       );
     });
 
-    // Stop typing when Enter is pressed
+    // Stop typing and clear timeout when Enter is pressed
     chatInput.addEventListener("keyup", (e) => {
       if (e.key === "Enter") {
+        if (this.typingTimeout) {
+          clearTimeout(this.typingTimeout);
+        }
         window.ws.send(
           JSON.stringify({
             type: "typing_end",
